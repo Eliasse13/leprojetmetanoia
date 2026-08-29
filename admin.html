@@ -58,6 +58,15 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 <div class="wrap">
   <header><h1>Metanoia · Admin</h1><a href="metanoia.html">← Voir la page publique</a></header>
 
+  <h2>Prochaine compétition <span id="compInfo"></span></h2>
+  <div class="form" id="compForm" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:12vh">
+    <div class="f"><label for="cNom">Nom de la course</label><input id="cNom" type="text" placeholder="10 km de Marseille"></div>
+    <div class="f"><label for="cLieu">Lieu</label><input id="cLieu" type="text" placeholder="Marseille"></div>
+    <div class="f"><label for="cDate">Date</label><input id="cDate" type="date"></div>
+    <div class="actions"><button class="btn" id="cSave">Enregistrer</button><button class="btn ghost" id="cDelete" style="display:none">Supprimer</button></div>
+    <div class="msg" id="cMsg"></div>
+  </div>
+
   <h2 id="formTitle">Nouvel entraînement</h2>
   <div class="form" id="form">
     <div class="f"><label for="date">Date</label><input id="date" type="date"></div>
@@ -81,7 +90,7 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { list, insert, update, remove, TYPES, parseTime, fmtTime, fmtPace, fr } from './config.js';
+import { list, insert, update, remove, TYPES, parseTime, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition } from './config.js';
 const $ = id => document.getElementById(id);
 const short = d => new Date(d+'T00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
 let rows = [], editing = null;
@@ -128,6 +137,41 @@ $('rows').addEventListener('click', async e => {
   const r=rows.find(x=>String(x.id)===tr.dataset.id); if(r) startEdit(r);
 });
 refresh();
+
+let currentCompId = null;
+async function refreshComp() {
+  try {
+    const compList = await listCompetitions();
+    const today = new Date().toISOString().slice(0,10);
+    const next = compList.find(c => c.date >= today) || compList[0] || null;
+    if (next) {
+      currentCompId = next.id;
+      $('cNom').value = next.nom; $('cLieu').value = next.lieu || ''; $('cDate').value = next.date;
+      $('compInfo').textContent = `— ${short(next.date)}`;
+      $('cDelete').style.display = 'inline-block';
+    } else {
+      currentCompId = null; $('cNom').value=''; $('cLieu').value=''; $('cDate').value='';
+      $('compInfo').textContent = ''; $('cDelete').style.display = 'none';
+    }
+  } catch (e) { $('cMsg').textContent = 'Erreur : ' + e.message; }
+}
+$('cSave').addEventListener('click', async () => {
+  const nom = $('cNom').value.trim(), date = $('cDate').value;
+  if (!nom || !date) { $('cMsg').textContent = 'Nom et date sont obligatoires.'; return; }
+  const row = { nom, lieu: $('cLieu').value.trim(), date };
+  $('cSave').disabled = true;
+  try {
+    if (currentCompId !== null) await updateCompetition(currentCompId, row); else await insertCompetition(row);
+    $('cMsg').textContent = 'Enregistré.'; await refreshComp();
+  } catch (e) { $('cMsg').textContent = 'Erreur : ' + e.message; }
+  $('cSave').disabled = false;
+});
+$('cDelete').addEventListener('click', async () => {
+  if (currentCompId === null || !confirm('Supprimer cette compétition ?')) return;
+  try { await removeCompetition(currentCompId); $('cMsg').textContent = 'Supprimée.'; await refreshComp(); }
+  catch (e) { $('cMsg').textContent = 'Erreur : ' + e.message; }
+});
+refreshComp();
 </script>
 </body>
 </html>
