@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metanoia — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#141414;--text:#2b2b2b;--mid:#5c5c5c;--soft:#9a9a9a;--line:#dcdcdc;--paper-2:#f6f5f2;--gold:#9a7b3c;--ease:cubic-bezier(.16,1,.3,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--text);font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:8vh 6vw 12vh}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.label{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}
+header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8vh}
+header h1{font-family:'Cinzel',serif;font-weight:400;font-size:clamp(1.4rem,3vw,2rem);letter-spacing:.15em}
+header a{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--mid)}
+h2{font-family:'Cinzel',serif;font-weight:400;font-size:1.2rem;letter-spacing:.12em;margin-bottom:28px;display:flex;justify-content:space-between;align-items:baseline}
+h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);font-style:italic;letter-spacing:0}
+.form{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px 28px;background:var(--paper-2);padding:40px;border-top:2px solid var(--ink);margin-bottom:12vh}
+.f{display:flex;flex-direction:column;gap:8px}
+.f label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mid)}
+.f input,.f select{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--ink);background:#fff;border:1px solid var(--line);padding:11px 14px;outline:none;transition:border-color .3s;width:100%;appearance:none;border-radius:0}
+.f input:focus,.f select:focus{border-color:var(--ink)}
+.f .hint{font-size:.9rem;color:var(--soft)}
+.f.wide{grid-column:span 2}
+.f input[type=range]{padding:0;border:0;background:transparent;accent-color:var(--ink);height:44px}
+.f .rv{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--ink)}
+.pace{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--line)}
+.pace .v{font-family:'Cinzel',serif;font-size:1.8rem;color:var(--ink)}
+.pace .v small{font-size:.45em;color:var(--mid);letter-spacing:.15em}
+.actions{grid-column:1/-1;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.btn{padding:18px 48px;background:var(--ink);color:#fff;border:0;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;transition:background .4s}
+.btn:hover{background:var(--gold)}.btn:disabled{background:var(--soft);cursor:default}
+.btn.ghost{background:transparent;color:var(--mid);border:1px solid var(--line);display:none}
+.form.edit .btn.ghost{display:inline-block}
+.msg{font-size:1rem;color:var(--gold);min-height:1.4em;grid-column:1/-1}
+@media(max-width:760px){.form{grid-template-columns:1fr;padding:26px}.f.wide{grid-column:auto}}
+.log{width:100%;border-collapse:collapse;font-size:1.05rem}
+.log th{font-family:'Cinzel',serif;font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mid);text-align:left;padding:0 12px 14px 0;border-bottom:2px solid var(--ink)}
+.log td{padding:18px 12px 18px 0;border-bottom:1px solid var(--line);vertical-align:top;font-variant-numeric:tabular-nums}
+.log tbody tr{transition:background .3s;cursor:pointer}.log tbody tr:hover{background:var(--paper-2)}
+.log tr.editing{background:#fbf6ea}
+.log td.d{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.08em;white-space:nowrap;color:var(--ink)}
+.log td.k{font-family:'Cinzel',serif;color:var(--ink);white-space:nowrap;font-size:.95rem}
+.log td .n{color:var(--soft);font-size:.92rem;font-style:italic}
+.log .tag{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.log .empty td{text-align:center;color:var(--soft);padding:48px 0;font-style:italic}
+.log td:last-child,.log th:last-child{text-align:right;padding-right:0;white-space:nowrap}
+.log .del{background:none;border:0;color:var(--line);cursor:pointer;font-size:1.2rem;transition:color .3s;font-family:inherit}
+.log tr:hover .del{color:var(--soft)}.log .del:hover{color:#b00!important}
+@media(max-width:700px){.hide{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>Metanoia · Admin</h1><a href="metanoia.html">← Voir la page publique</a></header>
+
+  <h2 id="formTitle">Nouvel entraînement</h2>
+  <div class="form" id="form">
+    <div class="f"><label for="date">Date</label><input id="date" type="date"></div>
+    <div class="f"><label for="type">Type de séance</label><select id="type"></select></div>
+    <div class="f"><label for="lieu">Lieu</label><input id="lieu" type="text" placeholder="Corniche, piste, Calanques…"></div>
+    <div class="f"><label for="dist">Distance</label><input id="dist" type="number" step="0.01" min="0" placeholder="10.00"><span class="hint">km</span></div>
+    <div class="f"><label for="temps">Temps</label><input id="temps" type="text" placeholder="52:30" inputmode="numeric"><span class="hint">h:mm:ss ou mm:ss</span></div>
+    <div class="f"><label for="den">Dénivelé positif</label><input id="den" type="number" step="1" min="0" placeholder="120"><span class="hint">m</span></div>
+    <div class="f wide"><label for="notes">Notes</label><input id="notes" type="text" placeholder="Allure de base, jambes lourdes…"></div>
+    <div class="f"><label for="ress">Ressenti <span class="rv" id="ressV">7</span> / 10</label><input id="ress" type="range" min="1" max="10" value="7"></div>
+    <div class="pace"><span class="label" style="color:var(--mid)">Allure moyenne</span><span class="v" id="paceLive">—<small>/km</small></span></div>
+    <div class="actions"><button class="btn" id="save">Enregistrer</button><button class="btn ghost" id="cancel">Annuler</button></div>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <h2>Journal <span id="count"></span></h2>
+  <table class="log">
+    <thead><tr><th>Date</th><th>Séance</th><th>Distance</th><th>Temps</th><th class="hide">D+</th><th>Allure</th><th class="hide">Ressenti</th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+
+<script type="module">
+import { list, insert, update, remove, TYPES, parseTime, fmtTime, fmtPace, fr } from './config.js';
+const $ = id => document.getElementById(id);
+const short = d => new Date(d+'T00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+let rows = [], editing = null;
+
+$('type').innerHTML = TYPES.map(t => `<option>${t}</option>`).join('');
+$('date').value = new Date().toISOString().slice(0,10);
+$('ress').addEventListener('input', () => $('ressV').textContent = $('ress').value);
+const livePace = () => { $('paceLive').innerHTML = fmtPace(parseTime($('temps').value), Number($('dist').value)) + '<small>/km</small>'; };
+$('temps').addEventListener('input', livePace); $('dist').addEventListener('input', livePace);
+
+function fill(r){ $('date').value=r.date; $('type').value=r.type||TYPES[0]; $('lieu').value=r.lieu||''; $('dist').value=r.distance_km; $('temps').value=fmtTime(r.temps_s);
+  $('den').value=r.denivele_m||''; $('notes').value=r.notes||''; $('ress').value=r.ressenti||7; $('ressV').textContent=$('ress').value; livePace(); }
+function reset(){ editing=null; ['lieu','dist','temps','den','notes'].forEach(i=>$(i).value=''); $('ress').value=7; $('ressV').textContent=7; $('date').value=new Date().toISOString().slice(0,10);
+  $('form').classList.remove('edit'); $('formTitle').textContent='Nouvel entraînement'; $('save').textContent='Enregistrer'; livePace(); render(); }
+function startEdit(r){ editing=r.id; fill(r); $('form').classList.add('edit'); $('formTitle').textContent='Modifier — '+short(r.date); $('save').textContent='Mettre à jour'; render(); $('form').scrollIntoView({behavior:'smooth'}); }
+
+function render(){
+  $('count').textContent = rows.length ? `${rows.length} sorties · ${fr(rows.reduce((a,r)=>a+Number(r.distance_km),0))} km` : '';
+  $('rows').innerHTML = rows.length ? rows.map(r => `<tr data-id="${r.id}" class="${r.id===editing?'editing':''}">
+    <td class="d">${short(r.date)}</td>
+    <td><span class="tag">${r.type||''}</span>${r.lieu?'<br>'+r.lieu:''}${r.notes?`<div class="n">${r.notes}</div>`:''}</td>
+    <td class="k">${fr(r.distance_km)} km</td><td class="k">${fmtTime(r.temps_s)}</td>
+    <td class="k hide">${r.denivele_m?fr(r.denivele_m,0)+' m':'—'}</td><td class="k">${fmtPace(r.temps_s,r.distance_km)}</td>
+    <td class="k hide">${r.ressenti?r.ressenti+'/10':'—'}</td>
+    <td><button class="del" data-del="${r.id}" title="Supprimer">×</button></td></tr>`).join('')
+    : `<tr class="empty"><td colspan="8">Aucun entraînement. Le premier kilomètre commence ici.</td></tr>`;
+}
+async function refresh(){ try { rows = await list(); render(); } catch(e){ $('msg').textContent='Erreur : '+e.message; } }
+
+$('save').addEventListener('click', async () => {
+  const d=Number($('dist').value), s=parseTime($('temps').value);
+  if(!$('date').value||!d||!s){ $('msg').textContent='Date, distance et temps sont obligatoires.'; return; }
+  const row={ date:$('date').value, type:$('type').value, lieu:$('lieu').value.trim(), distance_km:d, temps_s:s, denivele_m:Number($('den').value)||0, notes:$('notes').value.trim(), ressenti:Number($('ress').value) };
+  $('save').disabled=true;
+  try { if(editing!==null){ await update(editing,row); $('msg').textContent='Mis à jour.'; } else { await insert(row); $('msg').textContent=`Enregistré — ${fr(d)} km de plus.`; }
+    await refresh(); reset(); } catch(e){ $('msg').textContent='Erreur : '+e.message; }
+  $('save').disabled=false;
+});
+$('cancel').addEventListener('click', reset);
+$('rows').addEventListener('click', async e => {
+  const del=e.target.closest('[data-del]');
+  if(del){ e.stopPropagation(); if(confirm('Supprimer cet entraînement ?')){ try{ await remove(isNaN(del.dataset.del)?del.dataset.del:Number(del.dataset.del)); if(editing==del.dataset.del) reset(); await refresh(); }catch(err){ $('msg').textContent='Erreur : '+err.message; } } return; }
+  const tr=e.target.closest('tr[data-id]'); if(!tr) return;
+  const r=rows.find(x=>String(x.id)===tr.dataset.id); if(r) startEdit(r);
+});
+refresh();
+</script>
+</body>
+</html>
