@@ -33,6 +33,22 @@ export async function remove(id) {
   const { error } = await sb.from(TABLE).delete().eq('id', id); if (error) throw error;
 }
 
+// résultats de course
+export async function listResultats() {
+  await sbReady; if (!sb) return [];
+  const { data, error } = await sb.from('resultats').select('*').order('date', { ascending: false });
+  if (error) throw error; return data;
+}
+export async function insertResultat(row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('resultats').insert(row); if (error) throw error;
+}
+export async function updateResultat(id, row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('resultats').update(row).eq('id', id); if (error) throw error;
+}
+export async function removeResultat(id) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('resultats').delete().eq('id', id); if (error) throw error;
+}
+
 // compétitions
 export async function listCompetitions() {
   await sbReady; if (!sb) return [];
