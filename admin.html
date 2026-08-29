@@ -72,7 +72,7 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
     <div class="f"><label for="date">Date</label><input id="date" type="date"></div>
     <div class="f"><label for="type">Type de séance</label><select id="type"></select></div>
     <div class="f"><label for="lieu">Lieu</label><input id="lieu" type="text" placeholder="Corniche, piste, Calanques…"></div>
-    <div class="f"><label for="dist">Distance</label><input id="dist" type="number" step="0.01" min="0" placeholder="10.00"><span class="hint">km</span></div>
+    <div class="f"><label for="dist">Distance</label><input id="dist" type="text" inputmode="decimal" placeholder="7,37"><span class="hint">km (ex. 7,37 = 7 km 370 m)</span></div>
     <div class="f"><label for="temps">Temps</label><input id="temps" type="text" placeholder="52:30" inputmode="numeric"><span class="hint">h:mm:ss ou mm:ss</span></div>
     <div class="f"><label for="den">Dénivelé positif</label><input id="den" type="number" step="1" min="0" placeholder="120"><span class="hint">m</span></div>
     <div class="f wide"><label for="notes">Notes</label><input id="notes" type="text" placeholder="Allure de base, jambes lourdes…"></div>
@@ -90,7 +90,7 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { list, insert, update, remove, TYPES, parseTime, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition } from './config.js';
+import { list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition } from './config.js';
 const $ = id => document.getElementById(id);
 const short = d => new Date(d+'T00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
 let rows = [], editing = null;
@@ -98,7 +98,7 @@ let rows = [], editing = null;
 $('type').innerHTML = TYPES.map(t => `<option>${t}</option>`).join('');
 $('date').value = new Date().toISOString().slice(0,10);
 $('ress').addEventListener('input', () => $('ressV').textContent = $('ress').value);
-const livePace = () => { $('paceLive').innerHTML = fmtPace(parseTime($('temps').value), Number($('dist').value)) + '<small>/km</small>'; };
+const livePace = () => { $('paceLive').innerHTML = fmtPace(parseTime($('temps').value), parseKm($('dist').value)) + '<small>/km</small>'; };
 $('temps').addEventListener('input', livePace); $('dist').addEventListener('input', livePace);
 
 function fill(r){ $('date').value=r.date; $('type').value=r.type||TYPES[0]; $('lieu').value=r.lieu||''; $('dist').value=r.distance_km; $('temps').value=fmtTime(r.temps_s);
@@ -121,7 +121,7 @@ function render(){
 async function refresh(){ try { rows = await list(); render(); } catch(e){ $('msg').textContent='Erreur : '+e.message; } }
 
 $('save').addEventListener('click', async () => {
-  const d=Number($('dist').value), s=parseTime($('temps').value);
+  const d=parseKm($('dist').value), s=parseTime($('temps').value);
   if(!$('date').value||!d||!s){ $('msg').textContent='Date, distance et temps sont obligatoires.'; return; }
   const row={ date:$('date').value, type:$('type').value, lieu:$('lieu').value.trim(), distance_km:d, temps_s:s, denivele_m:Number($('den').value)||0, notes:$('notes').value.trim(), ressenti:Number($('ress').value) };
   $('save').disabled=true;
