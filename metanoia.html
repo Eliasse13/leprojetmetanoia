@@ -12,10 +12,10 @@
 html,body{height:100%;overflow:hidden;touch-action:none;overscroll-behavior:none}
 body{background:#fff;color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;display:grid;place-items:center;text-align:center;padding:6vh 6vw;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
 .label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
-.phrase{font-style:italic;font-weight:300;font-size:clamp(1.3rem,3.4vw,2.1rem);max-width:22ch;line-height:1.55;margin-top:5vh}
+.phrase{font-style:italic;font-weight:300;font-size:clamp(1.3rem,3.4vw,2.1rem);max-width:22ch;line-height:1.55}
 .phrase b{font-style:normal;font-weight:500;color:var(--ink)}
 .err{position:fixed;bottom:16px;left:0;right:0;font-size:.9rem;color:#b00}
-.visits{position:fixed;bottom:20px;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--soft);opacity:0;animation:in 1.4s var(--ease) 1.6s forwards}
+.visits{position:fixed;bottom:5vh;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:#bbb;opacity:0;animation:in 1.4s var(--ease) 1.6s forwards}
 .r{opacity:0;transform:translateY(14px);animation:in 1.4s var(--ease) forwards}
 @keyframes in{to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.r{animation:none;opacity:1;transform:none}}
@@ -23,8 +23,7 @@ body{background:#fff;color:var(--ink);font-family:'Cormorant Garamond',Georgia,s
 </head>
 <body>
 <div>
-  <span class="label r" style="animation-delay:.1s">Metanoia · Sport</span>
-  <p class="phrase r" id="phrase" style="animation-delay:.4s"></p>
+  <p class="phrase r" id="phrase" style="animation-delay:.2s"></p>
 </div>
 <div class="err" id="err"></div>
 <div class="visits" id="visits"></div>
@@ -42,7 +41,7 @@ try {
 } catch (e) { $('err').textContent = 'Erreur : ' + e.message; }
 
 enregistrerVisite().then(async () => {
-  try { const n = await nbVisites(); if (n !== null) $('visits').textContent = `${fr(n,0)}e visiteur du chemin`; }
+  try { const n = await nbVisites(); if (n !== null) $('visits').textContent = `${fr(n,0)} visites`; }
   catch (e) { /* silencieux */ }
 });
 
