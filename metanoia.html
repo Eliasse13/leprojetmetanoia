@@ -23,6 +23,7 @@ body{background:#fff;color:var(--ink);font-family:'Cormorant Garamond',Georgia,s
 .last .m i{font-style:italic}
 .empty{color:var(--soft);font-style:italic;margin-top:2vh}
 .err{position:fixed;bottom:16px;left:0;right:0;font-size:.9rem;color:#b00}
+.visits{position:fixed;bottom:20px;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--soft);opacity:0;animation:in 1.4s var(--ease) 1.6s forwards}
 .r{opacity:0;transform:translateY(14px);animation:in 1.4s var(--ease) forwards}
 @keyframes in{to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.r{animation:none;opacity:1;transform:none}}
@@ -40,9 +41,10 @@ body{background:#fff;color:var(--ink);font-family:'Cormorant Garamond',Georgia,s
   </div>
 </div>
 <div class="err" id="err"></div>
+<div class="visits" id="visits"></div>
 
 <script type="module">
-import { list, DEBUT, fmtTime, fmtDate, fr } from './config.js';
+import { list, DEBUT, fmtTime, fmtDate, fr, enregistrerVisite, nbVisites } from './config.js';
 const $ = id => document.getElementById(id);
 function count(el, to){ const t0 = performance.now(), dur = 2400;
   (function f(t){ const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,4); el.textContent = fr(to*e, to%1 ? 1 : 0); if (p<1) requestAnimationFrame(f); })(t0); }
@@ -54,6 +56,12 @@ try {
     $('last').innerHTML = `<div class="t">${fr(l.distance_km)} km <em>·</em> ${fmtTime(l.temps_s)}</div>
       <div class="m">${l.type || ''}${l.lieu ? ' — ' + l.lieu : ''}<br><i>${fmtDate(l.date)}</i></div>`; }
 } catch (e) { $('err').textContent = 'Erreur : ' + e.message; }
+
+enregistrerVisite().then(async () => {
+  try { const n = await nbVisites(); if (n !== null) $('visits').textContent = `${fr(n,0)}e visiteur du chemin`; }
+  catch (e) { /* silencieux */ }
+});
+
 ['wheel','touchmove','gesturestart','gesturechange'].forEach(ev => addEventListener(ev, e => e.preventDefault(), { passive:false }));
 </script>
 </body>
