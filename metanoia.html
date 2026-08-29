@@ -22,6 +22,10 @@ body{
 .phrase b{font-style:normal;font-weight:500;color:var(--ink)}
 .date{margin-top:3.5vh;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--soft)}
 .date em{font-style:normal;color:var(--gold)}
+.comp{margin-top:6vh}
+.comp .n{font-family:'Cinzel',serif;font-size:clamp(2.2rem,6vw,3.6rem);color:var(--ink);line-height:1}
+.comp .n small{font-size:.35em;letter-spacing:.1em;color:var(--soft);margin-left:.2em}
+.comp .l{margin-top:1.2vh;font-size:1.05rem;color:var(--mid)}
 .err{position:fixed;bottom:16px;left:0;right:0;font-size:.9rem;color:#b00}
 .visits{position:fixed;bottom:5vh;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:#bbb;opacity:0;animation:in 1.4s var(--ease) 1.6s forwards}
 .r{opacity:0;transform:translateY(14px);animation:in 1.4s var(--ease) forwards}
@@ -33,12 +37,13 @@ body{
 <div>
   <p class="phrase r" id="phrase" style="animation-delay:.2s"></p>
   <p class="date r" id="date" style="animation-delay:.6s"></p>
+  <div class="comp r" id="comp" style="animation-delay:1s"></div>
 </div>
 <div class="err" id="err"></div>
 <div class="visits" id="visits"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js';
+import { list, DEBUT, fr, enregistrerVisite, nbVisites, prochaineCompetition } from './config.js';
 const $ = id => document.getElementById(id);
 const START = new Date('2026-08-18T00:00:00'); // lancement du projet
 
@@ -61,6 +66,13 @@ try {
   const joursActifs = new Set(all.filter(r => new Date(r.date + 'T00:00') >= il14j).map(r => r.date)).size;
   const reg = Math.min(1, joursActifs / 7); // 7 jours actifs sur 14 = plein
   requestAnimationFrame(() => document.documentElement.style.setProperty('--reg', reg));
+
+  // prochaine compétition
+  const comp = await prochaineCompetition();
+  if (comp) {
+    const j = Math.max(0, Math.ceil((new Date(comp.date + 'T00:00') - now) / 864e5));
+    $('comp').innerHTML = `<div class="n">${j}<small>${j > 1 ? 'jours' : 'jour'}</small></div><p class="l">avant ${comp.nom}${comp.lieu ? ' — ' + comp.lieu : ''}</p>`;
+  }
 } catch (e) { $('err').textContent = 'Erreur : ' + e.message; }
 
 enregistrerVisite().then(async () => {
