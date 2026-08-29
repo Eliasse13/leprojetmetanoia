@@ -67,6 +67,22 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
     <div class="msg" id="cMsg"></div>
   </div>
 
+  <h2>Résultats <span id="recordInfo"></span></h2>
+  <div class="form" id="rForm" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:6vh">
+    <div class="f wide"><label for="rNom">Nom de la course</label><input id="rNom" type="text" placeholder="10 km de Marseille"></div>
+    <div class="f"><label for="rDate">Date</label><input id="rDate" type="date"></div>
+    <div class="f"><label for="rDist">Distance</label><input id="rDist" type="text" inputmode="decimal" placeholder="5"><span class="hint">km</span></div>
+    <div class="f"><label for="rTemps">Temps</label><input id="rTemps" type="text" placeholder="17,13"><span class="hint">min,s</span></div>
+    <div class="f"><label for="rClas">Classement</label><input id="rClas" type="number" min="1" placeholder="9"></div>
+    <div class="f"><label for="rPart">Participants</label><input id="rPart" type="number" min="1" placeholder="234"></div>
+    <div class="actions"><button class="btn" id="rSave">Ajouter</button></div>
+    <div class="msg" id="rMsg"></div>
+  </div>
+  <table class="log" style="margin-bottom:12vh">
+    <thead><tr><th>Date</th><th>Course</th><th>Distance</th><th>Temps</th><th>Classement</th><th></th></tr></thead>
+    <tbody id="rRows"></tbody>
+  </table>
+
   <h2 id="formTitle">Nouvel entraînement</h2>
   <div class="form" id="form">
     <div class="f"><label for="date">Date</label><input id="date" type="date"></div>
@@ -90,7 +106,7 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition } from './config.js';
+import { list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js';
 const $ = id => document.getElementById(id);
 const short = d => new Date(d+'T00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
 let rows = [], editing = null;
@@ -168,10 +184,40 @@ $('cSave').addEventListener('click', async () => {
 });
 $('cDelete').addEventListener('click', async () => {
   if (currentCompId === null || !confirm('Supprimer cette compétition ?')) return;
-  try { await removeCompetition(currentCompId); $('cMsg').textContent = 'Supprimée.'; await refreshComp(); }
-  catch (e) { $('cMsg').textContent = 'Erreur : ' + e.message; }
 });
 refreshComp();
+
+async function refreshResultats() {
+  try {
+    const rows = await listResultats();
+    // record = meilleur temps par distance
+    const records = {};
+    rows.forEach(r => { const key = fr(r.distance_km); if (!records[key] || r.temps_s < records[key]) records[key] = r.temps_s; });
+    $('recordInfo').textContent = Object.keys(records).length
+      ? '— ' + Object.entries(records).map(([d,s]) => `${d} km : ${fmtTime(s)}`).join(' · ') : '';
+    $('rRows').innerHTML = rows.length ? rows.map(r => `<tr data-id="${r.id}">
+      <td class="d">${short(r.date)}</td><td>${r.nom}</td><td class="k">${fr(r.distance_km)} km</td><td class="k">${fmtTime(r.temps_s)}</td>
+      <td class="k">${r.classement ? r.classement + (r.participants ? ' / ' + r.participants : '') : '—'}</td>
+      <td><button class="del" data-rdel="${r.id}" title="Supprimer">×</button></td></tr>`).join('')
+      : `<tr class="empty"><td colspan="6">Aucun résultat pour l'instant.</td></tr>`;
+  } catch (e) { $('rMsg').textContent = 'Erreur : ' + e.message; }
+}
+$('rSave').addEventListener('click', async () => {
+  const nom = $('rNom').value.trim(), date = $('rDate').value, d = parseKm($('rDist').value), s = parseTime($('rTemps').value);
+  if (!nom || !date || !d || !s) { $('rMsg').textContent = 'Nom, date, distance et temps sont obligatoires.'; return; }
+  $('rSave').disabled = true;
+  try {
+    await insertResultat({ nom, date, distance_km: d, temps_s: s, classement: Number($('rClas').value) || null, participants: Number($('rPart').value) || null });
+    ['rNom','rDist','rTemps','rClas','rPart'].forEach(i => $(i).value = ''); $('rDate').value = '';
+    $('rMsg').textContent = 'Résultat ajouté.'; await refreshResultats();
+  } catch (e) { $('rMsg').textContent = 'Erreur : ' + e.message; }
+  $('rSave').disabled = false;
+});
+$('rRows').addEventListener('click', async e => {
+  const b = e.target.closest('[data-rdel]'); if (!b) return;
+  if (confirm('Supprimer ce résultat ?')) { try { await removeResultat(Number(b.dataset.rdel)); await refreshResultats(); } catch (err) { $('rMsg').textContent = 'Erreur : ' + err.message; } }
+});
+refreshResultats();
 </script>
 </body>
 </html>
