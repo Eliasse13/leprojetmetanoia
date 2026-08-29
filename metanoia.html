@@ -7,23 +7,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#141414;--mid:#5c5c5c;--soft:#9a9a9a;--gold:#9a7b3c;--ease:cubic-bezier(.16,1,.3,1)}
+:root{--ink:#141414;--mid:#5c5c5c;--soft:#9a9a9a;--gold:#9a7b3c;--ease:cubic-bezier(.16,1,.3,1);--reg:0}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;touch-action:none;overscroll-behavior:none}
-body{background:#fff;color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;display:grid;place-items:center;text-align:center;padding:6vh 6vw;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none}
-.label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+body{
+  color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;display:grid;place-items:center;text-align:center;padding:6vh 6vw;
+  -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(ellipse 90% 70% at 50% 50%, #fff 0%, hsl(32,22%,calc(97% - var(--reg)*13%)) 150%);
+  background-size:130% 130%;background-position:50% 50%;
+  animation:breathe 22s ease-in-out infinite;transition:background 2.4s ease;
+}
+@keyframes breathe{0%,100%{background-position:48% 47%}50%{background-position:52% 53%}}
 .phrase{font-style:italic;font-weight:300;font-size:clamp(1.3rem,3.4vw,2.1rem);max-width:22ch;line-height:1.55}
 .phrase b{font-style:normal;font-weight:500;color:var(--ink)}
+.date{margin-top:3.5vh;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--soft)}
+.date em{font-style:normal;color:var(--gold)}
 .err{position:fixed;bottom:16px;left:0;right:0;font-size:.9rem;color:#b00}
 .visits{position:fixed;bottom:5vh;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:#bbb;opacity:0;animation:in 1.4s var(--ease) 1.6s forwards}
 .r{opacity:0;transform:translateY(14px);animation:in 1.4s var(--ease) forwards}
 @keyframes in{to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){.r{animation:none;opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.r{animation:none;opacity:1;transform:none}body{animation:none}}
 </style>
 </head>
 <body>
 <div>
   <p class="phrase r" id="phrase" style="animation-delay:.2s"></p>
+  <p class="date r" id="date" style="animation-delay:.6s"></p>
 </div>
 <div class="err" id="err"></div>
 <div class="visits" id="visits"></div>
@@ -31,13 +40,27 @@ body{background:#fff;color:var(--ink);font-family:'Cormorant Garamond',Georgia,s
 <script type="module">
 import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js';
 const $ = id => document.getElementById(id);
+const START = new Date('2026-08-18T00:00:00'); // lancement du projet
 
 try {
-  const rows = (await list()).filter(r => r.date >= DEBUT);
+  const all = await list();
+  const rows = all.filter(r => r.date >= DEBUT);
   const km = rows.reduce((a,r) => a + Number(r.distance_km), 0);
   $('phrase').innerHTML = km > 0
     ? `<b>${fr(km)} kilomètres</b> parcourus depuis le 1<sup>er</sup> septembre 2026.`
     : `Rien encore. <b>Le premier kilomètre</b> reste à parcourir.`;
+
+  // date + jours écoulés depuis le lancement
+  const now = new Date();
+  const jours = Math.max(1, Math.floor((now - START) / 864e5) + 1);
+  const dateStr = now.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  $('date').innerHTML = `${dateStr} <em>—</em> ${jours} jour${jours > 1 ? 's' : ''}`;
+
+  // régularité récente (14 derniers jours) → assombrit doucement le fond
+  const il14j = new Date(now); il14j.setDate(il14j.getDate() - 14);
+  const joursActifs = new Set(all.filter(r => new Date(r.date + 'T00:00') >= il14j).map(r => r.date)).size;
+  const reg = Math.min(1, joursActifs / 7); // 7 jours actifs sur 14 = plein
+  requestAnimationFrame(() => document.documentElement.style.setProperty('--reg', reg));
 } catch (e) { $('err').textContent = 'Erreur : ' + e.message; }
 
 enregistrerVisite().then(async () => {
