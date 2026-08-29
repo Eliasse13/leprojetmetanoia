@@ -52,7 +52,7 @@ try {
   const rows = all.filter(r => r.date >= DEBUT);
   const km = rows.reduce((a,r) => a + Number(r.distance_km), 0);
   $('phrase').innerHTML = km > 0
-    ? `<b>${fr(km)} kilomètres</b> parcourus depuis le 1<sup>er</sup> septembre 2026.`
+    ? `<b>${fr(km)} kilomètres</b> parcourus depuis le 28 août 2026.`
     : `Rien encore. <b>Le premier kilomètre</b> reste à parcourir.`;
 
   // date + jours écoulés depuis le lancement
