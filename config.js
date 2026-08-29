@@ -68,7 +68,7 @@ export async function nbVisites() {
 
 // utilitaires
 export const parseTime = s => { s = (s || '').trim(); const p = s.split(':').map(Number); if (!s || p.some(isNaN)) return null;
-  return p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p.length === 2 ? p[0]*60 + p[1] : p[0]*60; };
+  return Math.round(p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p.length === 2 ? p[0]*60 + p[1] : p[0]*60); };
 export const fmtTime = sec => { const h = Math.floor(sec/3600), m = Math.floor(sec/60)%60, s = sec%60;
   return h ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`; };
 export const fmtPace = (sec, km) => { if (!sec || !km) return '—'; const p = Math.round(sec/km); return `${Math.floor(p/60)}'${String(p%60).padStart(2,'0')}"`; };
