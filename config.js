@@ -30,6 +30,21 @@ export async function remove(id) {
   const { error } = await sb.from(TABLE).delete().eq('id', id); if (error) throw error;
 }
 
+// compteur de visites
+export async function enregistrerVisite() {
+  try {
+    if (localStorage.getItem('metanoia_visite')) return;
+    localStorage.setItem('metanoia_visite', '1');
+    if (!sb) return;
+    await sb.from('visites').insert({});
+  } catch (e) { /* silencieux */ }
+}
+export async function nbVisites() {
+  if (!sb) return null;
+  const { count, error } = await sb.from('visites').select('*', { count: 'exact', head: true });
+  if (error) throw error; return count;
+}
+
 // utilitaires
 export const parseTime = s => { s = (s || '').trim(); const p = s.split(':').map(Number); if (!s || p.some(isNaN)) return null;
   return p.length === 3 ? p[0]*3600 + p[1]*60 + p[2] : p.length === 2 ? p[0]*60 + p[1] : p[0]*60; };
