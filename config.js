@@ -30,6 +30,27 @@ export async function remove(id) {
   const { error } = await sb.from(TABLE).delete().eq('id', id); if (error) throw error;
 }
 
+// compétitions
+export async function listCompetitions() {
+  if (!sb) return [];
+  const { data, error } = await sb.from('competitions').select('*').order('date', { ascending: true });
+  if (error) throw error; return data;
+}
+export async function prochaineCompetition() {
+  const today = new Date().toISOString().slice(0, 10);
+  const all = await listCompetitions();
+  return all.find(c => c.date >= today) || null;
+}
+export async function insertCompetition(row) {
+  if (!sb) return; const { error } = await sb.from('competitions').insert(row); if (error) throw error;
+}
+export async function updateCompetition(id, row) {
+  if (!sb) return; const { error } = await sb.from('competitions').update(row).eq('id', id); if (error) throw error;
+}
+export async function removeCompetition(id) {
+  if (!sb) return; const { error } = await sb.from('competitions').delete().eq('id', id); if (error) throw error;
+}
+
 // compteur de visites
 export async function enregistrerVisite() {
   try {
