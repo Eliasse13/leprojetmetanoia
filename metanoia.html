@@ -127,6 +127,10 @@
   .panneau .piliers .p.alim{color:#7A6A38}
   .panneau .piliers .p em{font-style:normal;margin-left:auto;font-weight:300;font-size:8.5px;
     letter-spacing:.16em;text-transform:uppercase;color:#3F4744}
+  .visites{position:fixed;bottom:max(16px,env(safe-area-inset-bottom));left:0;right:0;
+    text-align:center;font-weight:300;font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--sourd);opacity:0;transition:opacity .8s ease}
+  .visites.on{opacity:1}
 </style>
 </head>
 <body>
@@ -160,10 +164,12 @@
 
 </div>
 
+<div class="visites" id="visits"></div>
+
 <div class="err" id="err"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite } from './config.js?v=20260830c';
+import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260830d';
 const $ = id => document.getElementById(id);
 
 try {
@@ -216,7 +222,16 @@ try {
 
 } catch (e) { $('err').textContent = 'Erreur : ' + e.message; }
 
-enregistrerVisite();
+enregistrerVisite().then(async () => {
+  try {
+    const n = await nbVisites();
+    if (n !== null) {
+      const el = document.getElementById('visits');
+      el.textContent = `${fr(n, 0)} visite${n > 1 ? 's' : ''}`;
+      requestAnimationFrame(() => el.classList.add('on'));
+    }
+  } catch (e) {}
+});
 
 
 // menu plein écran
