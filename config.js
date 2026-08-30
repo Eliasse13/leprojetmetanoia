@@ -135,3 +135,21 @@ export async function updatePlan(id, row) {
 export async function removePlan(objectifId) {
   await sbReady; if (!sb) return; const { error } = await sb.from('plan').delete().eq('objectif_id', objectifId); if (error) throw error;
 }
+
+// projet à dix ans + paliers
+export async function projetActif() {
+  await sbReady; if (!sb) return null;
+  const { data, error } = await sb.from('projet').select('*').eq('actif', true).order('id').limit(1);
+  if (error) throw error; return data[0] || null;
+}
+export async function listPaliers(projetId) {
+  await sbReady; if (!sb) return [];
+  const { data, error } = await sb.from('paliers').select('*').eq('projet_id', projetId).order('ordre');
+  if (error) throw error; return data;
+}
+export async function updatePalier(id, row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('paliers').update(row).eq('id', id); if (error) throw error;
+}
+export async function updateProjet(id, row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('projet').update(row).eq('id', id); if (error) throw error;
+}
