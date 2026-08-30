@@ -51,7 +51,26 @@
     -webkit-tap-highlight-color:transparent;
     transition:background .8s ease;
   }
-  body.ouvert{background:var(--fond-ouvert)}
+  /* une fois ouvert : tout s'inverse */
+  body.ouvert{
+    --fond:#FFFFFF;
+    --craie:#0D0F0E;
+    --sourd:#6B736E;
+    --texte:#454B48;
+    --piste:#E3E6E4;
+    --vert:#0B7A3E;
+    --lueur:rgba(11,122,62,.35);
+    --sur-accent:#FFFFFF;
+    background:#FFFFFF;
+    color:#0D0F0E;
+  }
+  body.ouvert .secours{color:#B7BEBA}
+  body.ouvert .secours:hover,body.ouvert .secours:focus-visible{color:var(--texte);border-bottom-color:var(--piste)}
+  body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{
+    transition:color .8s ease,background .8s ease,stroke .8s ease,fill .8s ease}
+  @media (prefers-reduced-motion:reduce){
+    body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{transition:none}
+  }
 
   .entete{display:grid;gap:clamp(8px,1.6vh,14px)}
   .dates{
@@ -201,6 +220,8 @@
   function ouvrir(){
     fini = true; actif = false;
     document.body.classList.add('ouvert');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', '#FFFFFF');
     label.innerHTML = 'Ouvert<small>jour ' + JOUR + '</small>';
     dire('Voilà. La suite se mérite pareil.');
     entrer.classList.add('visible');
