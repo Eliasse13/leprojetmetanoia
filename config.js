@@ -153,3 +153,30 @@ export async function updatePalier(id, row) {
 export async function updateProjet(id, row) {
   await sbReady; if (!sb) return; const { error } = await sb.from('projet').update(row).eq('id', id); if (error) throw error;
 }
+
+// authentification
+export async function sbClient() { await sbReady; return sb; }
+export async function utilisateur() {
+  await sbReady; if (!sb) return null;
+  const { data } = await sb.auth.getUser();
+  return data?.user || null;
+}
+export async function connexion(email, motDePasse) {
+  await sbReady; if (!sb) throw new Error('Supabase indisponible');
+  const { error } = await sb.auth.signInWithPassword({ email, password: motDePasse });
+  if (error) throw error;
+}
+export async function inscription(email, motDePasse) {
+  await sbReady; if (!sb) throw new Error('Supabase indisponible');
+  const { error } = await sb.auth.signUp({ email, password: motDePasse });
+  if (error) throw error;
+}
+export async function deconnexion() {
+  await sbReady; if (!sb) return; await sb.auth.signOut();
+}
+/** À placer en tête d'une page privée : redirige si non connecté. */
+export async function exigerConnexion(retour = 'connexion.html') {
+  const u = await utilisateur();
+  if (!u) { location.href = retour + '?suite=' + encodeURIComponent(location.pathname.split('/').pop()); return null; }
+  return u;
+}
