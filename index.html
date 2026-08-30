@@ -1,36 +1,239 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
-<title>Metanoia</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Metanoia — dix ans pour changer d'esprit</title>
+<meta name="description" content="Metanoia : un projet de transformation sur dix ans, du 18 août 2026 au 18 août 2036. Cinq piliers, un seul ouvert pour l'instant.">
+<link rel="canonical" href="https://leprojetmetanoia.fr/">
+<meta name="theme-color" content="#0F1412">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leprojetmetanoia.fr/">
+<meta property="og:title" content="Metanoia">
+<meta property="og:description" content="Dix ans pour changer d'esprit. Cinq piliers. Un seul ouvert pour l'instant.">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230F1412'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%2331E07A' stroke-width='9' stroke-linecap='round' stroke-dasharray='142 189' transform='rotate(-90 50 50)'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;height:100dvh;overflow:hidden;touch-action:none;overscroll-behavior:none}
-body{background:#fff;color:#111;display:grid;place-items:center;font-family:'Cinzel',serif;user-select:none;-webkit-user-select:none;position:relative}
-h1{position:relative;z-index:2;font-weight:400;font-size:clamp(2.2rem,8vw,6rem);letter-spacing:.3em;text-indent:.3em;display:flex;white-space:nowrap}
-h1 span{display:inline-block;opacity:0;animation:in 1.6s cubic-bezier(.16,1,.3,1) forwards;animation-delay:calc(abs(var(--i) - 3.5)*.08s + .2s)}
-@keyframes in{from{opacity:0;transform:translateX(calc((var(--i) - 3.5)*.6em))}to{opacity:1;transform:none}}
-.load{position:relative;z-index:2;width:min(220px,40vw);height:1px;background:rgba(17,17,17,.15);margin-top:6vh;overflow:hidden;
-  opacity:0;animation:fadein .8s ease 1.3s forwards}
-.load i{position:absolute;left:0;top:0;height:100%;width:0;background:#111;animation:fill 1.6s cubic-bezier(.4,0,.2,1) 1.3s forwards}
-@keyframes fadein{to{opacity:1}}
-@keyframes fill{to{width:100%}}
-@media(prefers-reduced-motion:reduce){h1 span,.load i{animation:none;opacity:1}.load i{width:100%}}
+  :root{
+    --fond:#0F1412;
+    --fond-ouvert:#0C1F16;
+    --vert:#31E07A;
+    --craie:#E9F2ED;
+    --sourd:#3C4A44;
+    --texte:#7E8D86;
+    --duree:3s;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--fond);
+    color:var(--craie);
+    font-family:"Chivo",system-ui,sans-serif;
+    min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(16px,3.6vh,32px);
+    padding:max(20px,env(safe-area-inset-top)) clamp(20px,5vw,52px) max(20px,env(safe-area-inset-bottom));
+    text-align:center;
+    overflow:hidden;
+    touch-action:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .8s ease;
+  }
+  body.ouvert{background:var(--fond-ouvert)}
+
+  .entete{display:grid;gap:clamp(8px,1.6vh,14px)}
+  .dates{
+    font-size:clamp(9px,2.6vw,12px);font-weight:300;
+    letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;
+    color:var(--sourd);
+  }
+  h1{
+    font-weight:900;
+    font-size:clamp(34px,11.5vw,110px);
+    letter-spacing:-.045em;line-height:.88;
+  }
+
+  /* — le cadran — */
+  .dial{
+    position:relative;
+    width:min(58vw,182px);aspect-ratio:1;
+    display:grid;place-items:center;
+    cursor:pointer;user-select:none;-webkit-user-select:none;
+    border-radius:50%;
+    transition:transform .2s ease;
+  }
+  .dial:active{transform:scale(.97)}
+  .dial:focus-visible{outline:2px solid var(--vert);outline-offset:10px}
+  .dial svg{position:absolute;inset:0;transform:rotate(-90deg);overflow:visible}
+  .dial circle{fill:none;stroke-width:5;stroke-linecap:round}
+  .piste{stroke:#1E2B25}
+  .jauge{stroke:var(--vert)}
+  body.ouvert .jauge{filter:drop-shadow(0 0 10px rgba(49,224,122,.5))}
+
+  .label{
+    z-index:2;
+    font-weight:700;font-size:clamp(11px,3vw,14px);
+    letter-spacing:.14em;text-transform:uppercase;line-height:1.35;
+  }
+  .label small{
+    display:block;font-weight:300;font-size:clamp(9px,2.4vw,10px);
+    letter-spacing:.2em;color:var(--sourd);margin-top:6px;
+  }
+  body.ouvert .label small{color:var(--vert)}
+
+  .msg{
+    font-size:clamp(12px,3.2vw,14px);font-weight:300;
+    color:var(--texte);max-width:32ch;line-height:1.6;
+    min-height:3.2em;
+  }
+
+  .entrer{
+    background:var(--vert);color:#08160F;
+    font-weight:900;font-size:clamp(13px,3.4vw,15px);
+    letter-spacing:.02em;text-decoration:none;
+    padding:15px 34px;border-radius:999px;
+    opacity:0;transform:scale(.9);pointer-events:none;
+    transition:opacity .5s ease,transform .5s cubic-bezier(.2,1.3,.4,1),filter .2s;
+  }
+  .entrer.visible{opacity:1;transform:none;pointer-events:auto}
+  .entrer:hover{filter:brightness(1.08)}
+  .entrer:focus-visible{outline:3px solid var(--craie);outline-offset:4px}
+
+  .secours{
+    font-size:11px;font-weight:300;letter-spacing:.14em;text-transform:uppercase;
+    color:#2F3A35;text-decoration:none;border-bottom:1px solid transparent;
+    opacity:0;pointer-events:none;transition:opacity .5s,color .3s;
+  }
+  .secours.visible{opacity:1;pointer-events:auto}
+  .secours:hover,.secours:focus-visible{color:var(--texte);border-bottom-color:var(--sourd)}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.01ms!important}
+    .dial:active{transform:none}
+  }
+  @media (max-height:560px){
+    body{gap:12px}
+    .dial{width:min(38vw,120px)}
+    .msg{min-height:2.4em}
+  }
 </style>
 </head>
 <body>
-<div style="display:flex;flex-direction:column;align-items:center">
-<h1 aria-label="Metanoia"><span style="--i:0">M</span><span style="--i:1">e</span><span style="--i:2">t</span><span style="--i:3">a</span><span style="--i:4">n</span><span style="--i:5">o</span><span style="--i:6">i</span><span style="--i:7">a</span></h1>
-<div class="load"><i></i></div>
+
+<div class="entete">
+  <p class="dates">18.08.2026 → 18.08.2036</p>
+  <h1>METANOIA</h1>
 </div>
+
+<div class="dial" id="dial" role="button" tabindex="0"
+     aria-label="Maintenir appuyé trois secondes pour entrer">
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <circle class="piste" cx="50" cy="50" r="45"></circle>
+    <circle class="jauge" id="jauge" cx="50" cy="50" r="45"></circle>
+  </svg>
+  <span class="label" id="label">Maintiens<small>3 secondes</small></span>
+</div>
+
+<p class="msg" id="msg" aria-live="polite">Rien ici ne s'ouvre en un clic. C'est un peu le sujet.</p>
+
+<a class="entrer" id="entrer" href="metanoia.html">ENTRER — SPORT</a>
+<a class="secours" id="secours" href="metanoia.html">Passer directement</a>
+
+<noscript>
+  <p class="msg"><a href="metanoia.html" style="color:#31E07A">Entrer — Sport</a></p>
+</noscript>
+
 <script>
-setTimeout(()=>location.href='metanoia.html',2000);
-['wheel','touchmove','gesturestart','gesturechange'].forEach(e=>addEventListener(e,ev=>ev.preventDefault(),{passive:false}));
-addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&['+','-','=','0'].includes(e.key))e.preventDefault();});
+(function(){
+  "use strict";
+
+  var DEBUT = new Date(2026, 7, 18);          // 18 août 2026
+  var JOUR  = Math.floor((new Date() - DEBUT) / 864e5) + 1;
+  var DUREE = 3000;                            // ms de maintien
+
+  var jauge   = document.getElementById('jauge'),
+      dial    = document.getElementById('dial'),
+      label   = document.getElementById('label'),
+      msg     = document.getElementById('msg'),
+      entrer  = document.getElementById('entrer'),
+      secours = document.getElementById('secours');
+
+  var L = 2 * Math.PI * 45;
+  jauge.style.strokeDasharray  = L;
+  jauge.style.strokeDashoffset = L;
+
+  var t0 = null, raf = null, fini = false, echecs = 0, actif = false;
+
+  var PALIERS = [[0.25, 'Tiens bon.'], [0.55, 'Encore un peu.'], [0.85, 'Presque.']];
+
+  function tick(ts){
+    if (t0 === null) t0 = ts;
+    var p = Math.min((ts - t0) / DUREE, 1);
+    jauge.style.strokeDashoffset = L * (1 - p);
+
+    for (var i = 0; i < PALIERS.length; i++){
+      if (p >= PALIERS[i][0]) msg.textContent = PALIERS[i][1];
+    }
+
+    if (p >= 1){ ouvrir(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function ouvrir(){
+    fini = true; actif = false;
+    document.body.classList.add('ouvert');
+    label.innerHTML = 'Ouvert<small>jour ' + JOUR + '</small>';
+    msg.textContent = 'Voilà. La suite se mérite pareil.';
+    entrer.classList.add('visible');
+    secours.classList.remove('visible');
+    dial.setAttribute('aria-label', 'Ouvert');
+    try { entrer.focus({ preventScroll: true }); } catch(e){}
+  }
+
+  function start(e){
+    if (fini || actif) return;
+    if (e && e.cancelable) e.preventDefault();
+    actif = true; t0 = null;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stop(){
+    if (fini || !actif) return;
+    actif = false;
+    cancelAnimationFrame(raf);
+    t0 = null;
+    jauge.style.strokeDashoffset = L;
+    echecs++;
+    msg.textContent = echecs > 1 ? 'Encore lâché. Trois secondes, pas plus.'
+                                 : 'Lâché trop tôt. Recommence.';
+    if (echecs >= 3) secours.classList.add('visible');
+  }
+
+  dial.addEventListener('pointerdown', start);
+  window.addEventListener('pointerup', stop);
+  window.addEventListener('pointercancel', stop);
+  dial.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  dial.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); start(); }
+  });
+  dial.addEventListener('keyup', function(e){
+    if (e.key === ' ' || e.key === 'Enter') stop();
+  });
+  dial.addEventListener('blur', stop);
+  document.addEventListener('visibilitychange', function(){
+    if (document.hidden) stop();
+  });
+})();
 </script>
 </body>
 </html>
