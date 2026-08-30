@@ -250,3 +250,52 @@ export const VERDICTS = {
   'tres-difficile':'Très difficile. Il faudrait progresser bien plus vite que la moyenne.',
   'hors-portee':   'Hors de portée dans ce délai. Recule la date ou revois le chrono.'
 };
+
+// ---------------------------------------------------------------- génération du plan
+/**
+ * Construit le plan complet, du lendemain jusqu'à la veille de la course.
+ * Retourne [{ date, titre, phase, km, blocs }] — les jours de repos sont inclus.
+ */
+export function genererPlan(vdotVal, dateCourse, debut = new Date()) {
+  const fin = new Date(dateCourse + 'T00:00:00');
+  const jours = [];
+  const d = new Date(debut); d.setHours(0,0,0,0); d.setDate(d.getDate() + 1);
+
+  while (d < fin) {
+    const restants = Math.round((fin - d) / 864e5);
+    const s = seanceDuJour(vdotVal, restants, d.getDay());
+    jours.push({
+      date: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,
+      titre: s.titre,
+      phase: s.phase,
+      km: s.km,
+      blocs: s.blocs
+    });
+    d.setDate(d.getDate() + 1);
+  }
+
+  // la veille : déblocage court ; le jour J n'est pas dans le plan
+  if (jours.length) {
+    const veille = jours[jours.length - 1];
+    veille.titre = 'Veille de course';
+    veille.km = 4;
+    veille.blocs = [{ nom: 'Footing très souple', detail: '20 min', zone: 'endurance',
+                      secondesParKm: (allures(vdotVal).find(z => z.cle === 'endurance') || {}).secondesParKm }];
+  }
+  return jours;
+}
+
+/** Bilan d'un plan : combien de séances prévues, faites, manquées. */
+export function bilanPlan(plan, aujourdhui = new Date()) {
+  const auj = aujourdhui.toISOString().slice(0,10);
+  let prevues = 0, faites = 0, manquees = 0, aVenir = 0;
+  for (const p of plan) {
+    if (!p.blocs || p.blocs.length === 0) continue;   // les repos ne comptent pas
+    prevues++;
+    if (p.etat === 'faite') faites++;
+    else if (p.date < auj) manquees++;
+    else aVenir++;
+  }
+  return { prevues, faites, manquees, aVenir,
+           taux: prevues ? Math.round(faites / (faites + manquees || 1) * 100) : null };
+}
