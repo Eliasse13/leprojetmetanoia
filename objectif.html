@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--vert:#0B7A3E;--vif:#12B85F;--ink:#0D0F0E;--sourd:#6B736E;--texte:#454B48;--piste:#E3E6E4;--or:#C98A1E;--rouge:#C4452F}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;
+  max-width:430px;margin:0 auto;padding-bottom:40px}
+.bar{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--piste)}
+.bar svg{width:76px;color:var(--ink)}
+.bar i{margin-left:auto;display:grid;gap:4px}
+.bar i b{display:block;width:19px;height:2px;background:var(--ink);border-radius:2px}
+.z{padding:22px 20px 0}
+.eyebrow{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#A9B0AC}
+
+/* cible */
+.cible{text-align:center;margin-bottom:26px}
+.cible .course{font-weight:900;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin:9px 0 4px}
+.cible .quand{font-weight:300;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--sourd)}
+.cible .chrono{font-weight:900;font-size:64px;letter-spacing:-.045em;line-height:1;margin-top:14px;
+  font-variant-numeric:tabular-nums}
+.cible .chrono u{text-decoration:none;font-size:.24em;color:var(--vert);margin-left:4px;vertical-align:.55em}
+.cible .lbl{font-weight:900;font-size:10px;letter-spacing:.3em;text-indent:.3em;
+  background:linear-gradient(180deg,#12B85F,#0B7A3E);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:8px}
+
+/* trajectoire */
+.traj{margin:0 0 26px}
+.traj svg{width:100%;height:auto;display:block}
+.traj .grid{stroke:#EEF1EF;stroke-width:1}
+.traj .zone{fill:rgba(18,184,95,.10)}
+.traj .reel{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.traj .proj{fill:none;stroke:var(--vif);stroke-width:2.5;stroke-dasharray:5 4;stroke-linecap:round}
+.traj .cibleL{stroke:var(--or);stroke-width:1.5;stroke-dasharray:3 3}
+.traj text{font-family:Chivo;font-size:8px;font-weight:700;fill:#A9B0AC;letter-spacing:.08em}
+.traj text.o{fill:var(--or)}
+.leg{display:flex;gap:16px;justify-content:center;margin-top:10px;
+  font-weight:300;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--sourd)}
+.leg i{display:inline-block;width:14px;height:2px;vertical-align:3px;margin-right:5px}
+
+/* trois chiffres */
+.trois{display:flex;border-top:1px solid var(--piste);border-bottom:1px solid var(--piste);margin-bottom:24px}
+.trois div{flex:1;padding:15px 0;text-align:center;border-left:1px solid var(--piste)}
+.trois div:first-child{border:0}
+.trois b{display:block;font-weight:900;font-size:20px;letter-spacing:-.02em}
+.trois span{display:block;font-weight:300;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--sourd);margin-top:4px}
+.trois .ok b{color:var(--vert)}
+
+/* charge */
+.charge{margin-bottom:26px}
+.charge .h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.charge .h b{font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.charge .h em{font-style:normal;font-weight:900;font-size:12px;color:var(--vert)}
+.charge .rail{height:8px;border-radius:5px;position:relative;
+  background:linear-gradient(90deg,#DCE3DF 0 24%,#12B85F 24% 60%,#E8C46A 60% 80%,#D9705C 80% 100%)}
+.charge .cur{position:absolute;top:-4px;width:3px;height:16px;background:var(--ink);border-radius:2px;left:47%}
+.charge .bornes{display:flex;justify-content:space-between;margin-top:7px;
+  font-weight:300;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#A9B0AC}
+.charge p{font-weight:300;font-size:12px;color:var(--texte);line-height:1.6;margin-top:11px}
+.charge p b{font-weight:900;color:var(--ink)}
+
+/* séance recommandée */
+.reco{border:2px solid var(--ink);border-radius:14px;padding:16px;margin-bottom:24px}
+.reco .t{display:flex;align-items:baseline;gap:8px;margin-bottom:12px}
+.reco .t b{font-weight:900;font-size:15px}
+.reco .t em{font-style:normal;margin-left:auto;font-weight:300;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--sourd)}
+.reco .bloc{display:flex;gap:9px;align-items:center;padding:9px 0;border-bottom:1px solid #F2F4F3}
+.reco .bloc:last-of-type{border:0}
+.reco .bloc .n{width:24px;height:24px;border-radius:50%;background:#F1F4F2;display:grid;place-items:center;
+  font-weight:900;font-size:10px;color:var(--sourd);flex:none}
+.reco .bloc .d b{display:block;font-weight:900;font-size:13px}
+.reco .bloc .d span{font-weight:300;font-size:11px;color:var(--sourd)}
+.reco .bloc em{margin-left:auto;font-style:normal;font-weight:900;font-size:13px;color:var(--vert);
+  font-variant-numeric:tabular-nums}
+.reco .pied{font-weight:300;font-size:11px;color:var(--sourd);margin-top:12px;line-height:1.5}
+
+/* allures */
+.allures{margin-bottom:24px}
+.allures .l{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F2F4F3}
+.allures .l .pt{width:8px;height:8px;border-radius:2px;flex:none}
+.allures .l b{font-weight:700;font-size:12.5px}
+.allures .l span{font-weight:300;font-size:10px;color:#A9B0AC;letter-spacing:.06em}
+.allures .l em{margin-left:auto;font-style:normal;font-weight:900;font-size:14px;font-variant-numeric:tabular-nums}
+.note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;padding:0 6px}
+</style></head><body>
+<div class="bar"><svg viewBox="0 0 5.071 .686"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg><i><b></b><b></b></i></div>
+
+<div class="z" id="z">
+  <p class="eyebrow" id="etat">Chargement…</p>
+</div>
+
+<script type="module">
+import { list, objectifActif } from './config.js';
+import { vdot, allures, charge, faisabilite, seanceDuJour,
+         fmtChrono, fmtAllure, fmtEcart, VERDICTS, NOMS } from './moteur.js';
+
+const $ = id => document.getElementById(id);
+const z = $('z');
+
+function jours(d){ return Math.max(0, Math.round((new Date(d + 'T00:00:00') - new Date()) / 864e5)); }
+function frDate(d){ return new Date(d + 'T00:00:00').toLocaleDateString('fr-FR',
+  { day:'numeric', month:'long', year:'numeric' }); }
+
+try {
+  const obj = await objectifActif();
+  if (!obj) {
+    z.innerHTML = `<p class="eyebrow">Objectif</p>
+      <h1 style="font-weight:900;font-size:26px;letter-spacing:-.03em;margin:8px 0 6px">Aucun objectif en cours</h1>
+      <p class="intro" style="font-weight:300;font-size:12.5px;color:#454B48;line-height:1.6">
+      La prochaine course n'est pas encore fixée.</p>`;
+  } else {
+    const seances = await list();
+    const ref = { metres: obj.ref_distance_m, secondes: obj.ref_chrono_s };
+    const cible = { metres: obj.distance_m, secondes: obj.chrono_cible_s, date: obj.date };
+    const f = faisabilite(ref, cible, obj.seances_semaine);
+    const ch = charge(seances);
+    const jr = jours(obj.date);
+    const s = seanceDuJour(f.vdotActuel, jr);
+    const zones = allures(f.vdotActuel);
+
+    // position du curseur de charge sur l'échelle 0,5 → 2,0
+    const pos = ch.ratio == null ? 50 : Math.min(98, Math.max(2, (ch.ratio - 0.5) / 1.5 * 100));
+    const COULEURS = { vert:'var(--vert)', or:'var(--or)', orange:'#D9772F', rouge:'var(--rouge)' };
+    const TEINTES  = ['#BFE8D0','#6FD79C','#12B85F','#0B7A3E','#075229'];
+
+    z.innerHTML = `
+      <div class="cible">
+        <p class="eyebrow">Objectif</p>
+        <p class="course">${obj.nom}</p>
+        <p class="quand">${frDate(obj.date)} — dans ${jr} jour${jr>1?'s':''}</p>
+        <div class="chrono">${fmtChrono(obj.chrono_cible_s)}</div>
+        <p class="lbl">CHRONO VISÉ</p>
+      </div>
+
+      <div class="trois">
+        <div><b>${fmtChrono(f.chronoActuel)}</b><span>ton niveau</span></div>
+        <div><b>${fmtEcart(f.ecart)}</b><span>à gagner</span></div>
+        <div class="ok"><b>VDOT ${f.vdotActuel}</b><span>actuel</span></div>
+      </div>
+
+      <div class="charge">
+        <div class="h"><b>Charge d'entraînement</b><em>${ch.ratio ?? '—'}</em></div>
+        <div class="rail"><span class="cur" style="left:${pos}%"></span></div>
+        <div class="bornes"><span>sous-entraîné</span><span>optimal</span><span>risqué</span></div>
+        <p>${ch.km7} km sur 7 jours, ${ch.km28} km sur 28.
+           ${ch.ratio == null ? 'Pas encore assez de séances pour juger.'
+             : ch.etat === 'optimal' ? 'Tu progresses sans forcer.'
+             : ch.etat === 'sous-entraine' ? 'Tu es en dessous de ton volume habituel.'
+             : ch.etat === 'eleve' ? 'Tu montes vite. Surveille les signaux.'
+             : 'Charge risquée. Au-delà de <b>1,5</b>, le risque de blessure double.'}</p>
+      </div>
+
+      <div class="retour" style="background:#F4F7F5;border-radius:14px;padding:16px;margin:0 0 24px">
+        <div class="verdict" style="display:flex;gap:9px;align-items:flex-start">
+          <span style="width:9px;height:9px;border-radius:50%;flex:none;margin-top:4px;
+                background:${COULEURS[f.couleur]}"></span>
+          <p style="font-weight:300;font-size:12.5px;color:#454B48;line-height:1.55">
+            <b style="font-weight:900;color:#0D0F0E">${VERDICTS[f.verdict]}</b><br>
+            Projection à <b style="font-weight:900;color:#0D0F0E">${fmtChrono(f.chronoProjete)}</b>,
+            fourchette ${fmtChrono(f.fourchette[0])} à ${fmtChrono(f.fourchette[1])}.
+            Il faut gagner ${f.gainDemande} point${Math.abs(f.gainDemande)>1?'s':''} de VDOT ;
+            ${f.gainPossible} sont atteignables en ${jr} jours à ${obj.seances_semaine} séances par semaine.</p>
+        </div>
+      </div>
+
+      <div class="reco">
+        <div class="t"><b>${s.titre}</b><em>phase ${s.phase}</em></div>
+        ${s.blocs.length ? s.blocs.map((b,i) => `
+          <div class="bloc"><span class="n">${i+1}</span>
+            <div class="d"><b>${b.nom}</b><span>${b.detail || ''}</span></div>
+            <em>${fmtAllure(b.secondesParKm)}</em></div>`).join('')
+          : '<p class="pied" style="margin:0">Repos. C\'est aussi un entraînement.</p>'}
+        ${s.km ? `<p class="pied">Total ${s.km} km.</p>` : ''}
+      </div>
+
+      <div class="allures">
+        <p class="eyebrow" style="margin-bottom:8px">Tes allures, calculées sur VDOT ${f.vdotActuel}</p>
+        ${zones.map((zz,i) => `<div class="l">
+          <span class="pt" style="background:${TEINTES[i]}"></span>
+          <b>${zz.nom}</b><span>${zz.sous}</span>
+          <em>${fmtAllure(zz.secondesParKm)}</em></div>`).join('')}
+      </div>
+
+      <p class="note">Calculs Daniels VDOT et ratio de charge aiguë/chronique,
+        à partir de ${seances.length} séance${seances.length>1?'s':''} et d'une référence du
+        ${frDate(obj.ref_date)} (${NOMS[Object.keys(NOMS).find(k=>({'5k':5000,'10k':10000,'semi':21097,'marathon':42195})[k]===obj.ref_distance_m)] || obj.ref_distance_m+' m'} en ${fmtChrono(obj.ref_chrono_s)}).
+        Une projection n'est pas une promesse.</p>`;
+  }
+} catch (e) {
+  z.innerHTML = '<p class="eyebrow" style="color:#C4452F">Erreur : ' + e.message + '</p>';
+}
+</script>
+</body></html>
