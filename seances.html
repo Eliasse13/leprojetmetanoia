@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Metanoia — Séances</title>
+<meta name="description" content="Chaque entraînement du projet Metanoia, analysé par rapport aux zones d'allure du coureur.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FFFFFF'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%230B7A3E' stroke-width='9' stroke-linecap='round' stroke-dasharray='142 189' transform='rotate(-90 50 50)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--vert:#0B7A3E;--vif:#12B85F;--ink:#0D0F0E;--sourd:#6B736E;--texte:#454B48;--piste:#E8EBE9}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;
+  max-width:430px;margin:0 auto;padding-bottom:48px;-webkit-font-smoothing:antialiased}
+.entete{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--piste)}
+.entete .lg{width:76px;color:var(--ink);line-height:0}
+.entete .lg svg{display:block;width:100%;height:auto}
+.ouvrir{margin-left:auto;background:none;border:0;cursor:pointer;display:grid;gap:4px;padding:10px;margin-right:-10px}
+.ouvrir i{display:block;width:19px;height:2px;background:var(--ink);border-radius:2px}
+.ouvrir:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
+
+.panneau{position:fixed;inset:0;z-index:50;background:#000;color:#fff;display:flex;flex-direction:column;
+  padding:max(20px,env(safe-area-inset-top)) clamp(22px,6vw,40px) max(24px,env(safe-area-inset-bottom));
+  opacity:0;visibility:hidden;transform:translateY(-10px);
+  transition:opacity .3s ease,transform .35s cubic-bezier(.2,.9,.3,1),visibility .3s}
+.panneau.ouvert{opacity:1;visibility:visible;transform:none}
+.panneau .haut{display:flex;align-items:center;justify-content:space-between}
+.panneau .lg{width:clamp(76px,22vw,104px);color:#fff;line-height:0}
+.panneau .lg svg{display:block;width:100%;height:auto}
+.fermer{background:none;border:0;color:#8B948F;font-size:22px;line-height:1;cursor:pointer;padding:10px;margin-right:-10px}
+.panneau nav{margin:auto 0;display:grid}
+.panneau nav a{display:flex;align-items:baseline;gap:14px;padding:clamp(13px,2.4vh,19px) 0;
+  border-bottom:1px solid #1E2124;text-decoration:none}
+.panneau nav a i{font-style:normal;font-weight:300;font-size:10px;letter-spacing:.14em;color:#5C6560}
+.panneau nav a b{font-weight:900;font-size:clamp(24px,7vw,34px);letter-spacing:-.02em;color:#8E9793}
+.panneau nav a.on b{color:var(--vif)}
+.panneau .pied{font-weight:300;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#4E5754}
+@media (prefers-reduced-motion:reduce){.panneau{transition:opacity .01ms}}
+
+.z{padding:24px 20px 0}
+.k{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#A9B0AC}
+.gros{font-weight:900;font-size:clamp(38px,11vw,46px);letter-spacing:-.045em;line-height:1;margin:8px 0 4px}
+.gros u{text-decoration:none;font-size:.26em;color:var(--vert);margin-left:3px}
+
+.mois{margin-top:30px}
+.mois .titre{display:flex;justify-content:space-between;align-items:baseline;
+  border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:2px}
+.mois .titre b{font-weight:900;font-size:15px;letter-spacing:-.01em}
+.mois .titre em{font-style:normal;font-weight:300;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--sourd)}
+.art{border-bottom:1px solid #F0F3F1;padding:15px 0}
+.art .sur{font-weight:900;font-size:8px;letter-spacing:.24em;text-transform:uppercase}
+.art h3{font-weight:900;font-size:22px;letter-spacing:-.035em;line-height:1.05;margin:5px 0 4px}
+.art p{font-weight:300;font-size:11.5px;color:var(--texte);line-height:1.5}
+.art .meta{display:flex;gap:14px;margin-top:7px;font-weight:300;font-size:10px;color:#A9B0AC;letter-spacing:.08em}
+.art .meta b{font-weight:900;color:var(--ink)}
+.vide{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.6;margin-top:16px}
+.note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;margin-top:26px;text-align:center}
+</style>
+</head>
+<body>
+<header class="entete">
+  <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <button class="ouvrir" id="ouvrir" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="panneau"><i></i><i></i></button>
+</header>
+
+<div class="panneau" id="panneau" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="haut">
+    <a class="lg" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+    <button class="fermer" id="fermer" aria-label="Fermer le menu">&#10005;</button>
+  </div>
+  <nav>
+    <a href="metanoia.html"><i>01</i><b>Vue d'ensemble</b></a>
+    <a href="objectif.html"><i>02</i><b>Objectif</b></a>
+    <a class="on" href="seances.html" aria-current="page"><i>03</i><b>Séances</b></a>
+  </nav>
+  <p class="pied">Pilier 1 sur 5 — sport</p>
+</div>
+
+<div class="z" id="z"><p class="k">Chargement…</p></div>
+
+<script type="module">
+import { list, projetActif } from './config.js';
+import { vdot, nature, NATURES, COMMENTAIRES, fmtAllure } from './moteur.js';
+
+const $ = id => document.getElementById(id);
+const z = $('z');
+const km = n => Number(n).toFixed(2).replace('.', ',');
+const duree = s => { const h = Math.floor(s/3600), m = Math.floor(s/60)%60;
+  return h ? `${h} h ${String(m).padStart(2,'0')}` : `${m} min`; };
+const chrono = s => `${Math.floor(s/60)}:${String(Math.round(s)%60).padStart(2,'0')}`;
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+try {
+  const [seances, p] = await Promise.all([list(), projetActif()]);
+  const v = p ? vdot(p.ref_distance_m, p.ref_chrono_s) : 50;
+
+  if (!seances.length) {
+    z.innerHTML = `<p class="k">Séances</p>
+      <p class="vide">Aucune séance enregistrée pour l'instant.
+      Chaque entraînement apparaîtra ici, analysé par rapport aux zones d'allure du moment.</p>`;
+  } else {
+    const tri = seances.slice().sort((a,b) => b.date.localeCompare(a.date));
+    const totKm = tri.reduce((a,s) => a + Number(s.distance_km || 0), 0);
+    const salles = tri.filter(s => (s.type||'').toLowerCase().includes('salle')).length;
+
+    // regroupement par mois
+    const groupes = {};
+    tri.forEach(s => { const c = s.date.slice(0,7); (groupes[c] = groupes[c] || []).push(s); });
+
+    let html = `<p class="k">Séances</p>
+      <div class="gros">${km(totKm)}<u>km</u></div>
+      <p class="k">${tri.length} séance${tri.length>1?'s':''}${salles ? ' · ' + salles + ' en salle' : ''}</p>`;
+
+    for (const [cle, lot] of Object.entries(groupes)) {
+      const [an, mo] = cle.split('-');
+      const kmMois = lot.reduce((a,s) => a + Number(s.distance_km || 0), 0);
+      html += `<div class="mois"><div class="titre">
+        <b>${MOIS[+mo-1].charAt(0).toUpperCase()+MOIS[+mo-1].slice(1)} ${an}</b>
+        <em>${km(kmMois)} km · ${lot.length} séance${lot.length>1?'s':''}</em></div>`;
+
+      lot.forEach((s, i) => {
+        const veille = tri[tri.indexOf(s)+1] || null;
+        const n = nature(s, v, veille);
+        const N = NATURES[n];
+        const salle = n === 'renfo';
+        const t = Number(s.temps_s || 0), d = Number(s.distance_km || 0);
+        const titre = salle ? (s.type || 'Renforcement') : km(d) + ' km';
+        const jour = new Date(s.date + 'T00:00:00')
+          .toLocaleDateString('fr-FR', { day:'numeric', month:'short' });
+        html += `<div class="art">
+          <p class="sur" style="color:${N.couleur}">${N.nom}</p>
+          <h3>${titre}</h3>
+          <p>${COMMENTAIRES[n]}</p>
+          <div class="meta"><span>${jour}</span>
+            ${t ? `<span>${salle ? duree(t) : chrono(t)}</span>` : ''}
+            ${(!salle && d && t) ? `<span><b>${fmtAllure(t/d)}</b>/km</span>` : ''}
+            ${s.lieu ? `<span>${s.lieu}</span>` : ''}
+          </div></div>`;
+      });
+      html += `</div>`;
+    }
+
+    html += `<p class="note">Chaque séance est classée par rapport aux allures calculées
+      sur ton VDOT actuel (${v}). Une classification n'est pas un jugement :
+      une séance de récupération est utile, une zone grise n'est pas une mauvaise sortie,
+      juste une sortie mal placée dans la semaine.</p>`;
+    z.innerHTML = html;
+  }
+} catch (e) {
+  z.innerHTML = '<p class="k" style="color:#C4452F">Erreur : ' + e.message + '</p>';
+}
+</script>
+<script>
+(function(){
+  var pan=document.getElementById('panneau'), ouv=document.getElementById('ouvrir'),
+      fer=document.getElementById('fermer'), avant=null;
+  function ouvrir(){ avant=document.activeElement; pan.classList.add('ouvert');
+    ouv.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; fer.focus(); }
+  function fermer(){ pan.classList.remove('ouvert'); ouv.setAttribute('aria-expanded','false');
+    document.body.style.overflow=''; (avant||ouv).focus(); }
+  ouv.addEventListener('click',ouvrir); fer.addEventListener('click',fermer);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&pan.classList.contains('ouvert')) fermer(); });
+})();
+</script>
+</body>
+</html>
