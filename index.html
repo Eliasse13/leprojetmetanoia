@@ -6,7 +6,7 @@
 <title>Metanoia — dix ans pour changer d'esprit</title>
 <meta name="description" content="Metanoia : un projet de transformation sur dix ans, du 18 août 2026 au 18 août 2036. Cinq piliers, un seul ouvert pour l'instant.">
 <link rel="canonical" href="https://leprojetmetanoia.fr/">
-<meta name="theme-color" content="#0F1412">
+<meta name="theme-color" content="#0B100E">
 <meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
@@ -92,9 +92,10 @@
 
   .msg{
     font-size:clamp(12px,3.2vw,14px);font-weight:300;
-    color:var(--texte);max-width:32ch;line-height:1.6;
-    min-height:3.2em;
+    color:var(--texte);max-width:34ch;line-height:1.75;
+    min-height:3.5em;
   }
+  .msg-2{display:block;color:var(--sourd);margin-top:2px}
 
   .entrer{
     background:var(--vert);color:#08160F;
@@ -125,9 +126,15 @@
     .dial{width:min(38vw,120px)}
     .msg{min-height:2.4em}
   }
+
+  body{background:#0B100E}
+  #champ{position:fixed;inset:0;z-index:-1;display:block}
+
 </style>
 </head>
 <body>
+
+<canvas id="champ" aria-hidden="true"></canvas>
 
 <div class="entete">
   <p class="dates">18.08.2026 → 18.08.2036</p>
@@ -143,7 +150,7 @@
   <span class="label" id="label">Maintiens<small>3 secondes</small></span>
 </div>
 
-<p class="msg" id="msg" aria-live="polite">Rien ici ne s'ouvre en un clic. C'est un peu le sujet.</p>
+<p class="msg" id="msg" aria-live="polite">Rien ici ne s'ouvre en un clic.<br><span class="msg-2">C'est un peu le sujet.</span></p>
 
 <a class="entrer" id="entrer" href="metanoia.html">ENTRER — SPORT</a>
 <a class="secours" id="secours" href="metanoia.html">Passer directement</a>
@@ -173,6 +180,8 @@
 
   var t0 = null, raf = null, fini = false, echecs = 0, actif = false;
 
+  function dire(t){ msg.textContent = t; }
+
   var PALIERS = [[0.25, 'Tiens bon.'], [0.55, 'Encore un peu.'], [0.85, 'Presque.']];
 
   function tick(ts){
@@ -181,7 +190,7 @@
     jauge.style.strokeDashoffset = L * (1 - p);
 
     for (var i = 0; i < PALIERS.length; i++){
-      if (p >= PALIERS[i][0]) msg.textContent = PALIERS[i][1];
+      if (p >= PALIERS[i][0]) dire(PALIERS[i][1]);
     }
 
     if (p >= 1){ ouvrir(); return; }
@@ -192,7 +201,7 @@
     fini = true; actif = false;
     document.body.classList.add('ouvert');
     label.innerHTML = 'Ouvert<small>jour ' + JOUR + '</small>';
-    msg.textContent = 'Voilà. La suite se mérite pareil.';
+    dire('Voilà. La suite se mérite pareil.');
     entrer.classList.add('visible');
     secours.classList.remove('visible');
     dial.setAttribute('aria-label', 'Ouvert');
@@ -213,8 +222,8 @@
     t0 = null;
     jauge.style.strokeDashoffset = L;
     echecs++;
-    msg.textContent = echecs > 1 ? 'Encore lâché. Trois secondes, pas plus.'
-                                 : 'Lâché trop tôt. Recommence.';
+    dire(echecs > 1 ? 'Encore lâché. Trois secondes, pas plus.'
+                    : 'Lâché trop tôt. Recommence.');
     if (echecs >= 3) secours.classList.add('visible');
   }
 
@@ -233,6 +242,45 @@
   document.addEventListener('visibilitychange', function(){
     if (document.hidden) stop();
   });
+
+  // --- champ de particules ---
+  (function(){
+    var cv=document.getElementById('champ'), cx=cv.getContext('2d'), W,H,dp;
+    function size(){dp=window.devicePixelRatio||1;W=innerWidth;H=innerHeight;
+      cv.width=W*dp;cv.height=H*dp;cx.setTransform(dp,0,0,dp,0,0);}
+    size();addEventListener('resize',size);
+    var N=Math.min(220,Math.round(innerWidth*innerHeight/4200)), P=[];
+    for(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.5+.7});
+    var reduit=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    function boucle(){
+      cx.clearRect(0,0,W,H);
+      var tient=document.body.classList.contains('tient');
+      var ouvert=document.body.classList.contains('ouvert');
+      var cxr=cv.getBoundingClientRect(), r=dial.getBoundingClientRect();
+      var gx=r.left+r.width/2, gy=r.top+r.height/2;
+      for(var i=0;i<P.length;i++){
+        var p=P[i];
+        if(!reduit){
+          if(tient||ouvert){ var dx=gx-p.x,dy=gy-p.y,d=Math.hypot(dx,dy)||1;
+            p.vx+=dx/d*.035; p.vy+=dy/d*.035; p.vx*=.965; p.vy*=.965; }
+          p.x+=p.vx;p.y+=p.vy;
+          if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+        }
+        var dd=Math.hypot(gx-p.x,gy-p.y);
+        var a=(tient||ouvert)?Math.min(.9,.32+200/(dd+80)):.30;
+        cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);
+        cx.fillStyle='rgba(49,224,122,'+a.toFixed(3)+')';cx.fill();
+      }
+      if(!document.hidden) requestAnimationFrame(boucle);
+    }
+    boucle();
+    document.addEventListener('visibilitychange',function(){ if(!document.hidden) boucle(); });
+  })();
+  dial.addEventListener('pointerdown', function(){ document.body.classList.add('tient'); });
+  window.addEventListener('pointerup', function(){ document.body.classList.remove('tient'); });
+  window.addEventListener('pointercancel', function(){ document.body.classList.remove('tient'); });
+
 })();
 </script>
 </body>
