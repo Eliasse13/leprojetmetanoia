@@ -70,6 +70,27 @@ export async function removeCompetition(id) {
   await sbReady; if (!sb) return; const { error } = await sb.from('competitions').delete().eq('id', id); if (error) throw error;
 }
 
+// objectifs
+export async function listObjectifs() {
+  await sbReady; if (!sb) return [];
+  const { data, error } = await sb.from('objectifs').select('*').order('date', { ascending: true });
+  if (error) throw error; return data;
+}
+export async function objectifActif() {
+  const today = new Date().toISOString().slice(0, 10);
+  const all = await listObjectifs();
+  return all.find(o => o.actif && o.date >= today) || null;
+}
+export async function insertObjectif(row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('objectifs').insert(row); if (error) throw error;
+}
+export async function updateObjectif(id, row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('objectifs').update(row).eq('id', id); if (error) throw error;
+}
+export async function removeObjectif(id) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('objectifs').delete().eq('id', id); if (error) throw error;
+}
+
 // compteur de visites
 export async function enregistrerVisite() {
   try {
