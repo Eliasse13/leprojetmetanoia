@@ -86,19 +86,36 @@ export function allures(vdotVal) {
  */
 export function charge(seances, aujourdhui = new Date()) {
   const jour = d => Math.floor((aujourdhui - new Date(d + 'T00:00:00')) / 864e5);
-  let aigue = 0, chronique = 0;
+  let aigue = 0, chronique = 0, nb28 = 0, plusVieux = 0;
+
   for (const s of seances) {
     const j = jour(s.date);
     if (j < 0) continue;
+    if (j > plusVieux) plusVieux = j;
     const c = Number(s.distance_km || 0) + Number(s.denivele_m || 0) / 100;
     if (j < 7)  aigue += c;
-    if (j < 28) chronique += c;
+    if (j < 28) { chronique += c; nb28++; }
   }
-  const moyenne28 = chronique / 4;                     // ramené à une semaine
-  const ratio = moyenne28 > 0 ? aigue / moyenne28 : null;
+
+  // le ratio n'a aucun sens sans un historique réel : il faut au moins
+  // trois semaines de données et une poignée de séances.
+  const historique = Math.min(28, plusVieux + 1);
+  if (nb28 < 5 || historique < 21) {
+    return {
+      km7: Math.round(aigue * 10) / 10,
+      km28: Math.round(chronique * 10) / 10,
+      ratio: null,
+      etat: 'insuffisant',
+      jours: historique,
+      seances: nb28
+    };
+  }
+
+  const moyenneHebdo = chronique / (historique / 7);   // ramené à une semaine réelle
+  const ratio = moyenneHebdo > 0 ? aigue / moyenneHebdo : null;
   let etat = 'inconnu';
   if (ratio !== null) {
-    if (ratio < 0.8)      etat = 'sous-entraine';
+    if (ratio < 0.8)       etat = 'sous-entraine';
     else if (ratio <= 1.3) etat = 'optimal';
     else if (ratio <= 1.5) etat = 'eleve';
     else                   etat = 'risque';
@@ -107,7 +124,7 @@ export function charge(seances, aujourdhui = new Date()) {
     km7: Math.round(aigue * 10) / 10,
     km28: Math.round(chronique * 10) / 10,
     ratio: ratio === null ? null : Math.round(ratio * 100) / 100,
-    etat
+    etat, jours: historique, seances: nb28
   };
 }
 
