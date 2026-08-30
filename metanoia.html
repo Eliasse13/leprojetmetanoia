@@ -114,6 +114,19 @@
   @keyframes in{to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){.r{animation:none;opacity:1;transform:none}}
   @media (max-height:620px){body{gap:14px}}
+
+  .panneau nav a em{font-style:normal;margin-left:auto;font-weight:300;font-size:9px;
+    letter-spacing:.18em;text-transform:uppercase;color:#4A524E}
+  .panneau .piliers{display:grid;gap:9px;padding-top:16px;border-top:1px solid #1E2124}
+  .panneau .piliers .p{display:flex;align-items:center;gap:9px;font-weight:700;font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;color:#4E5754}
+  .panneau .piliers .p i{width:8px;height:8px;border-radius:50%;background:#2A2E31;flex:none}
+  .panneau .piliers .p.on{color:#8E9793}
+  .panneau .piliers .p.on i{background:var(--vif)}
+  .panneau .piliers .p.alim i{background:#C9A227}
+  .panneau .piliers .p.alim{color:#7A6A38}
+  .panneau .piliers .p em{font-style:normal;margin-left:auto;font-weight:300;font-size:8.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:#3F4744}
 </style>
 </head>
 <body>
@@ -134,8 +147,12 @@
     <a class="on" href="metanoia.html" aria-current="page"><i>01</i><b>Vue d'ensemble</b></a>
     <a href="objectif.html"><i>02</i><b>Objectif</b></a>
     <a href="seances.html"><i>03</i><b>Séances</b></a>
+    <a aria-disabled="true"><i>04</i><b>Créer mon compte</b><em>prochainement</em></a>
   </nav>
-  <p class="pied">Pilier 1 sur 5 — sport</p>
+    <div class="piliers">
+    <span class="p on"><i></i>Sport</span>
+    <span class="p alim"><i></i>Alimentation<em>prochainement</em></span>
+  </div>
 </div>
 
 <div class="contenu">
@@ -146,7 +163,7 @@
 <div class="err" id="err"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite } from './config.js?v=20260830b';
+import { list, DEBUT, fr, enregistrerVisite } from './config.js?v=20260830c';
 const $ = id => document.getElementById(id);
 
 try {
