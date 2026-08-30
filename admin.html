@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Metanoia — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
@@ -52,6 +52,10 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 .log .del{background:none;border:0;color:var(--line);cursor:pointer;font-size:1.2rem;transition:color .3s;font-family:inherit}
 .log tr:hover .del{color:var(--soft)}.log .del:hover{color:#b00!important}
 @media(max-width:700px){.hide{display:none}}
+
+  body{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+    touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+  input,textarea,select{user-select:text;-webkit-user-select:text;-webkit-touch-callout:default}
 </style>
 </head>
 <body>
@@ -106,7 +110,7 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260830b';
+import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260830g';
 
 if (!await exigerConnexion()) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -225,9 +229,31 @@ refreshResultats();
   border-radius:999px;padding:7px 14px;font-family:inherit;font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;color:#888;cursor:pointer">Déconnexion</button>
 <script type="module">
-import { deconnexion } from './config.js?v=20260830b';
+import { deconnexion } from './config.js?v=20260830g';
 document.getElementById('quitter').addEventListener('click', async () => {
   await deconnexion(); location.href = 'index.html';
+});
+</script>
+
+<script>
+// pas de sélection ni de copie ; zoom bloqué sur mobile seulement
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(function(ev){
+  document.addEventListener(ev, function(e){
+    if (e.target.closest('input, textarea, select')) return;   // la saisie reste possible
+    e.preventDefault();
+  });
+});
+['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive:false });
+});
+document.addEventListener('touchmove', function(e){
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive:false });
+document.addEventListener('keydown', function(e){
+  if ((e.ctrlKey || e.metaKey) && ['c','x','a','u','s','p'].indexOf(e.key.toLowerCase()) > -1) {
+    if (e.target.closest('input, textarea')) return;
+    e.preventDefault();
+  }
 });
 </script>
 </body>
