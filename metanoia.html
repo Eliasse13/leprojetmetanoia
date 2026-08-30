@@ -43,6 +43,53 @@
     padding:clamp(24px,5vh,44px) clamp(20px,5vw,52px) max(24px,env(safe-area-inset-bottom));
   }
 
+  /* header : barre minimale + menu plein écran */
+  .entete{
+    display:flex;align-items:center;gap:14px;
+    padding:max(14px,env(safe-area-inset-top)) clamp(18px,5vw,34px) 14px;
+    border-bottom:1px solid var(--piste);
+  }
+  .marque{width:clamp(76px,22vw,104px);color:var(--craie);flex:none;line-height:0}
+  .marque svg{display:block;width:100%;height:auto}
+  .ouvrir{
+    margin-left:auto;background:none;border:0;cursor:pointer;
+    display:grid;gap:4px;padding:10px;margin-right:-10px;
+  }
+  .ouvrir i{display:block;width:19px;height:2px;background:var(--craie);border-radius:2px;
+    transition:transform .3s ease}
+  .ouvrir:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
+
+  .panneau{
+    position:fixed;inset:0;z-index:50;
+    background:#000;color:#fff;
+    display:flex;flex-direction:column;
+    padding:max(20px,env(safe-area-inset-top)) clamp(22px,6vw,40px) max(24px,env(safe-area-inset-bottom));
+    opacity:0;visibility:hidden;transform:translateY(-10px);
+    transition:opacity .3s ease,transform .35s cubic-bezier(.2,.9,.3,1),visibility .3s;
+  }
+  .panneau.ouvert{opacity:1;visibility:visible;transform:none}
+  .panneau .haut{display:flex;align-items:center;justify-content:space-between}
+  .panneau .marque{color:#fff}
+  .fermer{background:none;border:0;color:#8B948F;font-size:22px;line-height:1;cursor:pointer;
+    padding:10px;margin-right:-10px}
+  .fermer:focus-visible{outline:2px solid var(--vif);outline-offset:2px;border-radius:6px}
+  .panneau nav{margin:auto 0;display:grid;gap:0}
+  .panneau nav a{
+    display:flex;align-items:baseline;gap:14px;
+    padding:clamp(13px,2.4vh,19px) 0;border-bottom:1px solid #1E2124;
+    text-decoration:none;
+  }
+  .panneau nav a i{font-style:normal;font-weight:300;font-size:10px;letter-spacing:.14em;color:#5C6560}
+  .panneau nav a b{font-weight:900;font-size:clamp(24px,7vw,34px);letter-spacing:-.02em;color:#8E9793}
+  .panneau nav a.on b{color:var(--vif)}
+  .panneau nav a[aria-disabled] b{color:#3B4340}
+  .panneau nav a[aria-disabled]{pointer-events:none}
+  .panneau nav a em{font-style:normal;margin-left:auto;font-weight:300;font-size:9px;
+    letter-spacing:.18em;text-transform:uppercase;color:#4A524E}
+  .panneau nav a:focus-visible{outline:2px solid var(--vif);outline-offset:4px}
+  .panneau .pied{font-weight:300;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#4E5754}
+  @media (prefers-reduced-motion:reduce){.panneau{transition:opacity .01ms}}
+
   /* compteur principal — le chiffre se remplit */
   .compteur{display:grid;gap:clamp(8px,1.8vh,14px);justify-items:center}
   .liquide{width:min(88vw,440px);height:auto;display:block}
@@ -70,6 +117,26 @@
 </style>
 </head>
 <body>
+
+<header class="entete">
+  <a class="marque" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <button class="ouvrir" id="ouvrir" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="panneau">
+    <i></i><i></i>
+  </button>
+</header>
+
+<div class="panneau" id="panneau" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="haut">
+    <a class="marque" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+    <button class="fermer" id="fermer" aria-label="Fermer le menu">&#10005;</button>
+  </div>
+  <nav>
+    <a class="on" href="metanoia.html" aria-current="page"><i>01</i><b>Vue d'ensemble</b></a>
+    <a aria-disabled="true"><i>02</i><b>Séances</b><em>bientôt</em></a>
+    <a aria-disabled="true"><i>03</i><b>Courses</b><em>bientôt</em></a>
+  </nav>
+  <p class="pied">Pilier 1 sur 5 — sport</p>
+</div>
 
 <div class="contenu">
 <div class="compteur r" id="compteur" style="animation-delay:.2s"></div>
@@ -134,6 +201,32 @@ try {
 
 enregistrerVisite();
 
+
+// menu plein écran
+(function(){
+  var pan = document.getElementById('panneau'),
+      ouv = document.getElementById('ouvrir'),
+      fer = document.getElementById('fermer'),
+      avant = null;
+  function ouvrir(){
+    avant = document.activeElement;
+    pan.classList.add('ouvert');
+    ouv.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+    fer.focus();
+  }
+  function fermer(){
+    pan.classList.remove('ouvert');
+    ouv.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+    (avant || ouv).focus();
+  }
+  ouv.addEventListener('click', ouvrir);
+  fer.addEventListener('click', fermer);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && pan.classList.contains('ouvert')) fermer();
+  });
+})();
 
 // pas de sélection ni de copie ; zoom bloqué sur mobile seulement
 ['copy','cut','contextmenu','dragstart','selectstart'].forEach(function(ev){
