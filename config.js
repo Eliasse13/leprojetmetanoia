@@ -3,7 +3,7 @@ export const SUPABASE_URL = 'https://mfbrnmhtoqqklmywclxt.supabase.co';
 export const SUPABASE_KEY = 'sb_publishable_YzwLgEs90iScg1i54zYliQ_Js7Fl3jm';
 export const TABLE = 'entrainements';
 export const DEBUT = '2026-08-28'; // le compteur compte à partir de cette date
-export const TYPES = ['Footing', 'Fractionné', 'Sortie longue', 'Seuil', 'Compétition'];
+export const TYPES = ['Footing', 'Fractionné', 'Sortie longue', 'Seuil', 'Compétition', 'Salle de sport'];
 
 let sb = null;
 let sbReady = Promise.resolve();
