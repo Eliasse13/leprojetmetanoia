@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Metanoia — dix ans pour changer d'esprit</title>
 <meta name="description" content="Metanoia : un projet de transformation sur dix ans, du 18 août 2026 au 18 août 2036. Cinq piliers, un seul ouvert pour l'instant.">
 <link rel="canonical" href="https://leprojetmetanoia.fr/">
@@ -270,6 +270,28 @@
   window.addEventListener('pointercancel', function(){ document.body.classList.remove('tient'); });
 
 })();
+</script>
+
+<script>
+// pas de sélection ni de copie ; zoom bloqué sur mobile seulement
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(function(ev){
+  document.addEventListener(ev, function(e){
+    if (e.target.closest('input, textarea, select')) return;   // la saisie reste possible
+    e.preventDefault();
+  });
+});
+['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive:false });
+});
+document.addEventListener('touchmove', function(e){
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive:false });
+document.addEventListener('keydown', function(e){
+  if ((e.ctrlKey || e.metaKey) && ['c','x','a','u','s','p'].indexOf(e.key.toLowerCase()) > -1) {
+    if (e.target.closest('input, textarea')) return;
+    e.preventDefault();
+  }
+});
 </script>
 </body>
 </html>
