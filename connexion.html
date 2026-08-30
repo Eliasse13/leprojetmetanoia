@@ -45,7 +45,7 @@ button[disabled]{opacity:.5}
 <button class="lien" id="bascule">Créer le compte</button>
 
 <script type="module">
-import { connexion, inscription, utilisateur } from './config.js';
+import { connexion, inscription, utilisateur } from './config.js?v=20260830b';
 const $ = id => document.getElementById(id);
 const suite = new URLSearchParams(location.search).get('suite') || 'admin.html';
 let mode = 'connexion';
