@@ -47,12 +47,16 @@
   .palier b{font-weight:700;color:var(--vert)}
   @media (prefers-reduced-motion:reduce){.vague{animation:none}}
 
-  /* régularité : 14 jours */
-  .reg{display:grid;gap:10px;justify-items:center}
-  .jours{display:flex;gap:clamp(4px,1.4vw,7px)}
-  .jours i{width:clamp(7px,2.2vw,10px);aspect-ratio:1;border-radius:50%;background:var(--piste)}
-  .jours i.on{background:var(--vert)}
-  .reg span{font-weight:300;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sourd)}
+  /* régularité : mini calendrier, deux semaines */
+  .reg{display:grid;gap:12px;justify-items:center}
+  .cal{display:inline-grid;grid-template-columns:repeat(7,1fr);gap:clamp(5px,1.6vw,7px)}
+  .cal .jj{font-weight:300;font-size:9px;letter-spacing:.12em;color:#B8BEBB;text-align:center;height:12px}
+  .cal span{width:clamp(24px,7vw,30px);aspect-ratio:1;border-radius:6px;
+    border:1.5px solid var(--piste);display:grid;place-items:center;
+    font-weight:700;font-size:clamp(9px,2.6vw,11px);color:#C2C8C5}
+  .cal span.on{border-color:transparent;color:#fff}
+  .cal span.today{box-shadow:0 0 0 1.5px var(--craie)}
+  .reg .lg{font-weight:300;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sourd)}
 
   /* prochaine échéance */
   .comp{display:grid;gap:6px;border-top:1px solid var(--piste);padding-top:clamp(16px,3vh,26px);min-width:min(86vw,340px)}
@@ -144,17 +148,33 @@ try {
   const dateStr = now.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
   $('date').innerHTML = `${dateStr} <em>—</em> jour ${jours}`;
 
-  // régularité : un point par jour sur les 14 derniers
-  const actifs = new Set(all.map(r => r.date));
-  let pts = '', n = 0;
+  // régularité : mini calendrier des 14 derniers jours, intensité = distance
+  const parJour = {};
+  all.forEach(r => { parJour[r.date] = (parJour[r.date] || 0) + Number(r.distance_km); });
+
+  const cases = [];
   for (let i = 13; i >= 0; i--) {
     const d = new Date(now); d.setDate(d.getDate() - i);
-    const iso = d.toISOString().slice(0, 10);
-    const on = actifs.has(iso); if (on) n++;
-    pts += `<i class="${on ? 'on' : ''}"></i>`;
+    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    cases.push({ iso, jour: d.getDate(), km: parJour[iso] || 0, aujourdhui: i === 0 });
   }
-  $('reg').innerHTML = `<div class="jours" aria-label="${n} jours actifs sur les 14 derniers">${pts}</div>`
-    + `<span>${n} jour${n > 1 ? 's' : ''} actif${n > 1 ? 's' : ''} sur 14</span>`;
+  const maxKm = Math.max(1, ...cases.map(c => c.km));
+  const actifs = cases.filter(c => c.km > 0).length;
+
+  // aligner la grille sur le vrai jour de la semaine (lundi = 1re colonne)
+  const premier = new Date(now); premier.setDate(premier.getDate() - 13);
+  const decalage = (premier.getDay() + 6) % 7;
+
+  let grille = ['L','M','M','J','V','S','D'].map(j => `<div class="jj">${j}</div>`).join('');
+  grille += '<span style="visibility:hidden"></span>'.repeat(decalage);
+  grille += cases.map(c => {
+    const teinte = c.km ? `background:hsl(147 82% ${52 - Math.round(c.km / maxKm * 22)}%)` : '';
+    return `<span class="${c.km ? 'on' : ''}${c.aujourdhui ? ' today' : ''}" style="${teinte}">${c.jour}</span>`;
+  }).join('');
+
+  $('reg').innerHTML = `<div class="cal" role="img"
+      aria-label="${actifs} jours avec sortie sur les 14 derniers">${grille}</div>`
+    + `<p class="lg">${actifs} sortie${actifs > 1 ? 's' : ''} en deux semaines</p>`;
 
   const comp = await prochaineCompetition();
   if (comp) {
