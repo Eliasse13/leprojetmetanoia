@@ -124,8 +124,8 @@ label{display:block;font-weight:300;font-size:9px;letter-spacing:.2em;text-trans
 </div>
 
 <script type="module">
-import { insertObjectif } from './config.js';
-import { faisabilite, fmtChrono, fmtEcart, VERDICTS, DISTANCES } from './moteur.js';
+import { insertObjectif, insertPlan, listObjectifs } from './config.js';
+import { faisabilite, genererPlan, fmtChrono, fmtEcart, VERDICTS, DISTANCES } from './moteur.js';
 
 const $ = id => document.getElementById(id);
 const D = [['5k','5 km'],['10k','10 km'],['semi','Semi'],['marathon','Marathon']];
@@ -201,8 +201,19 @@ $('valider').addEventListener('click', async () => {
       seances_semaine: sem,
       actif:           true
     });
-    m.className='msg ok'; m.textContent='Objectif créé.';
-    setTimeout(() => location.href = 'objectif.html', 900);
+    m.className='msg ok'; m.textContent='Objectif créé, génération du plan…';
+    const tous = await listObjectifs();
+    const cree = tous.filter(o => o.nom === nom).sort((a,b) => b.id - a.id)[0];
+    if (cree) {
+      const f2 = faisabilite({ metres: DISTANCES[dRef], secondes: secs('rh','rm','rs') },
+                             { metres: DISTANCES[dCible], secondes: secs('ch','cm','cs'), date: $('date').value }, sem);
+      const plan = genererPlan(f2.vdotActuel, $('date').value)
+        .map(p => ({ objectif_id: cree.id, date: p.date, titre: p.titre, phase: p.phase,
+                     km: p.km, blocs: p.blocs, etat: 'prevue' }));
+      await insertPlan(plan);
+      m.textContent = `Objectif créé — ${plan.length} jours planifiés.`;
+    }
+    setTimeout(() => location.href = 'objectif.html', 1100);
   } catch (e) {
     m.className='msg ko'; m.textContent='Erreur : ' + e.message;
     $('valider').disabled = false;
