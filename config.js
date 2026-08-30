@@ -115,3 +115,23 @@ export const fmtTime = sec => { const h = Math.floor(sec/3600), m = Math.floor(s
 export const fmtPace = (sec, km) => { if (!sec || !km) return '—'; const p = Math.round(sec/km); return `${Math.floor(p/60)}'${String(p%60).padStart(2,'0')}"`; };
 export const fmtDate = d => new Date(d + 'T00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 export const fr = (n, d = 1) => Number(n).toLocaleString('fr-FR', { maximumFractionDigits: d });
+
+// plan d'entraînement
+export async function listPlan(objectifId) {
+  await sbReady; if (!sb) return [];
+  const { data, error } = await sb.from('plan').select('*').eq('objectif_id', objectifId).order('date');
+  if (error) throw error; return data;
+}
+export async function insertPlan(rows) {
+  await sbReady; if (!sb) return;
+  for (let i = 0; i < rows.length; i += 200) {
+    const { error } = await sb.from('plan').insert(rows.slice(i, i + 200));
+    if (error) throw error;
+  }
+}
+export async function updatePlan(id, row) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('plan').update(row).eq('id', id); if (error) throw error;
+}
+export async function removePlan(objectifId) {
+  await sbReady; if (!sb) return; const { error } = await sb.from('plan').delete().eq('objectif_id', objectifId); if (error) throw error;
+}
