@@ -35,17 +35,18 @@
   }
 
 
-  /* compteur principal — le chiffre se remplit */
-  .compteur{display:grid;gap:clamp(8px,1.8vh,14px);justify-items:center}
-  .liquide{width:min(88vw,440px);height:auto;display:block}
-  .liquide .creux{fill:#C7CEC9}
-  .vague{animation:houle 5.5s ease-in-out infinite alternate}
-  @keyframes houle{from{transform:translateX(0)}to{transform:translateX(-120px)}}
-  .unite{font-weight:900;font-size:clamp(13px,3.6vw,17px);letter-spacing:.34em;text-indent:.34em;color:var(--vert)}
+  /* compteur principal — tours de piste */
+  .compteur{display:grid;gap:clamp(10px,2vh,16px);justify-items:center}
+  .stade{width:min(84vw,400px);height:auto;display:block}
+  .stade .piste{fill:none;stroke:var(--piste);stroke-width:11}
+  .stade .fait{fill:none;stroke:var(--vert);stroke-width:11;stroke-linecap:round;
+    transition:stroke-dashoffset 2.2s cubic-bezier(.25,.9,.3,1)}
+  .stade .coureur{fill:var(--vert);transition:offset-distance 2.2s cubic-bezier(.25,.9,.3,1)}
+  .tours{font-weight:900;font-size:clamp(54px,17vw,132px);line-height:.86;letter-spacing:-.045em}
+  .unite{font-weight:900;font-size:clamp(12px,3.4vw,16px);letter-spacing:.34em;text-indent:.34em;color:var(--vert)}
   .depuis{font-weight:300;font-size:clamp(11px,2.9vw,13px);letter-spacing:.24em;text-transform:uppercase;color:var(--sourd)}
-  .palier{font-weight:300;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sourd)}
-  .palier b{font-weight:700;color:var(--vert)}
-  @media (prefers-reduced-motion:reduce){.vague{animation:none}}
+  .depuis b{font-weight:700;color:var(--craie)}
+  @media (prefers-reduced-motion:reduce){.stade .fait,.stade .coureur{transition:none}}
 
   /* régularité : 14 jours */
   .reg{display:grid;gap:10px;justify-items:center}
@@ -96,47 +97,34 @@ try {
   const rows = all.filter(r => r.date >= DEBUT);
   const km   = rows.reduce((a, r) => a + Number(r.distance_km), 0);
 
-  // palier suivant + niveau de remplissage
-  const PALIERS = [50, 100, 250, 500, 1000, 2000, 5000, 10000, 21000];
-  const palier = PALIERS.find(p => km < p) || Math.ceil(km / 5000) * 5000;
-  const precedent = PALIERS[PALIERS.indexOf(palier) - 1] || 0;
-  const ratio = Math.max(0.04, Math.min(1, (km - precedent) / (palier - precedent)));
-
-  const HAUT = 8, BAS = 92;                        // hauteur utile des chiffres
-  const niveau = BAS - ratio * (BAS - HAUT);
-  const texte = fr(km);
-  const uid = 'c' + Date.now();
+  // conversion en tours de piste (400 m)
+  const TOUR = 0.4;
+  const OVALE = "M66 26 H234 A40 40 0 0 1 234 106 H66 A40 40 0 0 1 66 26 Z";
+  const toursTotal = Number((km / TOUR).toFixed(6));   // évite 50,9999… pour 20,4 km
+  const toursPleins = Math.floor(toursTotal);
+  const fraction = toursTotal - toursPleins;
 
   $('compteur').innerHTML = `
-    <svg class="liquide" viewBox="0 0 600 108" role="img" aria-label="${texte} kilomètres parcourus">
-      <defs>
-        <clipPath id="${uid}">
-          <text x="300" y="92" text-anchor="middle" font-family="Chivo, sans-serif"
-                font-weight="900" font-size="104" letter-spacing="-4">${texte}</text>
-        </clipPath>
-        <linearGradient id="g-${uid}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#12B85F"/><stop offset="100%" stop-color="#0B7A3E"/>
-        </linearGradient>
-      </defs>
-      <g clip-path="url(#${uid})">
-        <rect class="creux" x="0" y="0" width="600" height="108"/>
-        <g class="niveau" style="transform:translateY(120px)">
-          <g class="vague">
-            <path fill="url(#g-${uid})"
-                  d="M-140 0 q 60 -13 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 t 120 0 V 200 H -140 Z"/>
-          </g>
-        </g>
-      </g>
+    <svg class="stade" viewBox="0 0 300 132" role="img"
+         aria-label="${fr(km)} kilomètres, soit ${toursPleins} tours de piste">
+      <path class="piste" d="${OVALE}"/>
+      <path class="fait" id="arc" d="${OVALE}"/>
+      <circle class="coureur" id="coureur" r="9"/>
     </svg>
-    <p class="unite">KILOMÈTRES</p>
-    <p class="depuis">parcourus depuis le 28 août 2026</p>
-    <p class="palier">prochain palier <b>${fr(palier,0)} km</b></p>`;
+    <div class="tours">${fr(toursPleins,0)}</div>
+    <p class="unite">TOURS DE PISTE</p>
+    <p class="depuis"><b>${fr(km)} km</b> depuis le 28 août 2026</p>`;
 
-  // montée du liquide
-  const couche = $('compteur').querySelector('.niveau');
+  // le tour en cours se dessine
+  const arc = $('arc'), L = arc.getTotalLength();
+  arc.style.strokeDasharray = L;
+  arc.style.strokeDashoffset = L;
+  const coureur = $('coureur');
+  coureur.style.offsetPath = `path("${OVALE}")`;
+  coureur.style.offsetDistance = '0%';
   requestAnimationFrame(() => {
-    couche.style.transition = 'transform 2.2s cubic-bezier(.25,.9,.3,1)';
-    couche.style.transform = `translateY(${niveau.toFixed(1)}px)`;
+    arc.style.strokeDashoffset = L * (1 - Math.max(fraction, 0.02));
+    coureur.style.offsetDistance = (Math.max(fraction,0.02) * 100).toFixed(1) + '%';
   });
 
   const now  = new Date();
