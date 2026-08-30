@@ -131,14 +131,16 @@ try {
 
       <div class="charge">
         <div class="h"><b>Charge d'entraînement</b><em>${ch.ratio ?? '—'}</em></div>
-        <div class="rail"><span class="cur" style="left:${pos}%"></span></div>
-        <div class="bornes"><span>sous-entraîné</span><span>optimal</span><span>risqué</span></div>
-        <p>${ch.km7} km sur 7 jours, ${ch.km28} km sur 28.
-          ${ch.ratio == null ? 'Pas encore assez de séances pour juger.'
-            : ch.etat === 'optimal' ? 'Tu progresses sans forcer.'
-            : ch.etat === 'sous-entraine' ? 'Tu es en dessous de ton volume habituel.'
-            : ch.etat === 'eleve' ? 'Tu montes vite. Surveille les signaux.'
-            : 'Charge risquée. Au-delà de <b>1,5</b>, le risque de blessure double.'}</p>
+        ${ch.ratio === null ? '' : `<div class="rail"><span class="cur" style="left:${pos}%"></span></div>
+        <div class="bornes"><span>sous-entraîné</span><span>optimal</span><span>risqué</span></div>`}
+        <p>${ch.etat === 'insuffisant'
+          ? `Pas encore mesurable. Il faut au moins <b>5 séances</b> sur <b>3 semaines</b> —
+             la base en contient ${ch.seances} sur ${ch.jours} jour${ch.jours>1?'s':''}.`
+          : `${ch.km7} km sur 7 jours, ${ch.km28} km sur 28.
+             ${ch.etat === 'optimal' ? 'Tu progresses sans forcer.'
+             : ch.etat === 'sous-entraine' ? 'Tu es en dessous de ton volume habituel.'
+             : ch.etat === 'eleve' ? 'Tu montes vite. Surveille les signaux.'
+             : 'Charge risquée. Au-delà de <b>1,5</b>, le risque de blessure double.'}`}</p>
       </div>
 
       <div class="allures">
