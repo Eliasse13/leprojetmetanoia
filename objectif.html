@@ -93,6 +93,27 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
   .panneau nav a:focus-visible{outline:2px solid var(--vif);outline-offset:4px}
   .panneau .pied{font-weight:300;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#4E5754}
   @media (prefers-reduced-motion:reduce){.panneau{transition:opacity .01ms}}
+
+  .reco{border:2px solid var(--ink);border-radius:14px;padding:16px;margin-bottom:26px}
+  .reco .t{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+  .reco .t b{font-weight:900;font-size:19px;letter-spacing:-.025em}
+  .reco .t em{font-style:normal;margin-left:auto;font-weight:700;font-size:8.5px;letter-spacing:.18em;
+    text-transform:uppercase;padding:4px 9px;border-radius:999px}
+  .reco .t em.dure{background:#F1EAFB;color:#6B3FC4}
+  .reco .t em.souple{background:#E7F7EE;color:var(--vert)}
+  .reco .t em.moyenne{background:#EAF2F8;color:#3B6E96}
+  .reco .t em.repos{background:#F2F4F3;color:var(--sourd)}
+  .reco .pq{font-weight:300;font-size:12px;color:var(--texte);line-height:1.55;margin-bottom:13px}
+  .reco .bloc{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #F2F4F3}
+  .reco .bloc:last-of-type{border:0}
+  .reco .bloc .n{width:23px;height:23px;border-radius:50%;background:#F1F4F2;display:grid;place-items:center;
+    font-weight:900;font-size:10px;color:var(--sourd);flex:none}
+  .reco .bloc .d b{display:block;font-weight:900;font-size:13px}
+  .reco .bloc .d span{font-weight:300;font-size:10.5px;color:var(--sourd)}
+  .reco .bloc em{margin-left:auto;font-style:normal;font-weight:900;font-size:14px;color:var(--vert);
+    font-variant-numeric:tabular-nums}
+  .reco .tot{font-weight:300;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:#A9B0AC;margin-top:11px}
 </style>
 </head>
 <body>
@@ -117,7 +138,7 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 
 <script type="module">
 import { list, projetActif, listPaliers } from './config.js';
-import { vdot, tempsPour, allures, charge, fmtChrono, fmtAllure } from './moteur.js';
+import { vdot, tempsPour, allures, charge, recommandation, fmtChrono, fmtAllure } from './moteur.js';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -131,6 +152,7 @@ try {
     const chronoAct = tempsPour(vAct, p.distance_m);
     const vCible = vdot(p.distance_m, p.chrono_cible_s);
     const ch = charge(seances);
+    const r = recommandation(seances, vAct);
     const zones = allures(vAct);
     const TEINTES = ['#BFE8D0','#6FD79C','#12B85F','#0B7A3E','#075229'];
 
@@ -167,6 +189,18 @@ try {
             <span class="st">${fait ? 'franchi' : est ? 'palier suivant' : ''}</span>
           </div>`;
         }).join('')}
+      </div>
+
+      <p class="eyebrow" style="margin-bottom:9px">La séance d'aujourd'hui</p>
+      <div class="reco">
+        <div class="t"><b>${r.titre}</b><em class="${r.intensite}">${
+          r.intensite === 'dure' ? 'séance dure' : r.intensite === 'repos' ? 'repos'
+          : r.intensite === 'moyenne' ? 'volume' : 'facile'}</em></div>
+        <p class="pq">${r.pourquoi}</p>
+        ${r.blocs.map((b,i) => `<div class="bloc"><span class="n">${i+1}</span>
+          <div class="d"><b>${b.nom}</b><span>${b.detail}</span></div>
+          <em>${fmtAllure(b.secondesParKm)}</em></div>`).join('')}
+        ${r.km ? `<p class="tot">environ ${r.km} km</p>` : ''}
       </div>
 
       <div class="charge">
