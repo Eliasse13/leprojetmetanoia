@@ -316,3 +316,49 @@ export function bilanPlan(plan, aujourdhui = new Date()) {
   return { prevues, faites, manquees, aVenir,
            taux: prevues ? Math.round(faites / (faites + manquees || 1) * 100) : null };
 }
+
+// ---------------------------------------------------------------- nature d'une séance
+export const NATURES = {
+  qualite:    { nom: 'Qualité',         couleur: '#8258DD' },
+  juste:      { nom: 'Endurance',       couleur: '#12B85F' },
+  grise:      { nom: 'Zone grise',      couleur: '#E5A93A' },
+  recup:      { nom: 'Récupération',    couleur: '#93B8D4' },
+  usante:     { nom: 'Séance qui use',  couleur: '#D63B27' },
+  renfo:      { nom: 'Renforcement',    couleur: '#404C58' }
+};
+
+/**
+ * Classe une séance par rapport aux zones du coureur.
+ * seance : { type, distance_km, temps_s, date }
+ * veille : la séance de la veille, ou null (sert à détecter deux jours durs d'affilée)
+ */
+export function nature(seance, vdotVal, veille = null) {
+  if ((seance.type || '').toLowerCase().includes('salle')) return 'renfo';
+  const km = Number(seance.distance_km), t = Number(seance.temps_s);
+  if (!(km > 0) || !(t > 0)) return 'renfo';
+  const a = Object.fromEntries(allures(vdotVal).map(z => [z.cle, z.secondesParKm]));
+  const p = t / km;                                  // secondes par km
+
+  let n;
+  if (p <= a.seuil + 12)            n = 'qualite';
+  else if (p < a.endurance - 8)     n = 'grise';
+  else if (p <= a.endurance + 30)   n = 'juste';
+  else                              n = 'recup';
+
+  // deux jours durs consécutifs, sans récupération entre les deux
+  if ((n === 'qualite' || n === 'grise') && veille) {
+    const dur = nature(veille, vdotVal, null);
+    const ecart = Math.abs(new Date(seance.date) - new Date(veille.date)) / 864e5;
+    if (ecart <= 1.5 && (dur === 'qualite' || dur === 'grise')) n = 'usante';
+  }
+  return n;
+}
+
+export const COMMENTAIRES = {
+  qualite: 'Séance rapide, au seuil ou au-dessus. C’est ce qui fait progresser le chrono.',
+  juste:   'Pile dans la zone qui construit le foncier. C’est ce genre de sortie qui paie dans six mois.',
+  grise:   'Trop rapide pour un footing, trop lent pour développer. La sortie qui fatigue sans faire progresser.',
+  recup:   'Très souple, largement sous l’allure d’endurance. Du repos actif.',
+  usante:  'Deuxième jour dur d’affilée, sans récupération entre les deux. C’est comme ça qu’on se blesse.',
+  renfo:   'Séance de salle. Elle ne compte pas dans les kilomètres mais tient le reste debout.'
+};
