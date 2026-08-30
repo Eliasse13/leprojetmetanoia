@@ -127,6 +127,10 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
   .panneau .piliers .p.alim{color:#7A6A38}
   .panneau .piliers .p em{font-style:normal;margin-left:auto;font-weight:300;font-size:8.5px;
     letter-spacing:.16em;text-transform:uppercase;color:#3F4744}
+  .visites{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));left:0;right:0;
+    text-align:center;font-weight:300;font-size:10px;letter-spacing:.26em;text-transform:uppercase;
+    color:#A9B0AC;opacity:0;transition:opacity .8s ease;pointer-events:none}
+  .visites.on{opacity:1}
 </style>
 </head>
 <body>
@@ -154,8 +158,8 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers } from './config.js?v=20260830c';
-import { vdot, tempsPour, allures, charge, recommandation, fmtChrono, fmtAllure } from './moteur.js?v=20260830c';
+import { list, projetActif, listPaliers, nbVisites, fr } from './config.js?v=20260830e';
+import { vdot, tempsPour, allures, charge, recommandation, fmtChrono, fmtAllure } from './moteur.js?v=20260830e';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -247,6 +251,16 @@ try {
 } catch (e) {
   z.innerHTML = '<p class="eyebrow" style="color:#C4452F">Erreur : ' + e.message + '</p>';
 }
+// compteur de visites
+(async () => {
+  try {
+    const n = await nbVisites();
+    if (n === null) return;
+    const el = document.getElementById('visits');
+    el.textContent = `${fr(n, 0)} visite${n > 1 ? 's' : ''}`;
+    requestAnimationFrame(() => el.classList.add('on'));
+  } catch (e) {}
+})();
 </script>
 <script>
 (function(){
@@ -260,5 +274,6 @@ try {
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&pan.classList.contains('ouvert')) fermer(); });
 })();
 </script>
+<div class="visites" id="visits"></div>
 </body>
 </html>
