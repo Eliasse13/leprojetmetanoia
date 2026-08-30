@@ -15,7 +15,7 @@
 :root{--vert:#0B7A3E;--vif:#12B85F;--ink:#0D0F0E;--sourd:#6B736E;--texte:#454B48;--piste:#E8EBE9}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;
-  max-width:430px;margin:0 auto;padding-bottom:48px;-webkit-font-smoothing:antialiased}
+  max-width:430px;margin:0 auto;padding-bottom:110px;-webkit-font-smoothing:antialiased}
 .entete{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--piste)}
 .entete .lg{width:76px;color:var(--ink);line-height:0}
 .entete .lg svg{display:block;width:100%;height:auto}
@@ -28,17 +28,7 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;
   opacity:0;visibility:hidden;transform:translateY(-10px);
   transition:opacity .3s ease,transform .35s cubic-bezier(.2,.9,.3,1),visibility .3s}
 .panneau.ouvert{opacity:1;visibility:visible;transform:none}
-.panneau .haut{display:flex;align-items:center;justify-content:space-between}
-.panneau .lg{width:clamp(76px,22vw,104px);color:#fff;line-height:0}
-.panneau .lg svg{display:block;width:100%;height:auto}
 .fermer{background:none;border:0;color:#8B948F;font-size:22px;line-height:1;cursor:pointer;padding:10px;margin-right:-10px}
-.panneau nav{margin:auto 0;display:grid}
-.panneau nav a{display:flex;align-items:baseline;gap:14px;padding:clamp(13px,2.4vh,19px) 0;
-  border-bottom:1px solid #1E2124;text-decoration:none}
-.panneau nav a i{font-style:normal;font-weight:300;font-size:10px;letter-spacing:.14em;color:#5C6560}
-.panneau nav a b{font-weight:900;font-size:clamp(24px,7vw,34px);letter-spacing:-.02em;color:#8E9793}
-.panneau nav a.on b{color:var(--vif)}
-.panneau .pied{font-weight:300;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#4E5754}
 @media (prefers-reduced-motion:reduce){.panneau{transition:opacity .01ms}}
 
 .z{padding:24px 20px 0}
@@ -61,52 +51,67 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;
 .vide{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.6;margin-top:16px}
 .note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;margin-top:26px;text-align:center}
 
-  .panneau nav a em{font-style:normal;margin-left:auto;font-weight:300;font-size:9px;
-    letter-spacing:.18em;text-transform:uppercase;color:#4A524E}
-  .panneau .piliers{display:grid;gap:9px;padding-top:16px;border-top:1px solid #1E2124}
-  .panneau .piliers .p{display:flex;align-items:center;gap:9px;font-weight:700;font-size:11px;
-    letter-spacing:.16em;text-transform:uppercase;color:#4E5754}
-  .panneau .piliers .p i{width:8px;height:8px;border-radius:50%;background:#2A2E31;flex:none}
-  .panneau .piliers .p.on{color:#8E9793}
-  .panneau .piliers .p.on i{background:var(--vif)}
-  .panneau .piliers .p.alim i{background:#C9A227}
-  .panneau .piliers .p.alim{color:#7A6A38}
-  .panneau .piliers .p em{font-style:normal;margin-left:auto;font-weight:300;font-size:8.5px;
-    letter-spacing:.16em;text-transform:uppercase;color:#3F4744}
-  .visites{position:fixed;bottom:max(14px,env(safe-area-inset-bottom));left:0;right:0;
-    text-align:center;font-weight:300;font-size:10px;letter-spacing:.26em;text-transform:uppercase;
-    color:#A9B0AC;opacity:0;transition:opacity .8s ease;pointer-events:none}
-  .visites.on{opacity:1}
+
+  /* ---- en-tête ---- */
+  .hd{display:flex;align-items:center;gap:11px;padding:max(14px,env(safe-area-inset-top)) 20px 13px;
+    border-bottom:1px solid var(--piste);position:relative;z-index:20}
+  .hd .lg{width:74px;color:var(--ink);line-height:0;flex:none}
+  .hd .lg svg{display:block;width:100%;height:auto}
+  .sel{display:flex;align-items:center;gap:7px;background:none;border:0;cursor:pointer;padding:6px 4px;
+    font-family:inherit;font-weight:900;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--vert)}
+  .sel i{width:8px;height:8px;border-radius:50%;background:var(--vert);flex:none}
+  .sel .fl{color:#B7BEBA;font-size:10px;transition:transform .2s}
+  .sel[aria-expanded="true"] .fl{transform:rotate(180deg)}
+  .sel:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
+  .cpt{margin-left:auto;width:31px;height:31px;border-radius:50%;border:1.4px dashed #CDD4D0;
+    display:grid;place-items:center;color:#A9B0AC;flex:none;text-decoration:none}
+  .cpt svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+  .piliers{position:absolute;left:16px;top:calc(100% - 4px);background:#fff;border:1px solid var(--piste);
+    border-radius:12px;box-shadow:0 14px 34px -16px rgba(0,0,0,.32);padding:6px;min-width:212px;z-index:30;
+    opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility .18s}
+  .piliers.ouvert{opacity:1;visibility:visible;transform:none}
+  .piliers a,.piliers span{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:8px;
+    font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8C948F;text-decoration:none}
+  .piliers .on{background:#EDF6F1;color:var(--vert)}
+  .piliers i{width:8px;height:8px;border-radius:50%;background:#DDE3E0;flex:none}
+  .piliers .on i{background:var(--vert)}
+  .piliers .al i{background:#C9A227}
+  .piliers em{font-style:normal;margin-left:auto;font-weight:300;font-size:8px;letter-spacing:.12em;color:#C0C7C3}
+
+  /* ---- barre du bas ---- */
+  .nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#fff;
+    border-top:1px solid var(--piste);padding:11px 0 max(15px,env(safe-area-inset-bottom));z-index:20}
+  .nav a{flex:1;text-align:center;text-decoration:none}
+  .nav a .num{display:block;font-weight:900;font-size:17px;letter-spacing:-.02em;color:#CDD4D0;line-height:1}
+  .nav a b{display:block;font-weight:700;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:#B7BEBA;margin-top:4px}
+  .nav a.on .num{color:var(--vert)}
+  .nav a.on b{color:var(--ink)}
+  .nav a:focus-visible{outline:2px solid var(--vert);outline-offset:-3px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.piliers{transition:none}}
 </style>
 </head>
 <body>
-<header class="entete">
-  <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
-  <button class="ouvrir" id="ouvrir" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="panneau"><i></i><i></i></button>
-</header>
 
-<div class="panneau" id="panneau" role="dialog" aria-modal="true" aria-label="Menu">
-  <div class="haut">
-    <a class="lg" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
-    <button class="fermer" id="fermer" aria-label="Fermer le menu">&#10005;</button>
+<header class="hd">
+  <a class="lg" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <button class="sel" id="selP" aria-expanded="false" aria-controls="piliers"><i></i>Sport<span class="fl">&#9662;</span></button>
+  <a class="cpt" href="connexion.html" aria-label="Mon compte"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9.2" r="3.4"/><path d="M5.8 19.2c0-3.1 2.7-5 6.2-5s6.2 1.9 6.2 5"/></svg></a>
+  <div class="piliers" id="piliers" role="menu">
+    <a class="on" href="metanoia.html" role="menuitem"><i></i>Sport</a>
+    <span class="al" role="menuitem" aria-disabled="true"><i></i>Alimentation<em>bientôt</em></span>
+    <span role="menuitem" aria-disabled="true"><i></i>Sommeil<em>bientôt</em></span>
+    <span role="menuitem" aria-disabled="true"><i></i>Lecture<em>bientôt</em></span>
+    <span role="menuitem" aria-disabled="true"><i></i>Argent<em>bientôt</em></span>
   </div>
-  <nav>
-    <a href="metanoia.html"><i>01</i><b>Vue d'ensemble</b></a>
-    <a href="objectif.html"><i>02</i><b>Objectif</b></a>
-    <a class="on" href="seances.html" aria-current="page"><i>03</i><b>Séances</b></a>
-    <a aria-disabled="true"><i>04</i><b>Créer mon compte</b><em>prochainement</em></a>
-  </nav>
-    <div class="piliers">
-    <span class="p on"><i></i>Sport</span>
-    <span class="p alim"><i></i>Alimentation<em>prochainement</em></span>
-  </div>
-</div>
+</header>
 
 <div class="z" id="z"><p class="k">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, nbVisites, fr } from './config.js?v=20260830e';
-import { vdot, nature, NATURES, COMMENTAIRES, fmtAllure } from './moteur.js?v=20260830e';
+import { list, projetActif } from './config.js?v=20260830f';
+import { vdot, nature, NATURES, COMMENTAIRES, fmtAllure } from './moteur.js?v=20260830f';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -175,29 +180,27 @@ try {
 } catch (e) {
   z.innerHTML = '<p class="k" style="color:#C4452F">Erreur : ' + e.message + '</p>';
 }
-// compteur de visites
-(async () => {
-  try {
-    const n = await nbVisites();
-    if (n === null) return;
-    const el = document.getElementById('visits');
-    el.textContent = `${fr(n, 0)} visite${n > 1 ? 's' : ''}`;
-    requestAnimationFrame(() => el.classList.add('on'));
-  } catch (e) {}
-})();
 </script>
 <script>
+</script>
+<nav class="nav">
+  <a href="metanoia.html"><span class="num">01</span><b>Vue</b></a>
+  <a href="objectif.html"><span class="num">02</span><b>Objectif</b></a>
+  <a href="seances.html" class="on" aria-current="page"><span class="num">03</span><b>Séances</b></a>
+</nav>
+
+<script>
 (function(){
-  var pan=document.getElementById('panneau'), ouv=document.getElementById('ouvrir'),
-      fer=document.getElementById('fermer'), avant=null;
-  function ouvrir(){ avant=document.activeElement; pan.classList.add('ouvert');
-    ouv.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; fer.focus(); }
-  function fermer(){ pan.classList.remove('ouvert'); ouv.setAttribute('aria-expanded','false');
-    document.body.style.overflow=''; (avant||ouv).focus(); }
-  ouv.addEventListener('click',ouvrir); fer.addEventListener('click',fermer);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&pan.classList.contains('ouvert')) fermer(); });
+  var b=document.getElementById('selP'), m=document.getElementById('piliers');
+  function ferme(){ m.classList.remove('ouvert'); b.setAttribute('aria-expanded','false'); }
+  b.addEventListener('click', function(e){
+    e.stopPropagation();
+    var o = m.classList.toggle('ouvert');
+    b.setAttribute('aria-expanded', o ? 'true' : 'false');
+  });
+  document.addEventListener('click', ferme);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') ferme(); });
 })();
 </script>
-<div class="visites" id="visits"></div>
 </body>
 </html>
