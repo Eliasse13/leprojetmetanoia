@@ -90,6 +90,13 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
   .pal .c .d{margin-left:auto;text-align:right}
   .pal .c .d b{display:block;font-weight:900;font-size:16px;font-variant-numeric:tabular-nums}
   .pal .c .d span{font-weight:300;font-size:9px;color:var(--vert);letter-spacing:.08em}
+  .forme{background:#F4F7F5;border-radius:13px;padding:14px;margin-bottom:14px}
+  .forme .h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+  .forme .h b{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .forme .h em{font-style:normal;font-weight:900;font-size:24px;letter-spacing:-.03em}
+  .forme .rail{height:7px;background:#E4E9E6;border-radius:4px;overflow:hidden}
+  .forme .rail i{display:block;height:100%;border-radius:4px}
+  .forme p{font-weight:300;font-size:11.5px;color:var(--texte);line-height:1.5;margin-top:9px}
   .reco{border:2px solid var(--ink);border-radius:14px;padding:16px;margin-bottom:26px}
   .reco .t{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
   .reco .t b{font-weight:900;font-size:19px;letter-spacing:-.025em}
@@ -173,9 +180,9 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers, listResultats } from './config.js?v=20260831b';
-import { vdot, tempsPour, allures, charge, recommandation, records, palmares,
-         fmtChrono, fmtAllure } from './moteur.js?v=20260831b';
+import { list, projetActif, listPaliers, listResultats, listJournal } from './config.js?v=20260831c';
+import { vdot, tempsPour, allures, charge, recommandation, records, palmares, etatForme, ETATS,
+         fmtChrono, fmtAllure } from './moteur.js?v=20260831c';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -184,14 +191,16 @@ try {
   const p = await projetActif();
   if (!p) { z.innerHTML = '<p class="eyebrow">Aucun projet en cours</p>'; }
   else {
-    const [pal, seances, res] = await Promise.all([listPaliers(p.id), list(), listResultats()]);
+    const [pal, seances, res, jrn] = await Promise.all([listPaliers(p.id), list(), listResultats(), listJournal()]);
     const recs = records(res);
     const courses = palmares(res);
     const vAct = vdot(p.ref_distance_m, p.ref_chrono_s);
     const chronoAct = tempsPour(vAct, p.distance_m);
     const vCible = vdot(p.distance_m, p.chrono_cible_s);
     const ch = charge(seances);
-    const r = recommandation(seances, vAct);
+    const r = recommandation(seances, vAct, new Date(), jrn);
+    const forme = etatForme(jrn);
+    const EF = ETATS[forme.etat] || ETATS.inconnu;
     const zones = allures(vAct);
     const TEINTES = ['#BFE8D0','#6FD79C','#12B85F','#0B7A3E','#075229'];
 
@@ -253,6 +262,15 @@ try {
               : (c.classement && c.participants ? c.classement + 'ᵉ / ' + c.participants : '')
           }${c.record ? ' — record' : ''}</span></span></div>`).join('')}
       </div>` : ''}
+
+      <div class="forme">
+        <div class="h"><b>Fraîcheur du jour</b><em style="color:${EF.couleur}">${forme.score ?? '—'}</em></div>
+        ${forme.score !== null ? `<div class="rail"><i style="width:${forme.score}%;background:${EF.couleur}"></i></div>` : ''}
+        <p><span style="color:${EF.couleur};font-weight:900">${EF.nom}</span>${
+          forme.raisons.length ? ' — ' + forme.raisons.join(' · ')
+          : forme.score === null ? ' — <a href="journal.html" style="color:var(--vert)">remplis le journal du jour</a>'
+          : ' — rien à signaler.'}</p>
+      </div>
 
       <p class="eyebrow" style="margin-bottom:9px">La séance d\'aujourd\'hui</p>
       <div class="reco">
