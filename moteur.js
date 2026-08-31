@@ -377,9 +377,12 @@ export const COMMENTAIRES = {
 
 // ---------------------------------------------------------------- séance recommandée
 /**
- * Décide de la séance du jour à partir de ce qui a été fait récemment.
- * seances : [{date, type, distance_km, temps_s}]  — l'historique complet
- * Renvoie { titre, pourquoi, blocs:[{nom,detail,zone,secondesParKm}], km, intensite }
+ * Le coach. Deux objectifs menés de front :
+ *   — la vitesse, pour le 5 km (seuil, VMA, répétitions)
+ *   — l'endurance longue, pour l'ultra (sortie longue, dénivelé, temps passé debout)
+ *
+ * Ordre de priorité, du plus impératif au plus souple :
+ *   0. l'état de forme du jour  1. la récupération  2. la semaine  3. les deux objectifs
  */
 export function recommandation(seances, vdotVal, aujourdhui = new Date(), journal = null) {
   const a = Object.fromEntries(allures(vdotVal).map(z => [z.cle, z.secondesParKm]));
@@ -387,92 +390,111 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date(), journa
   const auj = iso(aujourdhui);
   const jour = d => Math.round((new Date(auj) - new Date(d)) / 864e5);
 
-  const passees = seances
-    .filter(s => s.date < auj)
-    .sort((x, y) => y.date.localeCompare(x.date));
-
-  const sur7 = passees.filter(s => jour(s.date) <= 7);
-  const sur14 = passees.filter(s => jour(s.date) <= 14);
-
+  const passees = (seances || []).filter(s => s.date < auj).sort((x, y) => y.date.localeCompare(x.date));
+  const sur7  = passees.filter(s => jour(s.date) <= 7);
+  const sur28 = passees.filter(s => jour(s.date) <= 28);
   const nat = s => nature(s, vdotVal, null);
-  const derniere = passees[0] || null;
-  const veille = derniere && jour(derniere.date) <= 1 ? derniere : null;
-
-  const dursSur7 = sur7.filter(s => ['qualite','grise','usante'].includes(nat(s))).length;
-  const qualiteSur7 = sur7.filter(s => nat(s) === 'qualite').length;
-  const joursDepuisQualite = (() => {
-    const q = passees.find(s => nat(s) === 'qualite');
-    return q ? jour(q.date) : 99;
-  })();
-  const joursDepuisRepos = (() => {
-    for (let i = 1; i <= 10; i++) {
-      const d = new Date(aujourdhui); d.setDate(d.getDate() - i);
-      if (!passees.some(s => s.date === iso(d))) return i;
-    }
-    return 99;
-  })();
-  const kmSur7 = sur7.reduce((t, s) => t + Number(s.distance_km || 0), 0);
-  const plusLongue7 = Math.max(0, ...sur7.map(s => Number(s.distance_km || 0)));
-  const dimanche = aujourdhui.getDay() === 0 || aujourdhui.getDay() === 6;
 
   const B = (nom, detail, zone) => ({ nom, detail, zone, secondesParKm: a[zone] });
   const ech = B('Échauffement', '20 min', 'endurance');
   const cal = B('Retour au calme', '15 min', 'endurance');
 
-  // 0. l'état de forme passe avant toutes les autres règles
-  const forme = journal ? etatForme(journal, aujourdhui) : { score: null, etat: 'inconnu', raisons: [], douleur: null };
-  if (forme.douleur) {
-    return { titre: 'Repos', intensite: 'repos', km: 0, blocs: [], forme,
-      pourquoi: `Tu as déclaré une douleur (${forme.douleur}). On ne court pas sur une douleur : ` +
-                `deux jours d'arrêt maintenant valent mieux que six semaines dans un mois.` };
-  }
-  if (forme.etat === 'epuise') {
-    return { titre: 'Repos ou marche', intensite: 'repos', km: 0, blocs: [], forme,
-      pourquoi: `Score de fraîcheur à ${forme.score}/100${forme.raisons.length ? ' — ' + forme.raisons.slice(0,2).join(', ') : ''}. ` +
-                `Le progrès se fait pendant la récupération.` };
-  }
+  // ---- 0. état de forme : rien ne passe avant
+  const forme = journal ? etatForme(journal, aujourdhui)
+                        : { score: null, etat: 'inconnu', raisons: [], douleur: null };
+  if (forme.douleur) return { titre:'Repos', intensite:'repos', km:0, blocs:[], forme, cible:'santé',
+    pourquoi:`Tu as déclaré une douleur (${forme.douleur}). On ne court pas sur une douleur : deux jours d'arrêt maintenant valent mieux que six semaines dans un mois.` };
+  if (forme.etat === 'epuise') return { titre:'Repos ou marche', intensite:'repos', km:0, blocs:[], forme, cible:'santé',
+    pourquoi:`Fraîcheur à ${forme.score}/100${forme.raisons.length ? ' — ' + forme.raisons.slice(0,2).join(', ') : ''}. Le progrès se fait pendant la récupération.` };
 
-  // 1. rien depuis 7 jours sans repos → repos
-  if (joursDepuisRepos >= 7) {
-    return { titre: 'Repos complet', intensite: 'repos', forme, km: 0, blocs: [],
-      pourquoi: `Sept jours d’affilée sans repos. Le progrès se fait pendant la récupération, pas pendant l’effort.` };
-  }
-  // 2. la veille était dure → souple obligatoire
-  if (veille && ['qualite','usante'].includes(nat(veille))) {
-    return { titre: 'Endurance très souple', intensite: 'souple', forme,
-      km: 8, blocs: [B('Footing lent', '45 min', 'endurance')],
-      pourquoi: `Séance dure hier. Aujourd’hui c’est ${fmtAllure(a.endurance)}/km ou plus lent, sans exception.` };
-  }
-  if (forme.etat === 'entame') {
-    return { titre: 'Endurance très souple', intensite: 'souple', forme, km: 8, forme,
-      blocs: [B('Footing lent', '40 min', 'endurance')],
-      pourquoi: `Fraîcheur à ${forme.score}/100${forme.raisons.length ? ' — ' + forme.raisons.slice(0,2).join(', ') : ''}. ` +
-                `La séance dure est reportée : elle ne servirait à rien aujourd'hui.` };
-  }
+  // ---- 1. récupération
+  const derniere = passees[0] || null;
+  const veille = derniere && jour(derniere.date) <= 1 ? derniere : null;
+  const joursDepuisRepos = (() => {
+    for (let i = 1; i <= 12; i++) {
+      const d = new Date(aujourdhui); d.setDate(d.getDate() - i);
+      if (!passees.some(s => s.date === iso(d))) return i;
+    }
+    return 99;
+  })();
+  if (joursDepuisRepos >= 7) return { titre:'Repos complet', intensite:'repos', km:0, blocs:[], forme, cible:'récupération',
+    pourquoi:`Sept jours d'affilée sans repos. Une semaine sans jour off, c'est la porte ouverte à la blessure.` };
+  if (veille && ['qualite','usante'].includes(nat(veille)))
+    return { titre:'Endurance très souple', intensite:'souple', km:8, forme, cible:'récupération',
+      blocs:[B('Footing lent','45 min','endurance')],
+      pourquoi:`Séance dure hier. Aujourd'hui c'est ${fmtAllure(a.endurance)}/km ou plus lent, sans exception.` };
+  if (forme.etat === 'entame')
+    return { titre:'Endurance très souple', intensite:'souple', km:8, forme, cible:'récupération',
+      blocs:[B('Footing lent','40 min','endurance')],
+      pourquoi:`Fraîcheur à ${forme.score}/100${forme.raisons.length ? ' — ' + forme.raisons.slice(0,2).join(', ') : ''}. La séance dure est reportée : elle ne servirait à rien aujourd'hui.` };
 
-  // 3. aucune séance de qualité depuis longtemps → seuil
-  if (qualiteSur7 === 0 && joursDepuisQualite >= 3) {
-    return { titre: 'Seuil', intensite: 'dure', forme, km: 13,
-      blocs: [ech, B('2 × 10 min', 'récup 3 min en trot', 'seuil'), cal],
-      pourquoi: `Aucune séance rapide depuis ${joursDepuisQualite === 99 ? 'très longtemps' : joursDepuisQualite + ' jours'}. C’est le manque le plus coûteux pour ton 5 km.` };
-  }
-  // 4. une qualité déjà faite, et 3 jours de repos derrière → VMA
-  if (qualiteSur7 >= 1 && joursDepuisQualite >= 3 && dursSur7 < 3) {
-    return { titre: 'Intervalles courts', intensite: 'dure', forme, km: 11,
-      blocs: [ech, B('8 × 400 m', 'récup 1 min 30 en trot', 'intervalle'), cal],
-      pourquoi: `Le seuil est fait cette semaine. Là on travaille la vitesse pure, celle qui manque sur la fin d’un 5 km.` };
-  }
-  // 5. week-end et pas de sortie longue cette semaine → sortie longue
-  if (dimanche && plusLongue7 < 12) {
-    const cible = Math.max(12, Math.round(kmSur7 * 0.35));
-    return { titre: 'Sortie longue', intensite: 'moyenne', forme, km: cible,
-      blocs: [B('Continu', `${cible} km`, 'endurance')],
-      pourquoi: `Ta plus longue sortie de la semaine fait ${plusLongue7.toFixed(1)} km. Le foncier se construit sur la durée, pas sur l’intensité.` };
-  }
-  // 6. par défaut → endurance
-  return { titre: 'Endurance', intensite: 'souple', forme, km: 10,
-    blocs: [B('Footing continu', '55 min', 'endurance')],
-    pourquoi: `Journée facile. Reste au-dessus de ${fmtAllure(a.endurance)}/km : c’est ce qui te permettra d’aller vite le jour de la séance dure.` };
+  // ---- 2. état de la semaine
+  const qualiteSur7  = sur7.filter(s => nat(s) === 'qualite').length;
+  const joursDepuisQualite = (() => { const q = passees.find(s => nat(s) === 'qualite'); return q ? jour(q.date) : 99; })();
+  const kmSur7       = sur7.reduce((t, s) => t + Number(s.distance_km || 0), 0);
+  const kmSur28      = sur28.reduce((t, s) => t + Number(s.distance_km || 0), 0);
+  const plusLongue7  = Math.max(0, ...sur7.map(s => Number(s.distance_km || 0)));
+  const dPlusSur7    = sur7.reduce((t, s) => t + Number(s.denivele_m || 0), 0);
+  const weekend      = [0, 6].includes(aujourdhui.getDay());
+
+  // cycle de 4 semaines : 3 de charge, 1 allégée
+  const semaine = Math.floor(((aujourdhui - new Date('2026-08-18')) / 864e5) / 7) % 4;
+  const allegee = semaine === 3;
+
+  // ---- 3. les deux objectifs
+  // sortie longue cible : 30 % du volume hebdo, plancher 14 km, plafond +2 km par rapport au record du mois
+  const plusLongue28 = Math.max(0, ...sur28.map(s => Number(s.distance_km || 0)));
+  const cibleLongue = Math.min(
+    Math.max(14, Math.round(kmSur7 * 0.32)),
+    Math.max(14, Math.round(plusLongue28 + 2))
+  );
+
+  if (allegee && qualiteSur7 >= 1 && plusLongue7 >= 12)
+    return { titre:'Semaine allégée', intensite:'souple', km:9, forme, cible:'assimilation',
+      blocs:[B('Footing souple','50 min','endurance')],
+      pourquoi:`Quatrième semaine du cycle : on lève le pied pour assimiler les trois précédentes. C'est là que les progrès se fixent.` };
+
+  if (weekend && plusLongue7 < cibleLongue - 1)
+    return { titre:'Sortie longue', intensite:'moyenne', km:cibleLongue, forme, cible:'ultra',
+      blocs:[B('Continu', `${cibleLongue} km`, 'endurance'),
+             B('Dernier tiers', 'à allure marathon', 'marathon')],
+      pourquoi:`Ta plus longue sortie du mois fait ${plusLongue28.toFixed(1)} km. Pour l'ultra, c'est la durée qui construit, pas la vitesse. On monte de deux kilomètres à la fois, jamais plus.` };
+
+  if (qualiteSur7 === 0 && joursDepuisQualite >= 3)
+    return { titre:'Seuil', intensite:'dure', km:13, forme, cible:'5 km',
+      blocs:[ech, B('2 × 10 min','récup 3 min en trot','seuil'), cal],
+      pourquoi:`Aucune séance rapide depuis ${joursDepuisQualite === 99 ? 'très longtemps' : joursDepuisQualite + ' jours'}. Le seuil est ce qui fait descendre le chrono sur 5 km — et il sert aussi en ultra, il repousse le moment où ça devient dur.` };
+
+  if (qualiteSur7 >= 1 && joursDepuisQualite >= 3)
+    return { titre:'Intervalles courts', intensite:'dure', km:11, forme, cible:'5 km',
+      blocs:[ech, B('8 × 400 m','récup 1 min 30 en trot','intervalle'), cal],
+      pourquoi:`Le seuil est fait cette semaine. Là on travaille la vitesse pure : c'est elle qui manque sur la fin d'un 5 km, et elle ne se travaille qu'en courant vite.` };
+
+  if (dPlusSur7 < 250 && kmSur7 >= 15)
+    return { titre:'Côtes', intensite:'dure', km:11, forme, cible:'ultra',
+      blocs:[ech, B('8 × 45 s en côte','récup descente en trot','repetition'), cal],
+      pourquoi:`Seulement ${Math.round(dPlusSur7)} m de dénivelé cette semaine. En ultra, la montée se travaille comme une allure — et les côtes renforcent sans le choc du plat.` };
+
+  return { titre:'Endurance', intensite:'souple', km:10, forme, cible:'foncier',
+    blocs:[B('Footing continu','55 min','endurance')],
+    pourquoi:`Journée facile. Reste au-dessus de ${fmtAllure(a.endurance)}/km : c'est ce volume lent qui porte les deux objectifs, le 5 km comme l'ultra.` };
+}
+
+/** Où en est chacun des deux objectifs, sur les 28 derniers jours. */
+export function suiviObjectifs(seances, vdotVal, aujourdhui = new Date()) {
+  const jour = d => Math.round((aujourdhui - new Date(d + 'T00:00:00')) / 864e5);
+  const s28 = (seances || []).filter(s => jour(s.date) <= 28 && jour(s.date) >= 0);
+  const nat = s => nature(s, vdotVal, null);
+  const qualite = s28.filter(s => nat(s) === 'qualite').length;
+  const km = s28.reduce((t, s) => t + Number(s.distance_km || 0), 0);
+  const dplus = s28.reduce((t, s) => t + Number(s.denivele_m || 0), 0);
+  const longue = Math.max(0, ...s28.map(s => Number(s.distance_km || 0)));
+  return {
+    vitesse: { faites: qualite, cible: 8,  ok: qualite >= 6 },      // ~2 par semaine
+    longue:  { max: Math.round(longue * 10) / 10, cible: 25, ok: longue >= 20 },
+    denivele:{ total: Math.round(dplus), cible: 1200, ok: dplus >= 900 },
+    volume:  { km: Math.round(km * 10) / 10, cible: 200, ok: km >= 150 }
+  };
 }
 
 // ---------------------------------------------------------------- records
