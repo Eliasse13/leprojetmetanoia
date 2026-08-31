@@ -111,8 +111,8 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831b';
-import { plausible, fmtAllure } from './moteur.js?v=20260831b';
+import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831c';
+import { plausible, fmtAllure } from './moteur.js?v=20260831c';
 
 if (!await exigerConnexion()) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -242,12 +242,13 @@ $('rRows').addEventListener('click', async e => {
 });
 refreshResultats();
 </script>
+<a href="journal.html" style="position:fixed;top:10px;right:118px;border:1px solid #ddd;border-radius:999px;padding:7px 14px;font-family:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#888;text-decoration:none">Journal</a>
 <button id="quitter" style="position:fixed;top:10px;right:12px;background:none;border:1px solid #ddd;
   border-radius:999px;padding:7px 14px;font-family:inherit;font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;color:#888;cursor:pointer">Déconnexion</button>
 <script type="module">
-import { deconnexion } from './config.js?v=20260831b';
-import { plausible, fmtAllure } from './moteur.js?v=20260831b';
+import { deconnexion } from './config.js?v=20260831c';
+import { plausible, fmtAllure } from './moteur.js?v=20260831c';
 document.getElementById('quitter').addEventListener('click', async () => {
   await deconnexion(); location.href = 'index.html';
 });
