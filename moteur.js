@@ -26,8 +26,18 @@ function fractionVo2(minutes) {             // part de VO2max tenable sur cette 
 }
 
 /** VDOT à partir d'une performance. metres + secondes → nombre (1 décimale) */
+export const ALLURE_MIN = 130;    // 2'10"/km — plus rapide que le record du monde
+export const ALLURE_MAX = 900;    // 15'/km — plus lent que de la marche rapide
+
+/** Une performance est-elle physiquement plausible ? */
+export function plausible(metres, secondes) {
+  if (!(metres > 0) || !(secondes > 0)) return false;
+  const allure = secondes / (metres / 1000);
+  return allure >= ALLURE_MIN && allure <= ALLURE_MAX;
+}
+
 export function vdot(metres, secondes) {
-  if (!(metres > 0) || !(secondes > 0)) return null;
+  if (!plausible(metres, secondes)) return null;
   const minutes = secondes / 60;
   const v = metres / minutes;
   const val = vo2Demande(v) / fractionVo2(minutes);
@@ -447,7 +457,7 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date()) {
 const CLES_DISTANCE = [
   { cle: '5k',       metres: 5000,  nom: '5 km',     tol: 200 },
   { cle: '10k',      metres: 10000, nom: '10 km',    tol: 350 },
-  { cle: 'semi',     metres: 21097, nom: 'Semi',     tol: 600 },
+  { cle: 'semi',     metres: 21097, nom: 'Semi',     tol: 1200 },
   { cle: 'marathon', metres: 42195, nom: 'Marathon', tol: 900 }
 ];
 
@@ -459,7 +469,7 @@ export function records(resultats) {
   return CLES_DISTANCE.map(d => {
     const lot = (resultats || []).filter(r => {
       const m = Number(r.distance_km) * 1000;
-      return Math.abs(m - d.metres) <= d.tol && Number(r.temps_s) > 0;
+      return Math.abs(m - d.metres) <= d.tol && plausible(m, Number(r.temps_s));
     });
     if (!lot.length) return { ...d, vide: true };
     const best = lot.reduce((a, b) => (Number(a.temps_s) <= Number(b.temps_s) ? a : b));
@@ -493,11 +503,13 @@ export function palmares(resultats) {
     const d = CLES_DISTANCE.find(x => Math.abs(Number(r.distance_km) * 1000 - x.metres) <= x.tol);
     const est = d && meilleurs[d.cle] === r;
     const part = Number(r.participants) || 0, cl = Number(r.classement) || 0;
+    const ok = plausible(Number(r.distance_km) * 1000, Number(r.temps_s));
     return {
       ...r,
       distanceNom: d ? d.nom : Number(r.distance_km).toString().replace('.', ',') + ' km',
-      record: !!est,
-      vdot: d ? vdot(d.metres, Number(r.temps_s)) : null,
+      record: !!est && ok,
+      douteux: !ok,
+      vdot: (d && ok) ? vdot(d.metres, Number(r.temps_s)) : null,
       allure: Number(r.temps_s) / Number(r.distance_km),
       pourcent: part && cl ? Math.max(1, Math.round(cl / part * 100)) : null
     };
