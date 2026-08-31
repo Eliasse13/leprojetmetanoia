@@ -194,8 +194,8 @@ input[type=range]{padding:0;border:0;accent-color:var(--vert);height:38px}
 </nav>
 
 <script type="module">
-import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831d';
-import { plausible, fmtAllure } from './moteur.js?v=20260831d';
+import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831e';
+import { plausible, fmtAllure } from './moteur.js?v=20260831e';
 
 if (!await exigerConnexion()) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -326,8 +326,8 @@ $('rRows').addEventListener('click', async e => {
 refreshResultats();
 </script>
 <script type="module">
-import { deconnexion } from './config.js?v=20260831d';
-import { plausible, fmtAllure } from './moteur.js?v=20260831d';
+import { deconnexion } from './config.js?v=20260831e';
+import { plausible, fmtAllure } from './moteur.js?v=20260831e';
 document.getElementById('quitter').addEventListener('click', async () => {
   await deconnexion(); location.href = 'index.html';
 });
