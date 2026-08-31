@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Metanoia — Journal du jour</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--vert:#0B7A3E;--vif:#12B85F;--ink:#0D0F0E;--piste:#E8EBE9;--sourd:#6B736E;--texte:#454B48;--rouge:#C4452F}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max-width:430px;margin:0 auto;
+  padding-bottom:50px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+input,textarea{user-select:text;-webkit-user-select:text}
+.hd{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top)) 20px 13px;
+  border-bottom:1px solid var(--piste)}
+.hd .lg{width:74px;color:var(--ink);line-height:0}.hd .lg svg{display:block;width:100%;height:auto}
+.hd .q{margin-left:auto;font-weight:300;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:#A9B0AC;text-decoration:none}
+.z{padding:24px 20px 0}
+.k{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#A9B0AC}
+h1{font-weight:900;font-size:26px;letter-spacing:-.03em;margin:8px 0 4px}
+.intro{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.6;margin-bottom:22px}
+
+.champ{margin-bottom:20px}
+label{display:block;font-weight:900;font-size:11px;letter-spacing:.1em;margin-bottom:3px}
+.aide{font-weight:300;font-size:10.5px;color:#A9B0AC;margin-bottom:9px}
+.ech{display:flex;gap:6px}
+.ech button{flex:1;border:1.5px solid var(--piste);background:#fff;border-radius:9px;padding:12px 0;
+  font-family:inherit;font-weight:900;font-size:15px;color:#B7BEBA;cursor:pointer}
+.ech button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.ech .lb{display:flex;justify-content:space-between;margin-top:5px}
+.duo{display:flex;gap:10px}.duo>div{flex:1}
+input.ch,textarea.ch{width:100%;border:1.5px solid var(--piste);border-radius:9px;padding:12px 13px;
+  font-family:inherit;font-weight:700;font-size:15px;color:var(--ink);background:#fff}
+textarea.ch{font-weight:300;font-size:13.5px;min-height:70px;resize:vertical}
+input.ch:focus,textarea.ch:focus{outline:0;border-color:var(--ink)}
+.bornes{display:flex;justify-content:space-between;margin-top:5px;font-weight:300;font-size:9px;
+  letter-spacing:.12em;text-transform:uppercase;color:#B7BEBA}
+
+.res{background:#F4F7F5;border-radius:14px;padding:16px;margin:22px 0}
+.res .h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.res .h b{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.res .h em{font-style:normal;font-weight:900;font-size:26px;letter-spacing:-.03em}
+.res .rail{height:8px;background:#E4E9E6;border-radius:5px;overflow:hidden}
+.res .rail i{display:block;height:100%;border-radius:5px;transition:width .3s,background .3s}
+.res .et{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:10px}
+.res p{font-weight:300;font-size:12px;color:var(--texte);line-height:1.55;margin-top:6px}
+
+.cta{display:block;width:100%;background:var(--vert);color:#fff;border:0;border-radius:999px;padding:15px;
+  font-family:inherit;font-weight:900;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.cta[disabled]{background:#DDE3DF;color:#9AA19D}
+.msg{font-weight:700;font-size:12px;text-align:center;margin-top:12px;min-height:1.3em}
+.msg.ok{color:var(--vert)}.msg.ko{color:var(--rouge)}
+.note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<header class="hd">
+  <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <a class="q" href="admin.html">Séances</a>
+</header>
+
+<div class="z" id="z"><p class="k">Chargement…</p></div>
+
+<script type="module">
+import { exigerConnexion, listJournal, upsertJournal, journalDuJour } from './config.js?v=20260831c';
+import { etatForme, ETATS } from './moteur.js?v=20260831c';
+
+if (!await exigerConnexion('connexion.html')) throw new Error('non connecté');
+
+const $ = id => document.getElementById(id);
+const auj = new Date();
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const AUJ = iso(auj);
+
+const ECHELLES = [
+  ['fatigue','Fatigue','1 = frais comme au réveil d\u2019un jour off · 5 = vidé', ['Frais','','','','Vidé']],
+  ['courbatures','Courbatures','1 = aucune · 5 = chaque marche fait mal', ['Aucune','','','','Très fort']],
+  ['sommeil_q','Qualité du sommeil','1 = nuit hachée · 5 = sommeil profond', ['Mauvaise','','','','Excellente']],
+  ['motivation','Envie de courir','1 = aucune envie · 5 = impatient', ['Aucune','','','','Impatient']]
+];
+
+const V = { fatigue:null, courbatures:null, sommeil_q:null, motivation:null };
+let journal = await listJournal(60);
+const deja = await journalDuJour(AUJ);
+if (deja) for (const c of Object.keys(V)) V[c] = deja[c] ?? null;
+
+$('z').innerHTML = `
+  <p class="k">Journal du jour</p>
+  <h1>${auj.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}</h1>
+  <p class="intro">Trente secondes chaque matin, avant de courir.
+    C\u2019est ce qui permet au système de savoir quand te pousser et quand te retenir.</p>
+
+  ${ECHELLES.map(([cle,titre,aide,lb]) => `
+    <div class="champ"><label>${titre}</label><p class="aide">${aide}</p>
+    <div class="ech" data-cle="${cle}">
+      ${[1,2,3,4,5].map(n => `<button type="button" data-v="${n}"${V[cle]===n?' class="on"':''}>${n}</button>`).join('')}
+    </div>
+    <div class="bornes"><span>${lb[0]}</span><span>${lb[4]}</span></div></div>`).join('')}
+
+  <div class="champ"><div class="duo">
+    <div><label>Sommeil</label><p class="aide">heures</p>
+      <input class="ch" id="sh" type="number" step="0.5" min="0" max="14" placeholder="7,5"
+        value="${deja?.sommeil_h ?? ''}"></div>
+    <div><label>FC au repos</label><p class="aide">au réveil, allongé</p>
+      <input class="ch" id="fc" type="number" min="30" max="120" placeholder="48"
+        value="${deja?.fc_repos ?? ''}"></div>
+  </div></div>
+
+  <div class="champ"><label>Douleur</label>
+    <p class="aide">Laisse vide s\u2019il n\u2019y a rien. Une douleur déclarée annule la séance du jour.</p>
+    <input class="ch" id="dl" type="text" placeholder="mollet droit, genou…" value="${deja?.douleur ?? ''}"></div>
+
+  <div class="champ"><label>Note</label><p class="aide">Ce que tu veux, pour plus tard.</p>
+    <textarea class="ch" id="nt" placeholder="…">${deja?.note ?? ''}</textarea></div>
+
+  <div class="res" id="res"></div>
+  <button class="cta" id="ok">${deja ? 'Mettre à jour' : 'Enregistrer'}</button>
+  <p class="msg" id="msg"></p>
+  <p class="note">Ces données ne sont visibles que par toi.
+    Elles servent à ajuster la séance du jour, rien d\u2019autre.</p>`;
+
+function calcule() {
+  const brouillon = {
+    date: AUJ,
+    fatigue: V.fatigue, courbatures: V.courbatures,
+    sommeil_q: V.sommeil_q, motivation: V.motivation,
+    sommeil_h: $('sh').value ? Number($('sh').value) : null,
+    fc_repos: $('fc').value ? Number($('fc').value) : null,
+    douleur: $('dl').value.trim() || null
+  };
+  const autres = journal.filter(j => j.date !== AUJ);
+  const f = etatForme([brouillon, ...autres], auj);
+  const E = ETATS[f.etat] || ETATS.inconnu;
+  $('res').innerHTML = f.score === null
+    ? `<div class="h"><b>Fraîcheur du jour</b><em>—</em></div>
+       <p>Renseigne au moins la fatigue pour obtenir un score.</p>`
+    : `<div class="h"><b>Fraîcheur du jour</b><em style="color:${E.couleur}">${f.score}</em></div>
+       <div class="rail"><i style="width:${f.score}%;background:${E.couleur}"></i></div>
+       <p class="et" style="color:${E.couleur}">${E.nom}</p>
+       <p>${f.raisons.length ? f.raisons.join(' · ') : 'Rien à signaler. Bonne journée pour un effort.'}</p>`;
+  return brouillon;
+}
+
+document.querySelectorAll('.ech').forEach(g => g.addEventListener('click', e => {
+  const b = e.target.closest('button[data-v]'); if (!b) return;
+  V[g.dataset.cle] = Number(b.dataset.v);
+  [...g.children].forEach(c => c.classList.toggle('on', c === b));
+  calcule();
+}));
+['sh','fc','dl'].forEach(i => $(i).addEventListener('input', calcule));
+calcule();
+
+$('ok').addEventListener('click', async () => {
+  const m = $('msg'); m.className='msg'; m.textContent='';
+  const row = calcule();
+  row.note = $('nt').value.trim() || null;
+  $('ok').disabled = true;
+  try {
+    await upsertJournal(row);
+    journal = await listJournal(60);
+    m.className='msg ok'; m.textContent='Enregistré.';
+    $('ok').textContent = 'Mettre à jour';
+  } catch (e) { m.className='msg ko'; m.textContent='Erreur : ' + e.message; }
+  $('ok').disabled = false;
+});
+</script>
+</body>
+</html>
