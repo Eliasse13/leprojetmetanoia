@@ -442,3 +442,64 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date()) {
     blocs: [B('Footing continu', '55 min', 'endurance')],
     pourquoi: `Journée facile. Reste au-dessus de ${fmtAllure(a.endurance)}/km : c’est ce qui te permettra d’aller vite le jour de la séance dure.` };
 }
+
+// ---------------------------------------------------------------- records
+const CLES_DISTANCE = [
+  { cle: '5k',       metres: 5000,  nom: '5 km',     tol: 200 },
+  { cle: '10k',      metres: 10000, nom: '10 km',    tol: 350 },
+  { cle: 'semi',     metres: 21097, nom: 'Semi',     tol: 600 },
+  { cle: 'marathon', metres: 42195, nom: 'Marathon', tol: 900 }
+];
+
+/**
+ * Records personnels par distance officielle.
+ * resultats : [{nom, date, distance_km, temps_s, classement, participants}]
+ */
+export function records(resultats) {
+  return CLES_DISTANCE.map(d => {
+    const lot = (resultats || []).filter(r => {
+      const m = Number(r.distance_km) * 1000;
+      return Math.abs(m - d.metres) <= d.tol && Number(r.temps_s) > 0;
+    });
+    if (!lot.length) return { ...d, vide: true };
+    const best = lot.reduce((a, b) => (Number(a.temps_s) <= Number(b.temps_s) ? a : b));
+    return {
+      ...d, vide: false,
+      temps: Number(best.temps_s),
+      date: best.date,
+      course: best.nom,                       // le nom de la course, pas de la distance
+      vdot: vdot(d.metres, Number(best.temps_s)),
+      courses: lot.length
+    };
+  });
+}
+
+/** La meilleure performance toutes distances confondues, en VDOT. */
+export function meilleurVdot(resultats) {
+  const r = records(resultats).filter(x => !x.vide);
+  if (!r.length) return null;
+  return r.reduce((a, b) => (a.vdot >= b.vdot ? a : b));
+}
+
+/** Palmarès trié du plus récent au plus ancien, avec le record marqué. */
+export function palmares(resultats) {
+  const rs = (resultats || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+  const meilleurs = {};
+  for (const d of CLES_DISTANCE) {
+    const lot = rs.filter(r => Math.abs(Number(r.distance_km) * 1000 - d.metres) <= d.tol);
+    if (lot.length) meilleurs[d.cle] = lot.reduce((a, b) => (Number(a.temps_s) <= Number(b.temps_s) ? a : b));
+  }
+  return rs.map(r => {
+    const d = CLES_DISTANCE.find(x => Math.abs(Number(r.distance_km) * 1000 - x.metres) <= x.tol);
+    const est = d && meilleurs[d.cle] === r;
+    const part = Number(r.participants) || 0, cl = Number(r.classement) || 0;
+    return {
+      ...r,
+      distanceNom: d ? d.nom : Number(r.distance_km).toString().replace('.', ',') + ' km',
+      record: !!est,
+      vdot: d ? vdot(d.metres, Number(r.temps_s)) : null,
+      allure: Number(r.temps_s) / Number(r.distance_km),
+      pourcent: part && cl ? Math.max(1, Math.round(cl / part * 100)) : null
+    };
+  });
+}
