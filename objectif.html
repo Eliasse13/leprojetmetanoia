@@ -173,9 +173,9 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers, listResultats } from './config.js?v=20260830h';
+import { list, projetActif, listPaliers, listResultats } from './config.js?v=20260831a';
 import { vdot, tempsPour, allures, charge, recommandation, records, palmares,
-         fmtChrono, fmtAllure } from './moteur.js?v=20260830h';
+         fmtChrono, fmtAllure } from './moteur.js?v=20260831a';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -247,8 +247,9 @@ try {
           <span class="med ${c.record ? 'top' : ''}">${c.record ? '★' : (c.classement || '—')}</span>
           <div class="g"><b>${c.nom}</b><span>${new Date(c.date+'T00:00:00')
             .toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})} · ${c.distanceNom}</span></div>
-          <span class="d"><b>${fmtChrono(c.temps_s)}</b><span>${
-            c.classement && c.participants ? c.classement + 'ᵉ / ' + c.participants : ''
+          <span class="d"><b>${fmtChrono(c.temps_s)}</b><span${c.douteux ? ' style="color:#C4452F"' : ''}>${
+            c.douteux ? 'chrono à vérifier'
+              : (c.classement && c.participants ? c.classement + 'ᵉ / ' + c.participants : '')
           }${c.record ? ' — record' : ''}</span></span></div>`).join('')}
       </div>` : ''}
 
