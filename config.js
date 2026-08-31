@@ -180,3 +180,22 @@ export async function exigerConnexion(retour = 'connexion.html') {
   if (!u) { location.href = retour + '?suite=' + encodeURIComponent(location.pathname.split('/').pop()); return null; }
   return u;
 }
+
+// journal quotidien
+export async function listJournal(jours = 60) {
+  await sbReady; if (!sb) return [];
+  const d = new Date(); d.setDate(d.getDate() - jours);
+  const depuis = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const { data, error } = await sb.from('journal').select('*').gte('date', depuis).order('date', { ascending: false });
+  if (error) throw error; return data;
+}
+export async function upsertJournal(row) {
+  await sbReady; if (!sb) return;
+  const { error } = await sb.from('journal').upsert(row, { onConflict: 'date' });
+  if (error) throw error;
+}
+export async function journalDuJour(date) {
+  await sbReady; if (!sb) return null;
+  const { data, error } = await sb.from('journal').select('*').eq('date', date).limit(1);
+  if (error) throw error; return data[0] || null;
+}
