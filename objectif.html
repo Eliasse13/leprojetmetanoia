@@ -68,6 +68,28 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 .note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;margin-top:22px}
 
 
+  /* records */
+  .rec{display:grid;margin-bottom:26px}
+  .rec .l{display:flex;align-items:baseline;gap:10px;padding:13px 0;border-bottom:1px solid #F2F4F3}
+  .rec .l .d{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#A9B0AC;
+    width:62px;flex:none}
+  .rec .l .t{font-weight:900;font-size:25px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .rec .l .m{margin-left:auto;text-align:right}
+  .rec .l .m b{display:block;font-weight:900;font-size:11px;color:var(--vert)}
+  .rec .l .m span{font-weight:300;font-size:9.5px;color:#A9B0AC;letter-spacing:.06em}
+  .rec .l.vide .t{color:#D3D9D6}
+  .rec .l.vide .m b{color:#C6CCC9}
+  /* palmarès */
+  .pal{margin-bottom:26px}
+  .pal .c{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid #F2F4F3}
+  .pal .c .med{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;
+    font-weight:900;font-size:10px;background:#F1F4F2;color:#9AA29E}
+  .pal .c .med.top{background:#FBF1D9;color:#8A6212}
+  .pal .c .g b{display:block;font-weight:900;font-size:14px;letter-spacing:-.01em}
+  .pal .c .g span{font-weight:300;font-size:10px;color:#A9B0AC;letter-spacing:.06em}
+  .pal .c .d{margin-left:auto;text-align:right}
+  .pal .c .d b{display:block;font-weight:900;font-size:16px;font-variant-numeric:tabular-nums}
+  .pal .c .d span{font-weight:300;font-size:9px;color:var(--vert);letter-spacing:.08em}
   .reco{border:2px solid var(--ink);border-radius:14px;padding:16px;margin-bottom:26px}
   .reco .t{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
   .reco .t b{font-weight:900;font-size:19px;letter-spacing:-.025em}
@@ -151,8 +173,9 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers } from './config.js?v=20260830g';
-import { vdot, tempsPour, allures, charge, recommandation, fmtChrono, fmtAllure } from './moteur.js?v=20260830g';
+import { list, projetActif, listPaliers, listResultats } from './config.js?v=20260830h';
+import { vdot, tempsPour, allures, charge, recommandation, records, palmares,
+         fmtChrono, fmtAllure } from './moteur.js?v=20260830h';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -161,7 +184,9 @@ try {
   const p = await projetActif();
   if (!p) { z.innerHTML = '<p class="eyebrow">Aucun projet en cours</p>'; }
   else {
-    const [pal, seances] = await Promise.all([listPaliers(p.id), list()]);
+    const [pal, seances, res] = await Promise.all([listPaliers(p.id), list(), listResultats()]);
+    const recs = records(res);
+    const courses = palmares(res);
     const vAct = vdot(p.ref_distance_m, p.ref_chrono_s);
     const chronoAct = tempsPour(vAct, p.distance_m);
     const vCible = vdot(p.distance_m, p.chrono_cible_s);
@@ -189,6 +214,17 @@ try {
         <div><b>${(vCible - vAct).toFixed(1)}</b><span>points à gagner</span></div>
       </div>
 
+      <p class="eyebrow" style="margin-bottom:6px">Records personnels</p>
+      <div class="rec">
+        ${recs.map(r => r.vide
+          ? `<div class="l vide"><span class="d">${r.nom}</span><span class="t">—</span>
+             <span class="m"><b>à courir</b><span>jamais tenté</span></span></div>`
+          : `<div class="l"><span class="d">${r.nom}</span><span class="t">${fmtChrono(r.temps)}</span>
+             <span class="m"><b>VDOT ${r.vdot}</b><span>${new Date(r.date+'T00:00:00')
+               .toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</span></span></div>`
+        ).join('')}
+      </div>
+
       <p class="eyebrow" style="margin-bottom:10px">Les paliers</p>
       <div class="echelle">
         ${pal.map((x, i) => {
@@ -205,7 +241,18 @@ try {
         }).join('')}
       </div>
 
-      <p class="eyebrow" style="margin-bottom:9px">La séance d'aujourd'hui</p>
+      ${courses.length ? `<p class="eyebrow" style="margin-bottom:6px">Palmarès — ${courses.length} course${courses.length>1?'s':''}</p>
+      <div class="pal">
+        ${courses.map(c => `<div class="c">
+          <span class="med ${c.record ? 'top' : ''}">${c.record ? '★' : (c.classement || '—')}</span>
+          <div class="g"><b>${c.nom}</b><span>${new Date(c.date+'T00:00:00')
+            .toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})} · ${c.distanceNom}</span></div>
+          <span class="d"><b>${fmtChrono(c.temps_s)}</b><span>${
+            c.classement && c.participants ? c.classement + 'ᵉ / ' + c.participants : ''
+          }${c.record ? ' — record' : ''}</span></span></div>`).join('')}
+      </div>` : ''}
+
+      <p class="eyebrow" style="margin-bottom:9px">La séance d\'aujourd\'hui</p>
       <div class="reco">
         <div class="t"><b>${r.titre}</b><em class="${r.intensite}">${
           r.intensite === 'dure' ? 'séance dure' : r.intensite === 'repos' ? 'repos'
