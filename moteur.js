@@ -381,7 +381,7 @@ export const COMMENTAIRES = {
  * seances : [{date, type, distance_km, temps_s}]  — l'historique complet
  * Renvoie { titre, pourquoi, blocs:[{nom,detail,zone,secondesParKm}], km, intensite }
  */
-export function recommandation(seances, vdotVal, aujourdhui = new Date()) {
+export function recommandation(seances, vdotVal, aujourdhui = new Date(), journal = null) {
   const a = Object.fromEntries(allures(vdotVal).map(z => [z.cle, z.secondesParKm]));
   const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const auj = iso(aujourdhui);
@@ -419,38 +419,58 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date()) {
   const ech = B('Échauffement', '20 min', 'endurance');
   const cal = B('Retour au calme', '15 min', 'endurance');
 
+  // 0. l'état de forme passe avant toutes les autres règles
+  const forme = journal ? etatForme(journal, aujourdhui) : { score: null, etat: 'inconnu', raisons: [], douleur: null };
+  if (forme.douleur) {
+    return { titre: 'Repos', intensite: 'repos', km: 0, blocs: [], forme,
+      pourquoi: `Tu as déclaré une douleur (${forme.douleur}). On ne court pas sur une douleur : ` +
+                `deux jours d'arrêt maintenant valent mieux que six semaines dans un mois.` };
+  }
+  if (forme.etat === 'epuise') {
+    return { titre: 'Repos ou marche', intensite: 'repos', km: 0, blocs: [], forme,
+      pourquoi: `Score de fraîcheur à ${forme.score}/100${forme.raisons.length ? ' — ' + forme.raisons.slice(0,2).join(', ') : ''}. ` +
+                `Le progrès se fait pendant la récupération.` };
+  }
+
   // 1. rien depuis 7 jours sans repos → repos
   if (joursDepuisRepos >= 7) {
-    return { titre: 'Repos complet', intensite: 'repos', km: 0, blocs: [],
+    return { titre: 'Repos complet', intensite: 'repos', forme, km: 0, blocs: [],
       pourquoi: `Sept jours d’affilée sans repos. Le progrès se fait pendant la récupération, pas pendant l’effort.` };
   }
   // 2. la veille était dure → souple obligatoire
   if (veille && ['qualite','usante'].includes(nat(veille))) {
-    return { titre: 'Endurance très souple', intensite: 'souple',
+    return { titre: 'Endurance très souple', intensite: 'souple', forme,
       km: 8, blocs: [B('Footing lent', '45 min', 'endurance')],
       pourquoi: `Séance dure hier. Aujourd’hui c’est ${fmtAllure(a.endurance)}/km ou plus lent, sans exception.` };
   }
+  if (forme.etat === 'entame') {
+    return { titre: 'Endurance très souple', intensite: 'souple', forme, km: 8, forme,
+      blocs: [B('Footing lent', '40 min', 'endurance')],
+      pourquoi: `Fraîcheur à ${forme.score}/100${forme.raisons.length ? ' — ' + forme.raisons.slice(0,2).join(', ') : ''}. ` +
+                `La séance dure est reportée : elle ne servirait à rien aujourd'hui.` };
+  }
+
   // 3. aucune séance de qualité depuis longtemps → seuil
   if (qualiteSur7 === 0 && joursDepuisQualite >= 3) {
-    return { titre: 'Seuil', intensite: 'dure', km: 13,
+    return { titre: 'Seuil', intensite: 'dure', forme, km: 13,
       blocs: [ech, B('2 × 10 min', 'récup 3 min en trot', 'seuil'), cal],
       pourquoi: `Aucune séance rapide depuis ${joursDepuisQualite === 99 ? 'très longtemps' : joursDepuisQualite + ' jours'}. C’est le manque le plus coûteux pour ton 5 km.` };
   }
   // 4. une qualité déjà faite, et 3 jours de repos derrière → VMA
   if (qualiteSur7 >= 1 && joursDepuisQualite >= 3 && dursSur7 < 3) {
-    return { titre: 'Intervalles courts', intensite: 'dure', km: 11,
+    return { titre: 'Intervalles courts', intensite: 'dure', forme, km: 11,
       blocs: [ech, B('8 × 400 m', 'récup 1 min 30 en trot', 'intervalle'), cal],
       pourquoi: `Le seuil est fait cette semaine. Là on travaille la vitesse pure, celle qui manque sur la fin d’un 5 km.` };
   }
   // 5. week-end et pas de sortie longue cette semaine → sortie longue
   if (dimanche && plusLongue7 < 12) {
     const cible = Math.max(12, Math.round(kmSur7 * 0.35));
-    return { titre: 'Sortie longue', intensite: 'moyenne', km: cible,
+    return { titre: 'Sortie longue', intensite: 'moyenne', forme, km: cible,
       blocs: [B('Continu', `${cible} km`, 'endurance')],
       pourquoi: `Ta plus longue sortie de la semaine fait ${plusLongue7.toFixed(1)} km. Le foncier se construit sur la durée, pas sur l’intensité.` };
   }
   // 6. par défaut → endurance
-  return { titre: 'Endurance', intensite: 'souple', km: 10,
+  return { titre: 'Endurance', intensite: 'souple', forme, km: 10,
     blocs: [B('Footing continu', '55 min', 'endurance')],
     pourquoi: `Journée facile. Reste au-dessus de ${fmtAllure(a.endurance)}/km : c’est ce qui te permettra d’aller vite le jour de la séance dure.` };
 }
@@ -568,3 +588,76 @@ export function vdotCorrige(metres, secondes, denivele_m, profil) {
   const e = equivalentPlat(metres, secondes, denivele_m, profil);
   return { vdot: vdot(metres, e.secondes), ...e };
 }
+
+// ---------------------------------------------------------------- état de forme
+/**
+ * Score de fraîcheur du jour, de 0 à 100, à partir du journal.
+ * journal : [{date, sommeil_h, sommeil_q, fatigue, courbatures, motivation, fc_repos, douleur}]
+ *
+ * Le score ne récompense pas la performance : il mesure la capacité à encaisser
+ * une séance dure aujourd'hui. Une douleur déclarée le fait chuter d'un coup.
+ */
+export function etatForme(journal, aujourdhui = new Date()) {
+  const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const auj = iso(aujourdhui);
+  const tri = (journal || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+  const jour = tri.find(j => j.date === auj) || tri[0] || null;
+  if (!jour) return { score: null, etat: 'inconnu', raisons: [], douleur: null };
+
+  const age = Math.round((new Date(auj) - new Date(jour.date)) / 864e5);
+  if (age > 2) return { score: null, etat: 'perime', jours: age, raisons: [], douleur: null };
+
+  let score = 100;
+  const raisons = [];
+
+  const n = v => (v === null || v === undefined ? null : Number(v));
+
+  const f = n(jour.fatigue);
+  if (f !== null) { const p = (f - 1) * 11; score -= p; if (f >= 4) raisons.push('fatigue élevée'); }
+
+  const c = n(jour.courbatures);
+  if (c !== null) { score -= (c - 1) * 9; if (c >= 4) raisons.push('courbatures marquées'); }
+
+  const s = n(jour.sommeil_h);
+  if (s !== null) {
+    if (s < 6) { score -= 16; raisons.push('nuit trop courte'); }
+    else if (s < 7) score -= 7;
+  }
+  const sq = n(jour.sommeil_q);
+  if (sq !== null) { score -= (5 - sq) * 4; if (sq <= 2) raisons.push('sommeil de mauvaise qualité'); }
+
+  const mo = n(jour.motivation);
+  if (mo !== null) { score -= (5 - mo) * 3; if (mo <= 2) raisons.push('aucune envie'); }
+
+  // fréquence cardiaque au repos comparée à la moyenne des 21 jours précédents
+  const hist = tri.filter(j => j.date < jour.date && n(j.fc_repos)).slice(0, 21).map(j => n(j.fc_repos));
+  const fc = n(jour.fc_repos);
+  if (fc && hist.length >= 5) {
+    const moy = hist.reduce((a, b) => a + b, 0) / hist.length;
+    const ecart = fc - moy;
+    if (ecart >= 7) { score -= 20; raisons.push(`FC au repos +${Math.round(ecart)} bpm`); }
+    else if (ecart >= 4) { score -= 10; raisons.push('FC au repos en hausse'); }
+    else if (ecart <= -3) score += 4;
+  }
+
+  const douleur = (jour.douleur || '').trim() || null;
+  if (douleur) { score -= 45; raisons.push('douleur déclarée : ' + douleur); }
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  const etat = douleur ? 'douleur'
+    : score >= 78 ? 'frais'
+    : score >= 58 ? 'correct'
+    : score >= 38 ? 'entame'
+    : 'epuise';
+  return { score, etat, raisons, douleur, date: jour.date };
+}
+
+export const ETATS = {
+  frais:   { nom: 'Frais',            couleur: '#12B85F' },
+  correct: { nom: 'Correct',          couleur: '#7FA8C9' },
+  entame:  { nom: 'Entamé',           couleur: '#E5A93A' },
+  epuise:  { nom: 'Épuisé',           couleur: '#D63B27' },
+  douleur: { nom: 'Douleur déclarée', couleur: '#D63B27' },
+  inconnu: { nom: 'Pas de journal',   couleur: '#B7BEBA' },
+  perime:  { nom: 'Journal ancien',   couleur: '#B7BEBA' }
+};
