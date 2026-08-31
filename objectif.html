@@ -92,6 +92,12 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
   .pal .c .d span{font-weight:300;font-size:9px;color:var(--vert);letter-spacing:.08em}
   .reco .t .cib{font-weight:700;font-size:8px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--sourd);background:#F2F4F3;border-radius:999px;padding:3px 8px}
+  .allures .l em u{display:block;text-decoration:none;font-weight:300;font-size:9.5px;
+    color:#A9B0AC;letter-spacing:.02em;margin-top:2px}
+  .apla{font-weight:300;font-size:11px;color:var(--sourd);line-height:1.5;margin-bottom:10px}
+  .apla b{font-weight:900;color:var(--ink)}
+  .reco .bloc em u{display:block;text-decoration:none;font-weight:300;font-size:9px;
+    color:#A9B0AC;margin-top:2px}
   .deux{display:grid;gap:14px;margin-bottom:22px}
   .deux .ch .n{font-weight:900;font-size:12px;letter-spacing:-.01em;margin-bottom:6px}
   .deux .ch .n span{font-weight:300;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
@@ -189,9 +195,9 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers, listResultats, listJournal } from './config.js?v=20260831d';
+import { list, projetActif, listPaliers, listResultats, listJournal } from './config.js?v=20260831e';
 import { vdot, tempsPour, allures, charge, recommandation, records, palmares, etatForme, ETATS,
-         suiviObjectifs, fmtChrono, fmtAllure } from './moteur.js?v=20260831d';
+         suiviObjectifs, fmtChrono, fmtAllure } from './moteur.js?v=20260831e';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -290,7 +296,8 @@ try {
         <p class="pq">${r.pourquoi}</p>
         ${r.blocs.map((b,i) => `<div class="bloc"><span class="n">${i+1}</span>
           <div class="d"><b>${b.nom}</b><span>${b.detail}</span></div>
-          <em>${fmtAllure(b.secondesParKm)}</em></div>`).join('')}
+          <em>${fmtAllure(b.secondesParKm)}<u>${b.rapide !== b.lent
+            ? fmtAllure(b.rapide) + '–' + fmtAllure(b.lent) : ''}</u></em></div>`).join('')}
         ${r.km ? `<p class="tot">environ ${r.km} km</p>` : ''}
       </div>
 
@@ -310,8 +317,11 @@ try {
 
       <div class="allures">
         <p class="eyebrow" style="margin-bottom:8px">Tes allures, calculées sur VDOT ${vAct}</p>
+        <p class="apla">Ce sont des <b>plages</b>, pas des cibles. Pour un footing, vise le milieu
+          ou le bas : tu dois pouvoir tenir une conversation.</p>
         ${zones.map((zz,i) => `<div class="l"><span class="pt" style="background:${TEINTES[i]}"></span>
-          <b>${zz.nom}</b><span>${zz.sous}</span><em>${fmtAllure(zz.secondesParKm)}</em></div>`).join('')}
+          <b>${zz.nom}</b><span>${zz.sous}</span>
+          <em>${fmtAllure(zz.rapide)}<u>à ${fmtAllure(zz.lent)}</u></em></div>`).join('')}
       </div>
 
       <p class="eyebrow" style="margin:26px 0 8px">Les deux chantiers — 28 derniers jours</p>
