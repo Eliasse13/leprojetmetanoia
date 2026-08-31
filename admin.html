@@ -110,7 +110,8 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260830g';
+import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831a';
+import { plausible, fmtAllure } from './moteur.js?v=20260831a';
 
 if (!await exigerConnexion()) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -142,9 +143,23 @@ function render(){
 }
 async function refresh(){ try { rows = await list(); render(); } catch(e){ $('msg').textContent='Erreur : '+e.message; } }
 
+
+// refuse une performance physiquement impossible
+function verifieAllure(km, sec, cible) {
+  if (!plausible(km * 1000, sec)) {
+    const a = sec / km;
+    document.getElementById(cible).textContent =
+      'Allure de ' + fmtAllure(a) + '/km — c\u2019est impossible. Vérifie le temps : '
+      + 'pour une heure et plus, écris 1:49:00 et non 1:49.';
+    return false;
+  }
+  return true;
+}
+
 $('save').addEventListener('click', async () => {
   const d=parseKm($('dist').value), s=parseTime($('temps').value);
   if(!$('date').value||!d||!s){ $('msg').textContent='Date, distance et temps sont obligatoires.'; return; }
+  if(!verifieAllure(d, s, 'msg')) return;
   const row={ date:$('date').value, type:$('type').value, lieu:$('lieu').value.trim(), distance_km:d, temps_s:s, denivele_m:Number($('den').value)||0, notes:$('notes').value.trim(), ressenti:Number($('ress').value) };
   $('save').disabled=true;
   try { if(editing!==null){ await update(editing,row); $('msg').textContent='Mis à jour.'; } else { await insert(row); $('msg').textContent=`Enregistré — ${fr(d)} km de plus.`; }
@@ -211,6 +226,7 @@ async function refreshResultats() {
 $('rSave').addEventListener('click', async () => {
   const nom = $('rNom').value.trim(), date = $('rDate').value, d = parseKm($('rDist').value), s = parseTime($('rTemps').value);
   if (!nom || !date || !d || !s) { $('rMsg').textContent = 'Nom, date, distance et temps sont obligatoires.'; return; }
+  if (!verifieAllure(d, s, 'rMsg')) return;
   $('rSave').disabled = true;
   try {
     await insertResultat({ nom, date, distance_km: d, temps_s: s, classement: Number($('rClas').value) || null, participants: Number($('rPart').value) || null });
@@ -229,7 +245,8 @@ refreshResultats();
   border-radius:999px;padding:7px 14px;font-family:inherit;font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;color:#888;cursor:pointer">Déconnexion</button>
 <script type="module">
-import { deconnexion } from './config.js?v=20260830g';
+import { deconnexion } from './config.js?v=20260831a';
+import { plausible, fmtAllure } from './moteur.js?v=20260831a';
 document.getElementById('quitter').addEventListener('click', async () => {
   await deconnexion(); location.href = 'index.html';
 });
