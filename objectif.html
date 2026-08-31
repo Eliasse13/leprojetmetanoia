@@ -173,9 +173,9 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers, listResultats } from './config.js?v=20260831a';
+import { list, projetActif, listPaliers, listResultats } from './config.js?v=20260831b';
 import { vdot, tempsPour, allures, charge, recommandation, records, palmares,
-         fmtChrono, fmtAllure } from './moteur.js?v=20260831a';
+         fmtChrono, fmtAllure } from './moteur.js?v=20260831b';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -221,7 +221,8 @@ try {
              <span class="m"><b>à courir</b><span>jamais tenté</span></span></div>`
           : `<div class="l"><span class="d">${r.nom}</span><span class="t">${fmtChrono(r.temps)}</span>
              <span class="m"><b>VDOT ${r.vdot}</b><span>${new Date(r.date+'T00:00:00')
-               .toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}</span></span></div>`
+               .toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}${
+               r.denivele ? ' · ' + r.denivele + ' m D+' : ''}</span></span></div>`
         ).join('')}
       </div>
 
