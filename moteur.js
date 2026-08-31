@@ -347,7 +347,9 @@ export function nature(seance, vdotVal, veille = null) {
   const km = Number(seance.distance_km), t = Number(seance.temps_s);
   if (!(km > 0) || !(t > 0)) return 'renfo';
   const a = Object.fromEntries(allures(vdotVal).map(z => [z.cle, z.secondesParKm]));
-  const p = t / km;                                  // secondes par km
+  // une sortie en côte est ramenée à son équivalent plat avant d'être classée
+  const eq = equivalentPlat(km * 1000, t, Number(seance.denivele_m) || 0);
+  const p = eq.secondes / km;                        // secondes par km, corrigées du relief
 
   let n;
   if (p <= a.seuil + 12)            n = 'qualite';
@@ -473,12 +475,17 @@ export function records(resultats) {
     });
     if (!lot.length) return { ...d, vide: true };
     const best = lot.reduce((a, b) => (Number(a.temps_s) <= Number(b.temps_s) ? a : b));
+    const mReels = Number(best.distance_km) * 1000;
+    const dPlus = Number(best.denivele_m) || 0;
+    const eq = equivalentPlat(mReels, Number(best.temps_s), dPlus);
     return {
       ...d, vide: false,
       temps: Number(best.temps_s),
       date: best.date,
-      course: best.nom,                       // le nom de la course, pas de la distance
-      vdot: vdot(d.metres, Number(best.temps_s)),
+      course: best.nom,
+      denivele: dPlus,
+      tempsPlat: eq.secondes,
+      vdot: vdot(mReels, eq.secondes),          // distance réelle, corrigée du relief
       courses: lot.length
     };
   });
@@ -509,9 +516,55 @@ export function palmares(resultats) {
       distanceNom: d ? d.nom : Number(r.distance_km).toString().replace('.', ',') + ' km',
       record: !!est && ok,
       douteux: !ok,
-      vdot: (d && ok) ? vdot(d.metres, Number(r.temps_s)) : null,
+      vdot: ok ? vdot(Number(r.distance_km) * 1000,
+                      equivalentPlat(Number(r.distance_km) * 1000, Number(r.temps_s),
+                                     Number(r.denivele_m) || 0).secondes) : null,
+      denivele: Number(r.denivele_m) || 0,
       allure: Number(r.temps_s) / Number(r.distance_km),
       pourcent: part && cl ? Math.max(1, Math.round(cl / part * 100)) : null
     };
   });
+}
+
+// ---------------------------------------------------------------- dénivelé
+/**
+ * Équivalent plat d'une performance en côte.
+ *
+ * Règle de terrain largement admise : en montée, on perd environ 0,4 % de temps
+ * par mètre de D+ rapporté au kilomètre ; en descente on en regagne la moitié,
+ * jamais plus. Sur un parcours vallonné (montées ET descentes), le D+ total
+ * pénalise encore, mais moins qu'une montée sèche.
+ *
+ * metres     : distance en mètres
+ * secondes   : temps réalisé
+ * denivele_m : dénivelé positif total
+ * profil     : 'vallonne' (montées et descentes, défaut) | 'montee' (montée sèche)
+ */
+export function equivalentPlat(metres, secondes, denivele_m, profil = 'vallonne') {
+  const d = Number(denivele_m) || 0;
+  if (!(metres > 0) || !(secondes > 0) || d <= 0) return { secondes, gain: 0, pente: 0 };
+
+  const km = metres / 1000;
+  const dParKm = d / km;                            // mètres de D+ par kilomètre
+  const pente = d / metres * 100;                   // pente moyenne en %
+
+  // 0,4 % de temps par m/km en montée sèche, 0,25 % si le parcours redescend
+  const coef = profil === 'montee' ? 0.004 : 0.0025;
+  // au-delà de 60 m/km la pénalité sature : on marche autant qu'on court
+  const effectif = Math.min(dParKm, 60) + Math.max(0, dParKm - 60) * 0.4;
+
+  const facteur = 1 / (1 + effectif * coef);
+  const equiv = Math.round(secondes * facteur);
+  return {
+    secondes: equiv,
+    gain: secondes - equiv,                         // temps « rendu » par la correction
+    pente: Math.round(pente * 10) / 10,
+    dParKm: Math.round(dParKm)
+  };
+}
+
+/** VDOT corrigé du dénivelé. */
+export function vdotCorrige(metres, secondes, denivele_m, profil) {
+  const e = equivalentPlat(metres, secondes, denivele_m, profil);
+  return { vdot: vdot(metres, e.secondes), ...e };
 }
