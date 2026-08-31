@@ -65,12 +65,13 @@ export function equivalent(metresConnus, secondesConnues, metresCibles) {
 
 // ---------------------------------------------------------------- allures
 // Pourcentages de VDOT propres à chaque zone (Daniels).
+// pct = bord rapide de la zone ; large = étendue de la plage, en secondes par km
 const ZONES = [
-  { cle: 'endurance',  nom: 'Endurance',  sous: 'fondamental',  pct: 0.68 },
-  { cle: 'marathon',   nom: 'Marathon',   sous: 'allure course', pct: 0.84 },
-  { cle: 'seuil',      nom: 'Seuil',      sous: 'tempo',         pct: 0.88 },
-  { cle: 'intervalle', nom: 'Intervalle', sous: 'VMA',           pct: 0.98 },
-  { cle: 'repetition', nom: 'Répétition', sous: 'vitesse',       pct: 1.06 }
+  { cle: 'endurance',  nom: 'Endurance',  sous: 'fondamental',   pct: 0.68, large: 38 },
+  { cle: 'marathon',   nom: 'Marathon',   sous: 'allure course', pct: 0.84, large: 10 },
+  { cle: 'seuil',      nom: 'Seuil',      sous: 'tempo',         pct: 0.88, large: 8  },
+  { cle: 'intervalle', nom: 'Intervalle', sous: 'VMA',           pct: 0.98, large: 6  },
+  { cle: 'repetition', nom: 'Répétition', sous: 'vitesse',       pct: 1.06, large: 5  }
 ];
 
 /** Vitesse (m/min) correspondant à un VO2 demandé — inverse de vo2Demande. */
@@ -84,8 +85,23 @@ export function allures(vdotVal) {
   if (!(vdotVal > 0)) return [];
   return ZONES.map(z => {
     const v = vitessePourVo2(vdotVal * z.pct);        // m/min
-    return { ...z, secondesParKm: Math.round(60000 / v) };
+    const rapide = Math.round(60000 / v);             // bord rapide de la plage
+    return {
+      ...z,
+      secondesParKm: rapide,                          // conservé pour la compatibilité
+      rapide,
+      lent: rapide + z.large,
+      // pour un footing, viser le milieu-bas de la plage plutôt que le bord rapide
+      conseil: z.cle === 'endurance' ? rapide + Math.round(z.large * 0.62)
+                                     : rapide + Math.round(z.large * 0.35)
+    };
   });
+}
+
+/** La plage d'endurance, formatée. */
+export function plageEndurance(vdotVal) {
+  const e = allures(vdotVal).find(z => z.cle === 'endurance');
+  return e ? { rapide: e.rapide, lent: e.lent, conseil: e.conseil } : null;
 }
 
 // ---------------------------------------------------------------- charge
@@ -395,7 +411,13 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date(), journa
   const sur28 = passees.filter(s => jour(s.date) <= 28);
   const nat = s => nature(s, vdotVal, null);
 
-  const B = (nom, detail, zone) => ({ nom, detail, zone, secondesParKm: a[zone] });
+  const zonesDetail = Object.fromEntries(allures(vdotVal).map(z => [z.cle, z]));
+  const B = (nom, detail, zone) => ({
+    nom, detail, zone,
+    secondesParKm: zonesDetail[zone].conseil,
+    rapide: zonesDetail[zone].rapide,
+    lent: zonesDetail[zone].lent
+  });
   const ech = B('Échauffement', '20 min', 'endurance');
   const cal = B('Retour au calme', '15 min', 'endurance');
 
@@ -422,7 +444,7 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date(), journa
   if (veille && ['qualite','usante'].includes(nat(veille)))
     return { titre:'Endurance très souple', intensite:'souple', km:8, forme, cible:'récupération',
       blocs:[B('Footing lent','45 min','endurance')],
-      pourquoi:`Séance dure hier. Aujourd'hui c'est ${fmtAllure(a.endurance)}/km ou plus lent, sans exception.` };
+      pourquoi:`Séance dure hier. Aujourd'hui c'est ${fmtAllure(zonesDetail.endurance.conseil)}/km ou plus lent, sans exception.` };
   if (forme.etat === 'entame')
     return { titre:'Endurance très souple', intensite:'souple', km:8, forme, cible:'récupération',
       blocs:[B('Footing lent','40 min','endurance')],
@@ -477,7 +499,7 @@ export function recommandation(seances, vdotVal, aujourdhui = new Date(), journa
 
   return { titre:'Endurance', intensite:'souple', km:10, forme, cible:'foncier',
     blocs:[B('Footing continu','55 min','endurance')],
-    pourquoi:`Journée facile. Reste au-dessus de ${fmtAllure(a.endurance)}/km : c'est ce volume lent qui porte les deux objectifs, le 5 km comme l'ultra.` };
+    pourquoi:`Journée facile. Vise ${fmtAllure(zonesDetail.endurance.conseil)} à ${fmtAllure(zonesDetail.endurance.lent)}/km — tu dois pouvoir tenir une conversation. C'est ce volume lent qui porte les deux objectifs.` };
 }
 
 /** Où en est chacun des deux objectifs, sur les 28 derniers jours. */
