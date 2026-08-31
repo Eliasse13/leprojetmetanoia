@@ -90,6 +90,15 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
   .pal .c .d{margin-left:auto;text-align:right}
   .pal .c .d b{display:block;font-weight:900;font-size:16px;font-variant-numeric:tabular-nums}
   .pal .c .d span{font-weight:300;font-size:9px;color:var(--vert);letter-spacing:.08em}
+  .reco .t .cib{font-weight:700;font-size:8px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--sourd);background:#F2F4F3;border-radius:999px;padding:3px 8px}
+  .deux{display:grid;gap:14px;margin-bottom:22px}
+  .deux .ch .n{font-weight:900;font-size:12px;letter-spacing:-.01em;margin-bottom:6px}
+  .deux .ch .n span{font-weight:300;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:#A9B0AC;margin-left:7px}
+  .deux .ch .ra{height:6px;background:#EFF2F0;border-radius:4px;overflow:hidden}
+  .deux .ch .ra i{display:block;height:100%;border-radius:4px}
+  .deux .ch .v{font-weight:300;font-size:10.5px;color:var(--sourd);margin-top:5px}
   .forme{background:#F4F7F5;border-radius:13px;padding:14px;margin-bottom:14px}
   .forme .h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
   .forme .h b{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
@@ -180,9 +189,9 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max
 <div class="z" id="z"><p class="eyebrow">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif, listPaliers, listResultats, listJournal } from './config.js?v=20260831c';
+import { list, projetActif, listPaliers, listResultats, listJournal } from './config.js?v=20260831d';
 import { vdot, tempsPour, allures, charge, recommandation, records, palmares, etatForme, ETATS,
-         fmtChrono, fmtAllure } from './moteur.js?v=20260831c';
+         suiviObjectifs, fmtChrono, fmtAllure } from './moteur.js?v=20260831d';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -201,6 +210,7 @@ try {
     const r = recommandation(seances, vAct, new Date(), jrn);
     const forme = etatForme(jrn);
     const EF = ETATS[forme.etat] || ETATS.inconnu;
+    const su = suiviObjectifs(seances, vAct);
     const zones = allures(vAct);
     const TEINTES = ['#BFE8D0','#6FD79C','#12B85F','#0B7A3E','#075229'];
 
@@ -274,7 +284,7 @@ try {
 
       <p class="eyebrow" style="margin-bottom:9px">La séance d\'aujourd\'hui</p>
       <div class="reco">
-        <div class="t"><b>${r.titre}</b><em class="${r.intensite}">${
+        <div class="t"><b>${r.titre}</b>${r.cible ? `<span class="cib">${r.cible}</span>` : ''}<em class="${r.intensite}">${
           r.intensite === 'dure' ? 'séance dure' : r.intensite === 'repos' ? 'repos'
           : r.intensite === 'moyenne' ? 'volume' : 'facile'}</em></div>
         <p class="pq">${r.pourquoi}</p>
@@ -302,6 +312,34 @@ try {
         <p class="eyebrow" style="margin-bottom:8px">Tes allures, calculées sur VDOT ${vAct}</p>
         ${zones.map((zz,i) => `<div class="l"><span class="pt" style="background:${TEINTES[i]}"></span>
           <b>${zz.nom}</b><span>${zz.sous}</span><em>${fmtAllure(zz.secondesParKm)}</em></div>`).join('')}
+      </div>
+
+      <p class="eyebrow" style="margin:26px 0 8px">Les deux chantiers — 28 derniers jours</p>
+      <div class="deux">
+        <div class="ch">
+          <p class="n">Vitesse<span>pour le 5 km</span></p>
+          <div class="ra"><i style="width:${Math.min(100, su.vitesse.faites/su.vitesse.cible*100)}%;
+            background:${su.vitesse.ok?'var(--vif)':'#E5A93A'}"></i></div>
+          <p class="v">${su.vitesse.faites} séance${su.vitesse.faites>1?'s':''} rapide${su.vitesse.faites>1?'s':''} sur ${su.vitesse.cible} visées</p>
+        </div>
+        <div class="ch">
+          <p class="n">Endurance longue<span>pour l'ultra</span></p>
+          <div class="ra"><i style="width:${Math.min(100, su.longue.max/su.longue.cible*100)}%;
+            background:${su.longue.ok?'var(--vif)':'#E5A93A'}"></i></div>
+          <p class="v">plus longue sortie ${su.longue.max} km — cible ${su.longue.cible} km</p>
+        </div>
+        <div class="ch">
+          <p class="n">Dénivelé<span>pour l'ultra</span></p>
+          <div class="ra"><i style="width:${Math.min(100, su.denivele.total/su.denivele.cible*100)}%;
+            background:${su.denivele.ok?'var(--vif)':'#E5A93A'}"></i></div>
+          <p class="v">${su.denivele.total} m cumulés — cible ${su.denivele.cible} m</p>
+        </div>
+        <div class="ch">
+          <p class="n">Volume<span>les deux</span></p>
+          <div class="ra"><i style="width:${Math.min(100, su.volume.km/su.volume.cible*100)}%;
+            background:${su.volume.ok?'var(--vif)':'#E5A93A'}"></i></div>
+          <p class="v">${su.volume.km} km — cible ${su.volume.cible} km</p>
+        </div>
       </div>
 
       <p class="note">Référence : ${fmtChrono(p.ref_chrono_s)} sur ${p.ref_distance_m/1000} km${p.ref_note ? ' — ' + p.ref_note : ''}.
