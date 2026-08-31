@@ -114,8 +114,8 @@ body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;
 <div class="z" id="z"><p class="k">Chargement…</p></div>
 
 <script type="module">
-import { list, projetActif } from './config.js?v=20260831e';
-import { vdot, nature, NATURES, COMMENTAIRES, fmtAllure } from './moteur.js?v=20260831e';
+import { list, projetActif } from './config.js?v=20260831f';
+import { vdot, nature, NATURES, COMMENTAIRES, fmtAllure } from './moteur.js?v=20260831f';
 
 const $ = id => document.getElementById(id);
 const z = $('z');
@@ -134,24 +134,34 @@ try {
       <p class="vide">Aucune séance enregistrée pour l'instant.
       Chaque entraînement apparaîtra ici, analysé par rapport aux zones d'allure du moment.</p>`;
   } else {
-    const tri = seances.slice().sort((a,b) => b.date.localeCompare(a.date));
-    const totKm = tri.reduce((a,s) => a + Number(s.distance_km || 0), 0);
-    const salles = tri.filter(s => (s.type||'').toLowerCase().includes('salle')).length;
+    const tout = seances.slice().sort((a,b) => b.date.localeCompare(a.date));
+    const moisCourant = new Date().toISOString().slice(0,7);
+    const tri = tout.filter(s => s.date.slice(0,7) === moisCourant);
 
-    // regroupement par mois
-    const groupes = {};
-    tri.forEach(s => { const c = s.date.slice(0,7); (groupes[c] = groupes[c] || []).push(s); });
+    // totaux : le mois affiché, et l'ensemble depuis le début
+    const totKm    = tri.reduce((a,s) => a + Number(s.distance_km || 0), 0);
+    const salles   = tri.filter(s => (s.type||'').toLowerCase().includes('salle')).length;
+    const totKmAll = tout.reduce((a,s) => a + Number(s.distance_km || 0), 0);
+    const depuis   = tout.length ? tout[tout.length-1].date : null;
 
-    let html = `<p class="k">Séances</p>
+    const groupes = tri.length ? { [moisCourant]: tri } : {};
+
+    const MOISN = ['janvier','février','mars','avril','mai','juin','juillet','août',
+                   'septembre','octobre','novembre','décembre'];
+    const nomMois = MOISN[Number(moisCourant.slice(5)) - 1];
+
+    let html = `<p class="k">Séances — ${nomMois}</p>
       <div class="gros">${km(totKm)}<u>km</u></div>
       <p class="k">${tri.length} séance${tri.length>1?'s':''}${salles ? ' · ' + salles + ' en salle' : ''}</p>`;
+
+    if (!tri.length) {
+      html += `<p class="vide">Aucune séance ce mois-ci pour l'instant.</p>`;
+    }
 
     for (const [cle, lot] of Object.entries(groupes)) {
       const [an, mo] = cle.split('-');
       const kmMois = lot.reduce((a,s) => a + Number(s.distance_km || 0), 0);
-      html += `<div class="mois"><div class="titre">
-        <b>${MOIS[+mo-1].charAt(0).toUpperCase()+MOIS[+mo-1].slice(1)} ${an}</b>
-        <em>${km(kmMois)} km · ${lot.length} séance${lot.length>1?'s':''}</em></div>`;
+      html += `<div class="mois">`;
 
       lot.forEach((s, i) => {
         const veille = tri[tri.indexOf(s)+1] || null;
@@ -174,6 +184,10 @@ try {
       });
       html += `</div>`;
     }
+
+    html += `<p class="cumul">Depuis ${depuis ? new Date(depuis+'T00:00:00')
+        .toLocaleDateString('fr-FR',{month:'long',year:'numeric'}) : '—'} —
+      <b>${km(totKmAll)} km</b> · ${tout.length} séances</p>`;
 
     html += `<p class="note">Chaque séance est classée par rapport aux allures calculées
       sur ton VDOT actuel (${v}). Une classification n'est pas un jugement :
