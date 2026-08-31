@@ -77,6 +77,7 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
     <div class="f"><label for="rDate">Date</label><input id="rDate" type="date"></div>
     <div class="f"><label for="rDist">Distance</label><input id="rDist" type="text" inputmode="decimal" placeholder="5"><span class="hint">km</span></div>
     <div class="f"><label for="rTemps">Temps</label><input id="rTemps" type="text" placeholder="17,13"><span class="hint">min,s</span></div>
+    <div class="f"><label for="rDen">Dénivelé +</label><input id="rDen" type="number" min="0" placeholder="500"><span class="hint">m</span></div>
     <div class="f"><label for="rClas">Classement</label><input id="rClas" type="number" min="1" placeholder="9"></div>
     <div class="f"><label for="rPart">Participants</label><input id="rPart" type="number" min="1" placeholder="234"></div>
     <div class="actions"><button class="btn" id="rSave">Ajouter</button></div>
@@ -110,8 +111,8 @@ h2 span{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--soft);
 </div>
 
 <script type="module">
-import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831a';
-import { plausible, fmtAllure } from './moteur.js?v=20260831a';
+import { exigerConnexion, deconnexion, list, insert, update, remove, TYPES, parseTime, parseKm, fmtTime, fmtPace, fr, listCompetitions, insertCompetition, updateCompetition, removeCompetition, listResultats, insertResultat, removeResultat } from './config.js?v=20260831b';
+import { plausible, fmtAllure } from './moteur.js?v=20260831b';
 
 if (!await exigerConnexion()) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -145,7 +146,7 @@ async function refresh(){ try { rows = await list(); render(); } catch(e){ $('ms
 
 
 // refuse une performance physiquement impossible
-function verifieAllure(km, sec, cible) {
+function verifieAllure(km, sec, cible, dplus) {
   if (!plausible(km * 1000, sec)) {
     const a = sec / km;
     document.getElementById(cible).textContent =
@@ -159,7 +160,7 @@ function verifieAllure(km, sec, cible) {
 $('save').addEventListener('click', async () => {
   const d=parseKm($('dist').value), s=parseTime($('temps').value);
   if(!$('date').value||!d||!s){ $('msg').textContent='Date, distance et temps sont obligatoires.'; return; }
-  if(!verifieAllure(d, s, 'msg')) return;
+  if(!verifieAllure(d, s, 'msg', Number($('den').value)||0)) return;
   const row={ date:$('date').value, type:$('type').value, lieu:$('lieu').value.trim(), distance_km:d, temps_s:s, denivele_m:Number($('den').value)||0, notes:$('notes').value.trim(), ressenti:Number($('ress').value) };
   $('save').disabled=true;
   try { if(editing!==null){ await update(editing,row); $('msg').textContent='Mis à jour.'; } else { await insert(row); $('msg').textContent=`Enregistré — ${fr(d)} km de plus.`; }
@@ -226,11 +227,11 @@ async function refreshResultats() {
 $('rSave').addEventListener('click', async () => {
   const nom = $('rNom').value.trim(), date = $('rDate').value, d = parseKm($('rDist').value), s = parseTime($('rTemps').value);
   if (!nom || !date || !d || !s) { $('rMsg').textContent = 'Nom, date, distance et temps sont obligatoires.'; return; }
-  if (!verifieAllure(d, s, 'rMsg')) return;
+  if (!verifieAllure(d, s, 'rMsg', Number($('rDen').value)||0)) return;
   $('rSave').disabled = true;
   try {
-    await insertResultat({ nom, date, distance_km: d, temps_s: s, classement: Number($('rClas').value) || null, participants: Number($('rPart').value) || null });
-    ['rNom','rDist','rTemps','rClas','rPart'].forEach(i => $(i).value = ''); $('rDate').value = '';
+    await insertResultat({ nom, date, distance_km: d, temps_s: s, denivele_m: Number($('rDen').value) || 0, classement: Number($('rClas').value) || null, participants: Number($('rPart').value) || null });
+    ['rNom','rDist','rTemps','rDen','rClas','rPart'].forEach(i => $(i).value = ''); $('rDate').value = '';
     $('rMsg').textContent = 'Résultat ajouté.'; await refreshResultats();
   } catch (e) { $('rMsg').textContent = 'Erreur : ' + e.message; }
   $('rSave').disabled = false;
@@ -245,8 +246,8 @@ refreshResultats();
   border-radius:999px;padding:7px 14px;font-family:inherit;font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;color:#888;cursor:pointer">Déconnexion</button>
 <script type="module">
-import { deconnexion } from './config.js?v=20260831a';
-import { plausible, fmtAllure } from './moteur.js?v=20260831a';
+import { deconnexion } from './config.js?v=20260831b';
+import { plausible, fmtAllure } from './moteur.js?v=20260831b';
 document.getElementById('quitter').addEventListener('click', async () => {
   await deconnexion(); location.href = 'index.html';
 });
