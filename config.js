@@ -199,3 +199,15 @@ export async function journalDuJour(date) {
   const { data, error } = await sb.from('journal').select('*').eq('date', date).limit(1);
   if (error) throw error; return data[0] || null;
 }
+
+// préférences alimentaires
+export async function litGouts() {
+  await sbReady; if (!sb) return null;
+  const { data, error } = await sb.from('gouts').select('*').eq('id', 1).limit(1);
+  if (error) throw error; return data[0] || null;
+}
+export async function ecritGouts(row) {
+  await sbReady; if (!sb) return;
+  const { error } = await sb.from('gouts').upsert(row, { onConflict: 'id' });
+  if (error) throw error;
+}
