@@ -60,7 +60,8 @@ a{color:inherit;text-decoration:none}
   color:#B7BEBA;padding-top:2px}
 .repas .c b{display:block;font-weight:900;font-size:13.5px;letter-spacing:-.01em}
 .repas .c span{font-weight:300;font-size:11.5px;color:var(--texte);line-height:1.5;display:block;margin-top:2px}
-.repas .c .tip{display:block;font-weight:700;font-size:10px;color:var(--vert);margin-top:4px}
+.repas .c .fib{display:inline-block;font-weight:700;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#A9B0AC;background:#F3F6F4;border-radius:999px;padding:3px 8px;margin-top:6px}
+  .repas .c .tip{display:block;font-weight:700;font-size:10px;color:var(--vert);margin-top:4px}
 
 .bloc{background:#FBF9F2;border-radius:14px;padding:16px;margin-bottom:24px}
 .bloc h3{font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--alimF);margin-bottom:11px}
@@ -119,9 +120,9 @@ a{color:inherit;text-decoration:none}
 </nav>
 
 <script type="module">
-import { litGouts, list } from './config.js?v=20260901c';
-import { genererSemaine, besoins, courses, ajustement, couverture } from './cuisine.js?v=20260901c';
-import { recommandation, vdot } from './moteur.js?v=20260901c';
+import { litGouts, list } from './config.js?v=20260901f';
+import { genererSemaine, besoins, courses, ajustement, couverture } from './cuisine.js?v=20260901f';
+import { recommandation, vdot } from './moteur.js?v=20260901f';
 
 const z = document.getElementById('z');
 const JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
@@ -187,8 +188,10 @@ try {
     h += `<div class="jour"><div class="t"><b>${j.nom}</b><em class="${cls}">${j.seance}</em></div>`;
     for (const [m, lbl] of [['matin','Matin'],['midi','Midi'],['soir','Soir']]) {
       const r = j[m]; if (!r) continue;
+      const fib = ['', 'peu de fibres', 'fibres modérées', 'riche en fibres'][r.fibres || 2];
       h += `<div class="repas"><span class="h">${lbl}</span><div class="c">
         <b>${r.nom}</b><span>${r.detail}</span>
+        <span class="fib">${fib}</span>
         ${j.notes[m] ? `<span class="tip">${j.notes[m]}</span>` : ''}</div></div>`;
     }
     for (const e of (j.encas || [])) {
