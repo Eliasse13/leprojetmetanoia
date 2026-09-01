@@ -40,7 +40,7 @@
     flex:1;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:clamp(20px,4vh,38px);
-    padding:clamp(24px,5vh,44px) clamp(20px,5vw,52px) 88px;
+    padding:clamp(24px,5vh,44px) clamp(20px,5vw,52px) 24px;
   }
 
   /* compteur principal — le chiffre se remplit */
@@ -75,43 +75,74 @@
   .hd .lg{width:74px;color:var(--ink);line-height:0;flex:none}
   .hd .lg svg{display:block;width:100%;height:auto}
   .sel:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
-  .cpt{margin-left:auto;width:30px;height:30px;border-radius:9px;background:#F3F6F4;
-    border:1.5px solid var(--piste);display:grid;place-items:center;color:var(--sourd);flex:none}
-  .cpt svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
 
   /* ---- barre du bas ---- */
 
-  /* tiroir de navigation */
-  .tiroir{position:fixed;left:0;right:0;bottom:0;z-index:40;max-width:430px;margin:0 auto;
-    background:#fff;border-top:1px solid var(--piste);border-radius:20px 20px 0 0;
-    box-shadow:0 -14px 34px -22px rgba(0,0,0,.3);
-    padding:9px 20px max(16px,env(safe-area-inset-bottom));
-    transform:translateY(calc(100% - 52px));
-    transition:transform .38s cubic-bezier(.2,.9,.3,1)}
-  .tiroir.ouvert{transform:translateY(0)}
-  .tiroir .barre{display:flex;align-items:center;gap:10px;padding:4px 0 8px;cursor:pointer}
-  .tiroir .barre .ch{font-size:14px;color:#B7BEBA;line-height:1;transition:transform .3s}
-  .tiroir.ouvert .barre .ch{transform:rotate(180deg)}
-  .tiroir .barre b{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-  .tiroir .barre .vis{margin-left:auto;font-weight:300;font-size:9px;letter-spacing:.2em;
-    text-transform:uppercase;color:#B7BEBA}
-  .tiroir .g{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0 12px}
-  .tiroir .g a{display:flex;align-items:center;gap:10px;border:1.5px solid var(--piste);
-    border-radius:12px;padding:12px;text-decoration:none;color:var(--ink)}
-  .tiroir .g a .ic{font-size:16px;line-height:1}
-  .tiroir .g a b{font-weight:900;font-size:12.5px;letter-spacing:-.01em}
-  .tiroir .g a.on{background:#F3FAF6;border-color:#BEE6D0}
-  .tiroir .g a.on b{color:var(--vert)}
-  .tiroir .g a em{font-style:normal;margin-left:auto;font-weight:300;font-size:9px;color:#C0C7C3}
-  @media (prefers-reduced-motion:reduce){.tiroir{transition:none}}
+
+  /* bouton menu */
+  .menu{margin-left:auto;background:none;border:0;cursor:pointer;display:grid;gap:4px;padding:9px;margin-right:-9px}
+  .menu i{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:transform .3s,opacity .3s}
+  .menu:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
+
+  /* pied de page : les visites */
+  .visites{padding:14px 0 max(16px,env(safe-area-inset-bottom));text-align:center;
+    font-weight:300;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#B7BEBA;
+    border-top:1px solid var(--piste)}
+
+  /* panneau de navigation — aurore verte */
+  .aurore{position:fixed;inset:0;z-index:60;background:#05100A;color:#EDF2EF;overflow:hidden;
+    display:flex;flex-direction:column;padding:max(18px,env(safe-area-inset-top)) 22px max(20px,env(safe-area-inset-bottom));
+    opacity:0;visibility:hidden;transition:opacity .32s ease,visibility .32s}
+  .aurore.ouvert{opacity:1;visibility:visible}
+  .aurore .blob{position:absolute;border-radius:50%;filter:blur(48px);opacity:.55;pointer-events:none}
+  .aurore .b1{width:60vw;height:60vw;max-width:300px;max-height:300px;background:#12B85F;left:-16vw;top:-8vh;
+    animation:fl1 9s ease-in-out infinite alternate}
+  .aurore .b2{width:54vw;height:54vw;max-width:270px;max-height:270px;background:#0B7A3E;right:-16vw;top:30vh;
+    animation:fl2 11s ease-in-out infinite alternate}
+  .aurore .b3{width:46vw;height:46vw;max-width:230px;max-height:230px;background:#31E07A;left:12vw;bottom:-12vh;
+    opacity:.32;animation:fl1 13s ease-in-out infinite alternate-reverse}
+  @keyframes fl1{to{transform:translate(9vw,7vh) scale(1.15)}}
+  @keyframes fl2{to{transform:translate(-10vw,-6vh) scale(1.1)}}
+
+  .aurore .haut{display:flex;align-items:center;position:relative;z-index:5}
+  .aurore .haut .lg{width:clamp(70px,20vw,96px);color:#EDF2EF;line-height:0}
+  .aurore .haut .lg svg{display:block;width:100%;height:auto}
+  .aurore .fermer{margin-left:auto;background:none;border:0;color:#8B948F;font-size:20px;
+    line-height:1;cursor:pointer;padding:9px;margin-right:-9px}
+  .aurore .fermer:focus-visible{outline:2px solid var(--vif);outline-offset:2px;border-radius:6px}
+
+  .aurore nav{margin:auto 0;position:relative;z-index:5;display:grid}
+  .aurore nav a{display:flex;align-items:flex-end;gap:12px;padding:clamp(11px,2vh,15px) 0;
+    border-bottom:1px solid rgba(255,255,255,.09);text-decoration:none;
+    opacity:0;transform:translateY(10px)}
+  .aurore.ouvert nav a{animation:entree .5s cubic-bezier(.2,.9,.3,1) forwards}
+  .aurore nav a:nth-child(1){animation-delay:.06s} .aurore nav a:nth-child(2){animation-delay:.11s}
+  .aurore nav a:nth-child(3){animation-delay:.16s} .aurore nav a:nth-child(4){animation-delay:.21s}
+  .aurore nav a:nth-child(5){animation-delay:.26s} .aurore nav a:nth-child(6){animation-delay:.31s}
+  @keyframes entree{to{opacity:1;transform:none}}
+  .aurore nav a i{font-style:normal;font-weight:300;font-size:9.5px;letter-spacing:.16em;
+    color:#5C6560;padding-bottom:4px}
+  .aurore nav a b{font-weight:900;font-size:clamp(21px,6.2vw,27px);letter-spacing:-.03em;color:#8E9793;
+    transition:color .18s,transform .18s}
+  .aurore nav a:active b{transform:translateX(4px)}
+  .aurore nav a.on b{color:#31E07A}
+  .aurore nav a.on i{color:#31E07A}
+  .aurore .vis{position:relative;z-index:5;font-weight:300;font-size:8.5px;letter-spacing:.22em;
+    text-transform:uppercase;text-align:center;color:#4E5754}
+
+  @media (prefers-reduced-motion:reduce){
+    .aurore{transition:opacity .01ms}
+    .aurore .blob{animation:none}
+    .aurore.ouvert nav a{animation:none;opacity:1;transform:none}
+  }
 </style>
 </head>
 <body>
 
 <header class="hd">
   <a class="lg" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
-  <a class="cpt" href="connexion.html" aria-label="Mon compte"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9.2" r="3.4"/><path d="M5.8 19.2c0-3.1 2.7-5 6.2-5s6.2 1.9 6.2 5"/></svg></a>
+  <button class="menu" id="ouvrirMenu" aria-label="Ouvrir le menu" aria-expanded="false"><i></i><i></i></button>
 </header>
 
 <div class="contenu">
@@ -122,7 +153,7 @@
 <div class="err" id="err"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260902a';
+import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260902b';
 const $ = id => document.getElementById(id);
 
 try {
@@ -177,12 +208,14 @@ try {
 
 enregistrerVisite();
 
-// compteur de visites, dans le tiroir
+// compteur de visites
 (async () => {
   try {
     const n = await nbVisites();
     if (n === null) return;
-    document.getElementById('visits').textContent = `${fr(n, 0)} visite${n > 1 ? 's' : ''}`;
+    const t = `${fr(n, 0)} visite${n > 1 ? 's' : ''}`;
+    document.getElementById('visits').textContent = t;
+    document.getElementById('visMenu').textContent = t;
   } catch (e) {}
 })();
 
@@ -207,35 +240,45 @@ document.addEventListener('keydown', function(e){
 
 <script>
 </script>
-<div class="tiroir" id="tiroir">
-  <div class="barre" id="poignee">
-    <span class="ch">&#8963;</span><b>Naviguer</b><span class="vis" id="visits"></span>
+
+<script>
+</script>
+<div class="visites" id="visits"></div>
+
+<div class="aurore" id="aurore" role="dialog" aria-modal="true" aria-label="Navigation">
+  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <div class="haut">
+    <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+    <button class="fermer" id="fermerMenu" aria-label="Fermer le menu">&#10005;</button>
   </div>
-  <div class="g">
-    <a class="on" href="metanoia.html"><span class="ic">🏃</span><b>Kilomètres</b></a>
-    <a href="jour.html"><span class="ic">✅</span><b>Aujourd’hui</b></a>
-    <a href="objectif.html"><span class="ic">🎯</span><b>Objectif</b></a>
-    <a href="seances.html"><span class="ic">📊</span><b>Séances</b></a>
-    <a href="alimentation.html"><span class="ic">🥗</span><b>Alimentation</b></a>
-    <a href="gouts.html"><span class="ic">⚙️</span><b>Mes goûts</b></a>
-  </div>
+  <nav>
+    <a class="on" href="metanoia.html" aria-current="page"><i>01</i><b>Kilomètres</b></a>
+    <a href="jour.html"><i>02</i><b>Aujourd’hui</b></a>
+    <a href="objectif.html"><i>03</i><b>Objectif</b></a>
+    <a href="seances.html"><i>04</i><b>Séances</b></a>
+    <a href="alimentation.html"><i>05</i><b>Alimentation</b></a>
+    <a href="connexion.html"><i>06</i><b>Mon compte</b></a>
+  </nav>
+  <p class="vis" id="visMenu"></p>
 </div>
 
 <script>
 (function(){
-  var t = document.getElementById('tiroir');
-  function bascule(){ t.classList.toggle('ouvert'); }
-  document.getElementById('poignee').addEventListener('click', bascule);
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') t.classList.remove('ouvert'); });
-  var y0 = null;
-  t.addEventListener('touchstart', function(e){ y0 = e.touches[0].clientY; }, { passive:true });
-  t.addEventListener('touchend', function(e){
-    if (y0 === null) return;
-    var dy = e.changedTouches[0].clientY - y0;
-    if (dy < -30) t.classList.add('ouvert');
-    if (dy >  30) t.classList.remove('ouvert');
-    y0 = null;
-  }, { passive:true });
+  var p = document.getElementById('aurore'),
+      o = document.getElementById('ouvrirMenu'),
+      f = document.getElementById('fermerMenu'), avant = null;
+  function ouvrir(){
+    avant = document.activeElement;
+    p.classList.add('ouvert'); o.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden'; f.focus();
+  }
+  function fermer(){
+    p.classList.remove('ouvert'); o.setAttribute('aria-expanded','false');
+    document.body.style.overflow = ''; (avant || o).focus();
+  }
+  o.addEventListener('click', ouvrir);
+  f.addEventListener('click', fermer);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') fermer(); });
 })();
 </script>
 </body>
