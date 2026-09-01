@@ -73,8 +73,8 @@ input.ch:focus{outline:0;border-color:var(--ink)}
 <div class="z" id="z"><p class="etape">Chargement…</p></div>
 
 <script type="module">
-import { exigerConnexion, litGouts, ecritGouts } from './config.js?v=20260901f';
-import { besoins } from './cuisine.js?v=20260901f';
+import { exigerConnexion, litGouts, ecritGouts } from './config.js?v=20260901g';
+import { besoins } from './cuisine.js?v=20260901g';
 
 if (!await exigerConnexion('connexion.html')) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -96,7 +96,9 @@ const E = [
          ['tofu','⬜','Tofu, soja',''],['gluten','🌾','Gluten',''],
          ['champignons','🍄','Champignons',''],['choux','🥦','Choux, brocoli',''],
          ['aubergine','🍆','Aubergine',''],['courgette','🥒','Courgette',''],
-         ['legumineuses','🫘','Légumineuses',''],['oignon','🧅','Oignon, ail',''],
+         ['legumineuses','🫘','Toutes légumineuses',''],['poischiches','🧆','Pois chiches',''],
+         ['lentilles','🟤','Lentilles',''],['haricots','🫘','Haricots',''],
+         ['semoule','🌾','Semoule',''],['oignon','🧅','Oignon, ail',''],
          ['coriandre','🌿','Coriandre',''],['olives','🫒','Olives','']] },
 
  { cle:'textures', titre:'Les textures qui te rebutent', sous:'Les recettes concernées seront écartées ou adaptées.', type:'plusieurs',
