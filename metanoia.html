@@ -40,7 +40,7 @@
     flex:1;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:clamp(20px,4vh,38px);
-    padding:clamp(24px,5vh,44px) clamp(20px,5vw,52px) 118px;
+    padding:clamp(24px,5vh,44px) clamp(20px,5vw,52px) 88px;
   }
 
   /* compteur principal — le chiffre se remplit */
@@ -74,54 +74,41 @@
     border-bottom:1px solid var(--piste);position:relative;z-index:20}
   .hd .lg{width:74px;color:var(--ink);line-height:0;flex:none}
   .hd .lg svg{display:block;width:100%;height:auto}
-  .sel{display:flex;align-items:center;gap:7px;background:none;border:0;cursor:pointer;padding:6px 4px;
-    font-family:inherit;font-weight:900;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--vert)}
-  .sel i{width:8px;height:8px;border-radius:50%;background:var(--vert);flex:none}
-  .sel .fl{color:#B7BEBA;font-size:10px;transition:transform .2s}
-  .sel[aria-expanded="true"] .fl{transform:rotate(180deg)}
   .sel:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
   .cpt{margin-left:auto;width:31px;height:31px;border-radius:50%;border:1.4px dashed #CDD4D0;
     display:grid;place-items:center;color:#A9B0AC;flex:none;text-decoration:none}
   .cpt svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
-  .piliers{position:absolute;left:16px;top:calc(100% - 4px);background:#fff;border:1px solid var(--piste);
-    border-radius:12px;box-shadow:0 14px 34px -16px rgba(0,0,0,.32);padding:6px;min-width:212px;z-index:30;
-    opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility .18s}
-  .piliers.ouvert{opacity:1;visibility:visible;transform:none}
-  .piliers a,.piliers span{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:8px;
-    font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8C948F;text-decoration:none}
-  .piliers .on{background:#EDF6F1;color:var(--vert)}
-  .piliers i{width:8px;height:8px;border-radius:50%;background:#DDE3E0;flex:none}
-  .piliers .on i{background:var(--vert)}
-  .piliers .al i{background:#C9A227}
-  .piliers em{font-style:normal;margin-left:auto;font-weight:300;font-size:8px;letter-spacing:.12em;color:#C0C7C3}
 
   /* ---- barre du bas ---- */
-  .nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#fff;
-    border-top:1px solid var(--piste);padding:11px 0 max(15px,env(safe-area-inset-bottom));z-index:20}
-  .nav a{flex:1;text-align:center;text-decoration:none}
-  .nav a .num{display:block;font-weight:900;font-size:17px;letter-spacing:-.02em;color:#CDD4D0;line-height:1}
-  .nav a b{display:block;font-weight:700;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;
-    color:#B7BEBA;margin-top:4px}
-  .nav a.on .num{color:var(--vert)}
-  .nav a.on b{color:var(--ink)}
-  .nav a:focus-visible{outline:2px solid var(--vert);outline-offset:-3px;border-radius:8px}
-  @media (prefers-reduced-motion:reduce){.piliers{transition:none}}
+
+  /* tiroir de navigation */
+  .tiroir{position:fixed;left:0;right:0;bottom:0;z-index:40;max-width:430px;margin:0 auto;
+    background:#fff;border-top:1px solid var(--piste);border-radius:20px 20px 0 0;
+    box-shadow:0 -14px 34px -22px rgba(0,0,0,.3);
+    padding:9px 20px max(16px,env(safe-area-inset-bottom));
+    transform:translateY(calc(100% - 56px));
+    transition:transform .38s cubic-bezier(.2,.9,.3,1)}
+  .tiroir.ouvert{transform:translateY(0)}
+  .tiroir .poignee{display:block;width:38px;height:10px;padding:3px 0;background-clip:content-box;border-radius:3px;background:#DDE3E0;margin:0 auto 9px;cursor:pointer}
+  .tiroir .vis{font-weight:300;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
+    color:#B7BEBA;text-align:center;padding-bottom:6px;cursor:pointer}
+  .tiroir .g{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0 12px}
+  .tiroir .g a{display:flex;align-items:center;gap:10px;border:1.5px solid var(--piste);
+    border-radius:12px;padding:12px;text-decoration:none;color:var(--ink)}
+  .tiroir .g a .ic{font-size:16px;line-height:1}
+  .tiroir .g a b{font-weight:900;font-size:12.5px;letter-spacing:-.01em}
+  .tiroir .g a.on{background:#F3FAF6;border-color:#BEE6D0}
+  .tiroir .g a.on b{color:var(--vert)}
+  .tiroir .g a em{font-style:normal;margin-left:auto;font-weight:300;font-size:9px;color:#C0C7C3}
+  @media (prefers-reduced-motion:reduce){.tiroir{transition:none}}
 </style>
 </head>
 <body>
 
 <header class="hd">
   <a class="lg" href="index.html" aria-label="Accueil Metanoia"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
-  <button class="sel" id="selP" aria-expanded="false" aria-controls="piliers"><i></i>Sport<span class="fl">&#9662;</span></button>
   <a class="cpt" href="connexion.html" aria-label="Mon compte"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9.2" r="3.4"/><path d="M5.8 19.2c0-3.1 2.7-5 6.2-5s6.2 1.9 6.2 5"/></svg></a>
-  <div class="piliers" id="piliers" role="menu">
-    <a class="on" href="metanoia.html" role="menuitem"><i></i>Sport</a>
-    <a class="al" href="alimentation.html" role="menuitem"><i></i>Alimentation</a>
-    <span role="menuitem" aria-disabled="true"><i></i>Sommeil<em>bientôt</em></span>
-    <span role="menuitem" aria-disabled="true"><i></i>Lecture<em>bientôt</em></span>
-    <span role="menuitem" aria-disabled="true"><i></i>Argent<em>bientôt</em></span>
-  </div>
 </header>
 
 <div class="contenu">
@@ -132,7 +119,7 @@
 <div class="err" id="err"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260901d';
+import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260901e';
 const $ = id => document.getElementById(id);
 
 try {
@@ -187,6 +174,15 @@ try {
 
 enregistrerVisite();
 
+// compteur de visites, dans le tiroir
+(async () => {
+  try {
+    const n = await nbVisites();
+    if (n === null) return;
+    document.getElementById('visits').textContent = `${fr(n, 0)} visite${n > 1 ? 's' : ''}`;
+  } catch (e) {}
+})();
+
 
 
 // pas de sélection ni de copie ; zoom bloqué sur mobile seulement
@@ -205,24 +201,38 @@ document.addEventListener('keydown', function(e){
   }
 });
 </script>
-<nav class="nav">
-  <a href="metanoia.html" class="on" aria-current="page"><span class="num">01</span><b>Vue</b></a>
-  <a href="jour.html"><span class="num">02</span><b>Aujourd’hui</b></a>
-  <a href="objectif.html"><span class="num">03</span><b>Objectif</b></a>
-  <a href="seances.html"><span class="num">04</span><b>Séances</b></a>
-</nav>
+
+<script>
+</script>
+<div class="tiroir" id="tiroir">
+  <span class="poignee" id="poignee"></span>
+  <p class="vis" id="visits"></p>
+  <div class="g">
+    <a class="on" href="metanoia.html"><span class="ic">🏃</span><b>Kilomètres</b></a>
+    <a href="jour.html"><span class="ic">✅</span><b>Aujourd’hui</b></a>
+    <a href="objectif.html"><span class="ic">🎯</span><b>Objectif</b></a>
+    <a href="seances.html"><span class="ic">📊</span><b>Séances</b></a>
+    <a href="alimentation.html"><span class="ic">🥗</span><b>Alimentation</b></a>
+    <a href="gouts.html"><span class="ic">⚙️</span><b>Mes goûts</b></a>
+  </div>
+</div>
 
 <script>
 (function(){
-  var b=document.getElementById('selP'), m=document.getElementById('piliers');
-  function ferme(){ m.classList.remove('ouvert'); b.setAttribute('aria-expanded','false'); }
-  b.addEventListener('click', function(e){
-    e.stopPropagation();
-    var o = m.classList.toggle('ouvert');
-    b.setAttribute('aria-expanded', o ? 'true' : 'false');
-  });
-  document.addEventListener('click', ferme);
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') ferme(); });
+  var t = document.getElementById('tiroir');
+  function bascule(){ t.classList.toggle('ouvert'); }
+  document.getElementById('poignee').addEventListener('click', bascule);
+  document.getElementById('visits').addEventListener('click', bascule);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') t.classList.remove('ouvert'); });
+  var y0 = null;
+  t.addEventListener('touchstart', function(e){ y0 = e.touches[0].clientY; }, { passive:true });
+  t.addEventListener('touchend', function(e){
+    if (y0 === null) return;
+    var dy = e.changedTouches[0].clientY - y0;
+    if (dy < -30) t.classList.add('ouvert');
+    if (dy >  30) t.classList.remove('ouvert');
+    y0 = null;
+  }, { passive:true });
 })();
 </script>
 </body>
