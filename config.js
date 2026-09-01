@@ -211,3 +211,34 @@ export async function ecritGouts(row) {
   const { error } = await sb.from('gouts').upsert(row, { onConflict: 'id' });
   if (error) throw error;
 }
+
+// règles quotidiennes et tâches du jour
+export async function litRegles() {
+  await sbReady; if (!sb) return null;
+  const { data, error } = await sb.from('regles').select('*').eq('id', 1).limit(1);
+  if (error) throw error; return data[0] || null;
+}
+export async function ecritRegles(row) {
+  await sbReady; if (!sb) return;
+  const { error } = await sb.from('regles').upsert({ id: 1, ...row }, { onConflict: 'id' });
+  if (error) throw error;
+}
+export async function listTaches(date) {
+  await sbReady; if (!sb) return [];
+  const { data, error } = await sb.from('taches').select('*').eq('date', date);
+  if (error) throw error; return data;
+}
+export async function bascule(date, cle, pilier, titre, detail, fait) {
+  await sbReady; if (!sb) return;
+  const { error } = await sb.from('taches').upsert(
+    { date, cle, pilier, titre, detail, fait, fait_a: fait ? new Date().toISOString() : null },
+    { onConflict: 'date,cle' });
+  if (error) throw error;
+}
+export async function serieTaches(jours = 60) {
+  await sbReady; if (!sb) return [];
+  const d = new Date(); d.setDate(d.getDate() - jours);
+  const depuis = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const { data, error } = await sb.from('taches').select('date,fait').gte('date', depuis);
+  if (error) throw error; return data;
+}
