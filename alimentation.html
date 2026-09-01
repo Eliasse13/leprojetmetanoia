@@ -121,74 +121,75 @@ a{color:inherit;text-decoration:none}
 <script>
 const SEMAINE = [
  ['Lundi','Repos','off',[
-   ['Matin','Porridge avoine-banane','80 g de flocons d\u2019avoine, lait, 1 banane écrasée, 1 c. à s. de purée d\u2019amande, cannelle.'],
-   ['Midi','Salade de lentilles','Lentilles vertes, carottes râpées, oignon rouge, persil, vinaigrette moutarde-huile d\u2019olive. 2 œufs durs.'],
-   ['Soir','Soupe de pois chiches','Pois chiches, tomates, cumin, épinards. Une grosse tranche de pain complet.']]],
+   ['Matin','Œufs brouillés, pain grillé, tomates','3 œufs, 2 tranches de pain complet, tomates cerises poêlées à l’huile d’olive et à l’origan.'],
+   ['Midi','Salade de lentilles tièdes','Lentilles, carottes, oignon rouge, tomates séchées, persil, vinaigrette moutarde. 2 œufs durs. Pain.'],
+   ['Soir','Risotto à la tomate et au basilic','Riz arborio, coulis de tomates, oignon, bouillon de légumes, huile d’olive en finition. Sans fromage, crémeux quand même.']]],
  ['Mardi','Endurance 45 min','',[
-   ['Matin','Porridge avoine-pomme','Même base, pomme râpée et raisins secs.'],
-   ['Midi','Riz complet aux légumes rôtis','Riz, courgettes, poivrons, pois chiches rôtis, feta, huile d\u2019olive.'],
-   ['Soir','Omelette aux pommes de terre','3 œufs, pommes de terre, oignons, salade verte. Pain.','Séance faite : mange dans l\u2019heure qui suit.']]],
+   ['Matin','Houmous, pain, œuf dur, tomates','Houmous maison, 2 tranches de pain complet, un œuf dur, tomates.'],
+   ['Midi','Riz complet, poulet, légumes rôtis','Poulet grillé, poivrons, oignons, courgettes bien dorées — jamais fondues.','Boîte du frigo, se mange froid ou réchauffé.'],
+   ['Soir','Chili doux aux haricots rouges','Haricots, tomates concassées, maïs, oignons, cumin, paprika doux. Riz à côté.','Séance faite : mange dans l’heure.']]],
  ['Mercredi','Seuil 2 × 10 min','dur',[
-   ['Matin','Porridge + miel','Ajoute une cuillère de miel et une poignée de noix : la séance est ce soir.'],
-   ['Midi','Pâtes complètes, sauce tomate-lentilles','Grosse assiette. C\u2019est le repas qui alimente la séance.','2 h avant la séance : une banane et un peu de pain.'],
-   ['Soir','Semoule, poulet, légumes','Une petite portion de poulet, beaucoup de semoule et de légumes rôtis.','Protéines dans les 30 min après la séance.']]],
+   ['Matin','Œufs à la coque, pain, avocat','Jaune coulant mais blanc bien pris. Avocat écrasé au citron.'],
+   ['Midi','Pâtes complètes, sauce tomate-lentilles','Grosse assiette. C’est le carburant de la séance de ce soir.','Une banane et du pain 2 h avant.'],
+   ['Soir','Semoule, boulettes de pois chiches, tomates','Boulettes au four, pas frites. Semoule et sauce tomate maison.','Protéines dans les 30 min après la séance.']]],
  ['Jeudi','Renfo salle','',[
-   ['Matin','Fromage blanc, avoine, fruits','Fromage blanc, 50 g d\u2019avoine, fruits de saison, graines de courge.'],
-   ['Midi','Riz, haricots rouges, avocat','Version chili doux, sans viande. Coriandre, citron vert.'],
-   ['Soir','Gratin de courgettes et boulgour','Boulgour, courgettes, œuf, un peu de fromage râpé.']]],
+   ['Matin','Omelette aux herbes, pain, tomates','2 à 3 œufs, persil, ciboulette.'],
+   ['Midi','Taboulé de quinoa','Quinoa, tomates, concombre, menthe, pois chiches, huile d’olive, citron.'],
+   ['Soir','Dinde, pommes de terre au four, salade','Escalope de dinde poêlée, pommes de terre en quartiers rôtis.']]],
  ['Vendredi','Endurance 40 min','',[
-   ['Matin','Porridge avoine-cacao','Cacao non sucré, banane.'],
-   ['Midi','Taboulé de quinoa','Quinoa, tomates, concombre, menthe, pois chiches, feta.'],
-   ['Soir','Sardines, pommes de terre, salade','Sardines à l\u2019huile — les moins chères et les meilleures pour toi.']]],
+   ['Matin','Pain, houmous, œuf dur','Le petit-déjeuner du jour pressé. Se prépare la veille.'],
+   ['Midi','Risotto aux champignons','Le deuxième risotto de la semaine. Champignons de Paris, oignon, bouillon.'],
+   ['Soir','Soupe de pois chiches, pain complet','Pois chiches, tomates, épinards, cumin. Épaisse, pas en purée.']]],
  ['Samedi','Sortie longue 14 km','dur',[
-   ['Matin','Porridge + miel + banane','2 h avant la sortie. C\u2019est le carburant de la matinée.','Emporte une banane si tu dépasses 1 h 15.'],
-   ['Midi','Pâtes, thon, tomates, olives','Le repas de récupération : glucides et protéines ensemble.','Dans l\u2019heure qui suit la sortie.'],
-   ['Soir','Soupe de légumes, œufs, pain','Léger, la digestion a assez travaillé.']]],
+   ['Matin','Pain, œufs, banane','2 h avant la sortie. Salé, comme tu aimes, la banane à part.','Emporte une banane au-delà d’1 h 15.'],
+   ['Midi','Pâtes, sauce tomate, poulet','Le repas de récupération : glucides et protéines ensemble.','Dans l’heure qui suit la sortie.'],
+   ['Soir','Œufs, riz, légumes rôtis','Simple, la digestion a assez travaillé.']]],
  ['Dimanche','Repos ou footing court','off',[
-   ['Matin','Œufs brouillés, pain complet, fruits','Le repas plaisir de la semaine.'],
+   ['Matin','Œufs brouillés, pain, tomates','Le classique du dimanche.'],
    ['Midi','Ce que tu veux','Un vrai repas libre. Un projet de dix ans ne tient pas sans respiration.'],
    ['Soir','Restes du batch cooking','Et on prépare la semaine suivante.']]]
 ];
 
 const COURSES = [
  ['Sec et épicerie',[
-   ['Flocons d\u2019avoine bio','1 kg','2,50 €'],['Riz complet bio','1 kg','3,20 €'],
-   ['Pâtes complètes bio','1 kg','2,20 €'],['Lentilles vertes bio','500 g','2,40 €'],
-   ['Pois chiches secs bio','500 g','2,10 €'],['Haricots rouges secs','500 g','2,00 €'],
-   ['Quinoa','500 g','3,80 €'],['Boulgour bio','500 g','2,10 €'],
-   ['Semoule complète','500 g','1,60 €'],['Purée d\u2019amande','200 g','4,50 €']]],
+   ['Flocons d’avoine bio','1 kg','2,50 €'],['Riz complet bio','1 kg','3,20 €'],
+   ['Riz arborio','1 kg','2,90 €'],['Pâtes complètes bio','1 kg','2,20 €'],
+   ['Lentilles vertes bio','500 g','2,40 €'],['Pois chiches secs bio','1 kg','3,80 €'],
+   ['Haricots rouges secs','500 g','2,00 €'],['Quinoa','500 g','3,80 €'],
+   ['Semoule complète','500 g','1,60 €'],['Tomates concassées bio','5 boîtes','4,50 €'],
+   ['Tomates séchées','200 g','2,80 €'],['Maïs','1 boîte','1,10 €'],
+   ['Bouillon de légumes bio','1 boîte','2,20 €'],['Tahini','200 g','3,90 €']]],
  ['Frais',[
-   ['Œufs bio','12','4,20 €'],['Fromage blanc','1 kg','2,60 €'],
-   ['Feta','200 g','2,50 €'],['Poulet (filet)','300 g','4,50 €'],
-   ['Sardines à l\u2019huile','3 boîtes','3,60 €'],['Thon au naturel','2 boîtes','3,00 €']]],
+   ['Œufs bio','18','6,30 €'],['Poulet (filet)','300 g','4,50 €'],
+   ['Escalope de dinde','250 g','3,80 €'],['Champignons de Paris','500 g','2,60 €']]],
  ['Fruits et légumes',[
+   ['Tomates','2 kg','5,00 €'],['Tomates cerises','500 g','2,40 €'],
    ['Bananes','1,5 kg','2,70 €'],['Pommes','1 kg','2,20 €'],
    ['Carottes bio','1,5 kg','2,40 €'],['Courgettes','1 kg','2,20 €'],
-   ['Poivrons','3','2,40 €'],['Tomates','1 kg','2,50 €'],
-   ['Oignons bio','1 kg','1,80 €'],['Pommes de terre bio','2 kg','3,20 €'],
-   ['Épinards frais','400 g','2,20 €'],['Salade','1','1,20 €'],
-   ['Concombre, citrons, herbes','—','3,00 €']]],
+   ['Poivrons','3','2,40 €'],['Oignons bio','1,5 kg','2,40 €'],
+   ['Pommes de terre bio','2 kg','3,20 €'],['Épinards frais','400 g','2,20 €'],
+   ['Avocats','2','2,60 €'],['Salade, concombre, citrons, herbes','—','4,00 €']]],
  ['Base',[
-   ['Huile d\u2019olive','—','déjà là'],['Tomates concassées bio','3 boîtes','2,70 €'],
-   ['Pain complet','2','3,00 €'],['Noix et graines','200 g','3,40 €']]]
+   ['Huile d’olive','—','déjà là'],['Pain complet','3','4,50 €'],
+   ['Noix et graines','200 g','3,40 €'],['Épices : cumin, paprika doux, origan','—','3,00 €']]]
 ];
 
 const BATCH = [
- ['Lancer les légumineuses','Pois chiches et haricots ont trempé la nuit. Cuisson à l\u2019eau 45 min pendant que tu fais le reste.'],
- ['Enfourner les légumes','Courgettes, poivrons, oignons, pommes de terre en dés. Huile d\u2019olive, herbes. 40 min à 200 °C, deux plaques.'],
- ['Cuire les féculents','Riz complet et boulgour en grande quantité. Ils se gardent 4 jours au frais.'],
- ['Lentilles et semoule','15 min pour les lentilles, 5 min pour la semoule.'],
- ['Œufs durs','Six d\u2019un coup. Ils dépannent tous les midis.'],
- ['Sauce tomate-lentilles','Oignon, tomates concassées, lentilles cuites, cumin. Elle sert mercredi et peut se congeler.'],
- ['Répartir en boîtes','Une base féculent + une base légume + une base protéine par boîte. Tu assembles le matin en trois minutes.']
+ ['Faire tremper la veille','Pois chiches et haricots rouges, dans un grand volume d’eau. La seule chose à ne pas oublier le samedi soir.'],
+ ['Lancer les légumineuses','Pois chiches et haricots à l’eau, 45 min. Lentilles à part, 18 min — elles doivent rester fermes.'],
+ ['Enfourner les légumes','Poivrons, courgettes, oignons, pommes de terre en gros dés. Huile d’olive, origan. 40 min à 200 °C. Bien dorés, jamais fondants.'],
+ ['Cuire les féculents','Riz complet, quinoa, semoule. En grande quantité, ils tiennent 4 jours au frais.'],
+ ['La sauce tomate','Oignon, tomates concassées, origan, une pointe de cumin. Elle sert au moins trois fois dans la semaine.'],
+ ['Les boulettes de pois chiches','Pois chiches écrasés grossièrement, oignon, persil, un œuf, chapelure. Au four 25 min.'],
+ ['Le houmous','Pois chiches, tahini, citron, ail, huile d’olive. Pour les petits-déjeuners salés.'],
+ ['Huit œufs durs','Ils dépannent tous les matins et tous les midis.'],
+ ['Répartir en boîtes','Une base féculent, une base légume, une base protéine par boîte. Le matin, tu assembles en trois minutes.']
 ];
 
 const z = document.getElementById('z');
 let h = `<p class="k">Alimentation</p>
-  <div class="gros">2 950<u>kcal / jour</u></div>
-  <p class="intro">Sans porc, peu de viande. Sept jours, vingt-et-un repas, préparés le dimanche.
-    Compté pour un métier physique <b>plus</b> 45 km de course par semaine —
-    c\u2019est beaucoup, et c\u2019est normal.</p>
+  <div class="gros">3 070<u>kcal / jour</u></div>
+  <p class="intro">Sans porc, sans poisson, sans fromage, peu de viande. Sept jours, vingt-et-un repas, préparés le dimanche et emportés en boîte. Calculé pour <b>1,86 m, 69 kg</b>, un métier physique et 45 km de course par semaine.</p>
 
   <p class="k" id="semaine" style="margin-bottom:12px">La semaine</p>`;
 
@@ -214,7 +215,7 @@ for (const [rayon, items] of COURSES) {
 }
 h += `<div class="total"><b>Total estimé</b><em>${total.toFixed(2).replace('.', ',')} €</em></div>
   <p class="note">Prix moyens en magasin bio ou grande surface, rayon bio quand ça vaut le coup.
-    Le sec dure deux à trois semaines : les semaines suivantes coûteront moins cher.</p>`;
+    Le sec, les épices et le tahini durent deux à trois semaines : les semaines suivantes tomberont autour de 50 €.</p>`;
 
 h += `<p class="k" id="batch" style="margin:30px 0 12px">Le dimanche — 2 h 30</p>
   <div class="bloc"><h3>Dans cet ordre</h3><ol>`;
