@@ -122,27 +122,27 @@ a{color:inherit;text-decoration:none}
 const SEMAINE = [
  ['Lundi','Repos','off',[
    ['Matin','Œufs brouillés, pain grillé, tomates','3 œufs, 2 tranches de pain complet, tomates cerises poêlées à l’huile d’olive et à l’origan.'],
-   ['Midi','Salade de lentilles tièdes','Lentilles, carottes, oignon rouge, tomates séchées, persil, vinaigrette moutarde. 2 œufs durs. Pain.'],
+   ['Midi','Salade de lentilles tièdes','Lentilles, carottes, oignon rouge, tomates séchées, persil, vinaigrette moutarde. 2 œufs durs. Pain. Un yaourt.'],
    ['Soir','Risotto à la tomate et au basilic','Riz arborio, coulis de tomates, oignon, bouillon de légumes, huile d’olive en finition. Sans fromage, crémeux quand même.']]],
  ['Mardi','Endurance 45 min','',[
    ['Matin','Houmous, pain, œuf dur, tomates','Houmous maison, 2 tranches de pain complet, un œuf dur, tomates.'],
-   ['Midi','Riz complet, poulet, légumes rôtis','Poulet grillé, poivrons, oignons, courgettes bien dorées — jamais fondues.','Boîte du frigo, se mange froid ou réchauffé.'],
+   ['Midi','Riz complet, poulet, légumes rôtis','Poulet grillé, poivrons, oignons, courgettes bien dorées — jamais fondues. Un yaourt.','Boîte du frigo, se mange froid ou réchauffé.'],
    ['Soir','Chili doux aux haricots rouges','Haricots, tomates concassées, maïs, oignons, cumin, paprika doux. Riz à côté.','Séance faite : mange dans l’heure.']]],
  ['Mercredi','Seuil 2 × 10 min','dur',[
    ['Matin','Œufs à la coque, pain, avocat','Jaune coulant mais blanc bien pris. Avocat écrasé au citron.'],
    ['Midi','Pâtes complètes, sauce tomate-lentilles','Grosse assiette. C’est le carburant de la séance de ce soir.','Une banane et du pain 2 h avant.'],
    ['Soir','Semoule, boulettes de pois chiches, tomates','Boulettes au four, pas frites. Semoule et sauce tomate maison.','Protéines dans les 30 min après la séance.']]],
  ['Jeudi','Renfo salle','',[
-   ['Matin','Omelette aux herbes, pain, tomates','2 à 3 œufs, persil, ciboulette.'],
-   ['Midi','Taboulé de quinoa','Quinoa, tomates, concombre, menthe, pois chiches, huile d’olive, citron.'],
+   ['Matin','Omelette aux herbes, pain, tomates','2 à 3 œufs, persil, ciboulette. Fromage blanc au miel à côté.'],
+   ['Midi','Taboulé de quinoa','Quinoa, tomates, concombre, menthe, pois chiches, huile d’olive, citron. Un yaourt.'],
    ['Soir','Dinde, pommes de terre au four, salade','Escalope de dinde poêlée, pommes de terre en quartiers rôtis.']]],
  ['Vendredi','Endurance 40 min','',[
    ['Matin','Pain, houmous, œuf dur','Le petit-déjeuner du jour pressé. Se prépare la veille.'],
-   ['Midi','Risotto aux champignons','Le deuxième risotto de la semaine. Champignons de Paris, oignon, bouillon.'],
+   ['Midi','Risotto aux champignons','Le deuxième risotto de la semaine. Champignons de Paris, oignon, bouillon. Un yaourt.'],
    ['Soir','Soupe de pois chiches, pain complet','Pois chiches, tomates, épinards, cumin. Épaisse, pas en purée.']]],
  ['Samedi','Sortie longue 14 km','dur',[
-   ['Matin','Pain, œufs, banane','2 h avant la sortie. Salé, comme tu aimes, la banane à part.','Emporte une banane au-delà d’1 h 15.'],
-   ['Midi','Pâtes, sauce tomate, poulet','Le repas de récupération : glucides et protéines ensemble.','Dans l’heure qui suit la sortie.'],
+   ['Matin','Pain, œufs, banane, miel','2 h avant la sortie. Salé d’abord, puis du pain au miel : c’est le carburant.','Emporte une banane au-delà d’1 h 15.'],
+   ['Midi','Pâtes, sauce tomate, poulet','Le repas de récupération : glucides et protéines ensemble. Fromage blanc au miel en dessert.','Dans l’heure qui suit la sortie.'],
    ['Soir','Œufs, riz, légumes rôtis','Simple, la digestion a assez travaillé.']]],
  ['Dimanche','Repos ou footing court','off',[
    ['Matin','Œufs brouillés, pain, tomates','Le classique du dimanche.'],
@@ -160,8 +160,9 @@ const COURSES = [
    ['Tomates séchées','200 g','2,80 €'],['Maïs','1 boîte','1,10 €'],
    ['Bouillon de légumes bio','1 boîte','2,20 €'],['Tahini','200 g','3,90 €']]],
  ['Frais',[
-   ['Œufs bio','18','6,30 €'],['Poulet (filet)','300 g','4,50 €'],
-   ['Escalope de dinde','250 g','3,80 €'],['Champignons de Paris','500 g','2,60 €']]],
+   ['Œufs bio','24','8,40 €'],['Fromage blanc','1 kg','2,60 €'],
+   ['Yaourts nature bio','8','3,20 €'],['Poulet (filet)','400 g','5,90 €'],
+   ['Escalope de dinde','300 g','4,50 €'],['Champignons de Paris','500 g','2,60 €']]],
  ['Fruits et légumes',[
    ['Tomates','2 kg','5,00 €'],['Tomates cerises','500 g','2,40 €'],
    ['Bananes','1,5 kg','2,70 €'],['Pommes','1 kg','2,20 €'],
@@ -171,7 +172,8 @@ const COURSES = [
    ['Avocats','2','2,60 €'],['Salade, concombre, citrons, herbes','—','4,00 €']]],
  ['Base',[
    ['Huile d’olive','—','déjà là'],['Pain complet','3','4,50 €'],
-   ['Noix et graines','200 g','3,40 €'],['Épices : cumin, paprika doux, origan','—','3,00 €']]]
+   ['Épices : cumin, paprika doux, origan','—','3,00 €'],
+   ['Miel','250 g','4,20 €']]]
 ];
 
 const BATCH = [
@@ -183,6 +185,7 @@ const BATCH = [
  ['Les boulettes de pois chiches','Pois chiches écrasés grossièrement, oignon, persil, un œuf, chapelure. Au four 25 min.'],
  ['Le houmous','Pois chiches, tahini, citron, ail, huile d’olive. Pour les petits-déjeuners salés.'],
  ['Huit œufs durs','Ils dépannent tous les matins et tous les midis.'],
+ ['Portionner les laitages','Fromage blanc en pots individuels avec le miel à part. Les yaourts partent dans les boîtes du midi.'],
  ['Répartir en boîtes','Une base féculent, une base légume, une base protéine par boîte. Le matin, tu assembles en trois minutes.']
 ];
 
@@ -215,7 +218,11 @@ for (const [rayon, items] of COURSES) {
 }
 h += `<div class="total"><b>Total estimé</b><em>${total.toFixed(2).replace('.', ',')} €</em></div>
   <p class="note">Prix moyens en magasin bio ou grande surface, rayon bio quand ça vaut le coup.
-    Le sec, les épices et le tahini durent deux à trois semaines : les semaines suivantes tomberont autour de 50 €.</p>`;
+    Le sec, les épices, le tahini et le miel durent trois semaines à un mois :
+    les semaines suivantes tomberont autour de 55 €.</p>
+  <p class="note" style="margin-top:10px">Sans poisson, sans fromage affiné, sans oléagineux,
+    les protéines viennent des <b>œufs</b>, des <b>légumineuses</b>, des <b>laitages frais</b>
+    et d\u2019un peu de volaille. Environ 110 g par jour, pour une cible de 117 g.</p>`;
 
 h += `<p class="k" id="batch" style="margin:30px 0 12px">Le dimanche — 2 h 30</p>
   <div class="bloc"><h3>Dans cet ordre</h3><ol>`;
