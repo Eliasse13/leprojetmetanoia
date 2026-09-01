@@ -14,74 +14,80 @@
  */
 export const RECETTES = [
   // ---------- matin ----------
-  { id:'m-oeufs-tomates', moment:'matin', nom:'Œufs brouillés, pain grillé, tomates',
+  { id:'m-oeufs-tomates', moment:'matin', fibres:1, nom:'Œufs brouillés, pain grillé, tomates',
     detail:'3 œufs, 2 tranches de pain complet, tomates cerises poêlées à l’huile d’olive et à l’origan.',
     glu:2, prot:24, kcal:620, cont:['oeufs','gluten'], aime:['oeufs','tomate'], cout:1, boite:false, sale:true },
-  { id:'m-houmous', moment:'matin', nom:'Houmous, pain, œuf dur, tomates',
+  { id:'m-houmous', moment:'matin', fibres:3, nom:'Houmous, pain, œuf dur, tomates',
     detail:'Houmous maison, deux tranches de pain complet, un œuf dur, tomates.',
     glu:2, prot:22, kcal:600, cont:['oeufs','gluten','sesame','legumineuses'], aime:['legumineuses','tomate'], cout:1, boite:true, sale:true },
-  { id:'m-omelette', moment:'matin', nom:'Omelette aux herbes, pain, tomates',
+  { id:'m-omelette', moment:'matin', fibres:1, nom:'Omelette aux herbes, pain, tomates',
     detail:'Deux à trois œufs, persil, ciboulette. Fromage blanc au miel à côté.',
     glu:2, prot:30, kcal:660, cont:['oeufs','gluten','laitage'], aime:['oeufs'], cout:1, boite:false, sale:true },
-  { id:'m-coque-avocat', moment:'matin', nom:'Œufs à la coque, pain, avocat',
+  { id:'m-coque-avocat', moment:'matin', fibres:2, nom:'Œufs à la coque, pain, avocat',
     detail:'Jaune coulant, blanc bien pris. Avocat écrasé au citron.',
     glu:2, prot:20, kcal:640, cont:['oeufs','gluten'], aime:['oeufs'], cout:2, boite:false, sale:true },
-  { id:'m-porridge', moment:'matin', nom:'Porridge avoine-banane',
+  { id:'m-porridge', moment:'matin', fibres:2, nom:'Porridge avoine-banane',
     detail:'80 g de flocons d’avoine, lait, une banane écrasée, cannelle.',
     glu:3, prot:16, kcal:580, cont:['gluten','laitage'], aime:['sucre'], cout:1, boite:true, sale:false },
-  { id:'m-fromage-blanc', moment:'matin', nom:'Fromage blanc, avoine, fruits',
+  { id:'m-fromage-blanc', moment:'matin', fibres:2, nom:'Fromage blanc, avoine, fruits',
     detail:'Fromage blanc, 50 g d’avoine, fruits de saison, miel.',
     glu:3, prot:28, kcal:560, cont:['laitage','gluten'], aime:['sucre'], cout:1, boite:true, sale:false },
-  { id:'m-pain-miel', moment:'matin', nom:'Pain, œufs, banane, miel',
+  { id:'m-pain-miel', moment:'matin', fibres:2, nom:'Pain, œufs, banane, miel',
     detail:'Salé d’abord, puis du pain au miel. Le carburant d’avant sortie longue.',
     glu:3, prot:20, kcal:700, cont:['oeufs','gluten'], aime:['oeufs'], cout:1, boite:false, sale:true },
 
   // ---------- midi ----------
-  { id:'d-lentilles', moment:'midi', nom:'Salade de lentilles tièdes',
+  { id:'d-lentilles', moment:'midi', fibres:3, nom:'Salade de lentilles tièdes',
     detail:'Lentilles, carottes, oignon rouge, tomates séchées, persil, vinaigrette moutarde. Deux œufs durs, pain, un yaourt.',
     glu:2, prot:36, kcal:820, cont:['oeufs','gluten','laitage','legumineuses','oignon'], aime:['legumineuses','tomate'], cout:1, boite:true },
-  { id:'d-riz-poulet', moment:'midi', nom:'Riz complet, poulet, légumes rôtis',
+  { id:'d-riz-poulet', moment:'midi', fibres:2, nom:'Riz complet, poulet, légumes rôtis',
     detail:'Poulet grillé, poivrons, oignons, courgettes bien dorées — jamais fondues. Un yaourt.',
     glu:3, prot:42, kcal:880, cont:['volaille','laitage','courgette','oignon'], aime:['volaille'], cout:2, boite:true },
-  { id:'d-taboule', moment:'midi', nom:'Taboulé de quinoa',
+  { id:'d-taboule', moment:'midi', fibres:3, nom:'Taboulé de quinoa',
     detail:'Quinoa, tomates, concombre, menthe, pois chiches, huile d’olive, citron. Un yaourt.',
     glu:2, prot:30, kcal:760, cont:['laitage','legumineuses'], aime:['legumineuses','tomate'], cout:2, boite:true },
-  { id:'d-risotto-champ', moment:'midi', nom:'Risotto aux champignons',
+  { id:'d-risotto-champ', moment:'midi', fibres:1, nom:'Risotto aux champignons',
     detail:'Riz arborio, champignons de Paris, oignon, bouillon de légumes. Un yaourt.',
     glu:3, prot:22, kcal:820, cont:['laitage','champignons','oignon'], aime:['risotto'], cout:2, boite:true },
-  { id:'d-pates-tomate', moment:'midi', nom:'Pâtes complètes, sauce tomate-lentilles',
+  { id:'d-pates-tomate', moment:'midi', fibres:3, nom:'Pâtes complètes, sauce tomate-lentilles',
     detail:'Grosse assiette. C’est le carburant de la séance du soir.',
     glu:3, prot:32, kcal:900, cont:['gluten','legumineuses'], aime:['tomate','legumineuses'], cout:1, boite:true },
-  { id:'d-pates-poulet', moment:'midi', nom:'Pâtes, sauce tomate, poulet',
+  { id:'d-pates-poulet', moment:'midi', fibres:1, nom:'Pâtes, sauce tomate, poulet',
     detail:'Le repas de récupération : glucides et protéines ensemble. Fromage blanc au miel en dessert.',
     glu:3, prot:44, kcal:950, cont:['gluten','volaille','laitage'], aime:['tomate','volaille'], cout:2, boite:true },
-  { id:'d-riz-haricots', moment:'midi', nom:'Riz, haricots rouges, avocat',
+  { id:'d-pates-blanches', moment:'midi', fibres:1, nom:'Pâtes blanches, sauce tomate, poulet',
+    detail:'Pâtes non complètes, sauce tomate simple, poulet. Léger à digérer, plein de glucides.',
+    glu:3, prot:40, kcal:900, cont:['gluten','volaille'], aime:['pates','tomate','volaille'], cout:2, boite:true },
+  { id:'d-riz-blanc-oeufs', moment:'midi', fibres:1, nom:'Riz blanc, œufs, tomates',
+    detail:'Riz blanc, deux à trois œufs, tomates poêlées. Le repas d’avant séance par excellence.',
+    glu:3, prot:26, kcal:820, cont:['oeufs'], aime:['riz','oeufs','tomate'], cout:1, boite:true },
+  { id:'d-riz-haricots', moment:'midi', fibres:3, nom:'Riz, haricots rouges, avocat',
     detail:'Chili doux sans viande, coriandre et citron vert. Un yaourt.',
     glu:3, prot:30, kcal:840, cont:['laitage','legumineuses','coriandre'], aime:['legumineuses','tomate'], cout:1, boite:true },
 
   // ---------- soir ----------
-  { id:'s-risotto-tomate', moment:'soir', nom:'Risotto à la tomate et au basilic',
+  { id:'s-risotto-tomate', moment:'soir', fibres:1, nom:'Risotto à la tomate et au basilic',
     detail:'Riz arborio, coulis de tomates, oignon, bouillon, huile d’olive en finition. Crémeux sans fromage.',
     glu:3, prot:20, kcal:780, cont:['oignon'], aime:['risotto','tomate'], cout:2, boite:true },
-  { id:'s-chili', moment:'soir', nom:'Chili doux aux haricots rouges',
+  { id:'s-chili', moment:'soir', fibres:3, nom:'Chili doux aux haricots rouges',
     detail:'Haricots, tomates concassées, maïs, oignons, cumin, paprika doux. Riz à côté.',
     glu:3, prot:28, kcal:820, cont:['legumineuses','oignon'], aime:['legumineuses','tomate'], cout:1, boite:true },
-  { id:'s-boulettes', moment:'soir', nom:'Semoule, boulettes de pois chiches, tomates',
+  { id:'s-boulettes', moment:'soir', fibres:3, nom:'Semoule, boulettes de pois chiches, tomates',
     detail:'Boulettes au four, jamais frites. Semoule et sauce tomate maison.',
     glu:3, prot:30, kcal:830, cont:['oeufs','gluten','legumineuses','oignon'], aime:['legumineuses','tomate'], cout:1, boite:true },
-  { id:'s-dinde-pdt', moment:'soir', nom:'Dinde, pommes de terre au four, salade',
+  { id:'s-dinde-pdt', moment:'soir', fibres:1, nom:'Dinde, pommes de terre au four, salade',
     detail:'Escalope poêlée, pommes de terre en quartiers bien rôtis.',
     glu:2, prot:40, kcal:800, cont:['volaille'], aime:['volaille'], cout:2, boite:true },
-  { id:'s-soupe-pois', moment:'soir', texture:['puree'], nom:'Soupe de pois chiches, pain complet',
+  { id:'s-soupe-pois', moment:'soir', fibres:3, texture:['puree'], nom:'Soupe de pois chiches, pain complet',
     detail:'Pois chiches, tomates, épinards, cumin. Épaisse, pas en purée.',
     glu:2, prot:26, kcal:700, cont:['gluten','legumineuses'], aime:['legumineuses','tomate'], cout:1, boite:true },
-  { id:'s-oeufs-riz', moment:'soir', nom:'Œufs, riz, légumes rôtis',
+  { id:'s-oeufs-riz', moment:'soir', fibres:1, nom:'Œufs, riz, légumes rôtis',
     detail:'Simple et rapide. Quand la digestion a assez travaillé.',
     glu:2, prot:26, kcal:720, cont:['oeufs'], aime:['oeufs'], cout:1, boite:true },
-  { id:'s-omelette-pdt', moment:'soir', nom:'Omelette aux pommes de terre',
+  { id:'s-omelette-pdt', moment:'soir', fibres:1, nom:'Omelette aux pommes de terre',
     detail:'Trois œufs, pommes de terre, oignons, salade verte, pain.',
     glu:2, prot:28, kcal:760, cont:['oeufs','gluten','oignon'], aime:['oeufs'], cout:1, boite:false },
-  { id:'s-gratin-boulgour', moment:'soir', nom:'Gratin de courgettes et boulgour',
+  { id:'s-gratin-boulgour', moment:'soir', fibres:2, nom:'Gratin de courgettes et boulgour',
     detail:'Boulgour, courgettes dorées, œuf. Au four.',
     glu:2, prot:24, kcal:700, cont:['oeufs','gluten','courgette'], aime:[], cout:1, boite:true }
 ];
@@ -126,16 +132,16 @@ const score = (r, aimes) => (r.aime || []).filter(a => (aimes || []).includes(a)
  * jours : [{ nom, seance, intensite }] — 7 entrées, du lundi au dimanche
  */
 export const ENCAS = [
-  { id:'e-pain-miel', nom:'Pain complet, miel, banane', detail:'Deux tranches, du miel, une banane.',
-    kcal:420, prot:9, cont:['gluten'] },
+  { id:'e-pain-miel', nom:'Pain, miel, banane', detail:'Deux tranches, du miel, une banane.',
+    kcal:420, prot:9, cont:['gluten'], fibres:2 },
   { id:'e-yaourt', nom:'Yaourt, avoine, miel', detail:'Un gros yaourt, deux cuillères d’avoine, du miel.',
-    kcal:380, prot:16, cont:['laitage','gluten'] },
+    kcal:380, prot:16, cont:['laitage','gluten'], fibres:2 },
   { id:'e-oeufs-pain', nom:'Deux œufs durs, pain', detail:'Le plus efficace après une séance.',
-    kcal:400, prot:18, cont:['oeufs','gluten'] },
+    kcal:400, prot:18, cont:['oeufs','gluten'], fibres:1 },
   { id:'e-fruits', nom:'Fruits et fromage blanc', detail:'Pommes, banane, fromage blanc.',
-    kcal:360, prot:18, cont:['laitage'] },
+    kcal:360, prot:18, cont:['laitage'], fibres:2 },
   { id:'e-houmous', nom:'Houmous et pain', detail:'Deux belles tartines.',
-    kcal:430, prot:13, cont:['gluten','sesame'] }
+    kcal:430, prot:13, cont:['gluten','sesame'], fibres:3 }
 ];
 
 /** Le catalogue est-il assez fourni pour construire une semaine variée ? */
@@ -180,20 +186,27 @@ export function genererSemaine(gouts, jours) {
     const longue = /longue/i.test(j.seance || '');
     const repos = j.intensite === 'repos' || /repos/i.test(j.seance || '');
 
-    const matin = piocher('matin', r => (longue || dure) ? r.glu >= 3 || r.sale : true);
-    const midi  = piocher('midi',  r => dure ? r.glu === 3 : true);
-    const soir  = piocher('soir',  r => dure ? r.prot >= 26 : true);
+    // avant une séance dure : beaucoup de glucides, peu de fibres.
+    // après : protéines qui digèrent vite, donc pas de légumineuses.
+    const matin = piocher('matin', r => (longue || dure)
+      ? (r.glu >= 3 || r.sale) && (r.fibres || 2) <= 2 : true);
+    const midi  = piocher('midi',  r => dure
+      ? r.glu === 3 && (r.fibres || 2) <= 2 : true);
+    const soir  = piocher('soir',  r => dure
+      ? r.prot >= 26 && !r.cont.includes('legumineuses') : true);
 
     const notes = {};
-    if (dure && !longue)  notes.midi = 'Une banane et du pain deux heures avant la séance.';
-    if (dure)             notes.soir = 'Protéines dans les trente minutes qui suivent.';
+    if (dure && !longue)  notes.midi = 'Peu de fibres avant une séance dure : c’est ce qui évite le mal de ventre. Une banane deux heures avant.';
+    if (dure)             notes.soir = 'Protéines qui digèrent vite dans les trente minutes : œufs, laitages, volaille. Pas de légumineuses ce soir.';
     if (longue)           notes.matin = 'Deux heures avant. Emporte une banane au-delà d’1 h 15.';
     if (longue)           notes.midi = 'Dans l’heure qui suit la sortie.';
     if (repos)            notes.soir = null;
 
     const i = jours.indexOf(j);
-    const encas = encasOk.length ? [encasOk[i % encasOk.length]] : [];
-    if ((dure || longue) && encasOk.length > 1) encas.push(encasOk[(i + 2) % encasOk.length]);
+    const pool = (dure || longue) ? encasOk.filter(e => (e.fibres || 2) <= 2) : encasOk;
+    const lot = pool.length ? pool : encasOk;
+    const encas = lot.length ? [lot[i % lot.length]] : [];
+    if ((dure || longue) && lot.length > 1) encas.push(lot[(i + 2) % lot.length]);
 
     const brut = (matin?.kcal || 0) + (midi?.kcal || 0) + (soir?.kcal || 0)
                + encas.reduce((t, e) => t + e.kcal, 0);
