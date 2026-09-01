@@ -212,15 +212,30 @@ try {
     Budget visé : <b>${g.budget} €</b>. Les quantités dépendent de tes portions —
     achète large sur le sec, il se garde.</p>`;
 
-  const BATCH = [
-    ['Faire tremper la veille','Pois chiches et haricots, dans un grand volume d’eau.'],
-    ['Lancer les légumineuses','Pois chiches et haricots à l’eau, 45 min. Lentilles à part, 18 min, elles doivent rester fermes.'],
-    ['Enfourner les légumes','Poivrons, courgettes, oignons, pommes de terre en gros dés. 40 min à 200 °C, bien dorés.'],
-    ['Cuire les féculents','Riz, quinoa, semoule en grande quantité. Ils tiennent 4 jours au frais.'],
-    ['La sauce tomate','Oignon, tomates concassées, origan. Elle sert plusieurs fois dans la semaine.'],
-    ['Les œufs durs','Huit d’un coup. Ils dépannent matins et midis.'],
-    ['Portionner','Une base féculent, une base légume, une base protéine par boîte.']
-  ];
+  // la fiche du dimanche découle des ingrédients réellement présents dans la semaine
+  const ing = new Set();
+  liste.forEach(([, items]) => items.forEach(x => ing.add(x.toLowerCase())));
+  const a = m => [...ing].some(x => x.includes(m));
+
+  const secs = ['Lentilles vertes','Haricots rouges secs','Haricots blancs secs','Pois chiches secs']
+    .filter(x => ing.has(x.toLowerCase()));
+  const fecu = ['Riz complet','Riz arborio','Quinoa','Boulgour','Semoule complète','Pâtes complètes','Pâtes']
+    .filter(x => ing.has(x.toLowerCase()));
+
+  const BATCH = [];
+  if (secs.length) {
+    BATCH.push(['Faire tremper la veille', secs.join(', ') + ' — dans un grand volume d’eau.']);
+    const cuisson = [];
+    if (secs.some(x => /haricot/i.test(x)))     cuisson.push('haricots 45 min');
+    if (secs.some(x => /pois chiche/i.test(x))) cuisson.push('pois chiches 45 min');
+    if (secs.some(x => /lentille/i.test(x)))    cuisson.push('lentilles 18 min, elles doivent rester fermes');
+    BATCH.push(['Cuire les légumineuses', cuisson.join(' · ') + '.']);
+  }
+  BATCH.push(['Enfourner les légumes','Poivrons, courgettes, oignons, pommes de terre en gros dés. 40 min à 200 °C, bien dorés.']);
+  if (fecu.length) BATCH.push(['Cuire les féculents', fecu.join(', ') + ' — en grande quantité, ils tiennent 4 jours au frais.']);
+  if (a('tomates concassées')) BATCH.push(['La sauce tomate','Oignon, tomates concassées, origan. Elle sert plusieurs fois dans la semaine.']);
+  if (a('œufs')) BATCH.push(['Les œufs durs','Huit d’un coup. Ils dépannent matins et midis.']);
+  BATCH.push(['Portionner','Une base féculent, une base légume, une base protéine par boîte.']);
   h += `<p class="k" id="batch" style="margin:30px 0 12px">Le dimanche</p>
     <div class="bloc"><h3>Dans cet ordre</h3><ol>`;
   for (const [t, d] of BATCH) h += `<li><div><b>${t}</b><span>${d}</span></div></li>`;
