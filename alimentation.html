@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Metanoia — Alimentation</title>
+<meta name="description" content="Pilier alimentation du projet Metanoia : la semaine de repas, la liste de courses et le batch cooking du dimanche.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--vert:#0B7A3E;--vif:#12B85F;--alim:#C9A227;--alimF:#8A6A12;--ink:#0D0F0E;
+  --piste:#E8EBE9;--sourd:#6B736E;--texte:#454B48}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max-width:430px;margin:0 auto;
+  padding-bottom:112px;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+  -webkit-touch-callout:none;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+
+.hd{display:flex;align-items:center;gap:11px;padding:max(14px,env(safe-area-inset-top)) 20px 13px;
+  border-bottom:1px solid var(--piste);position:relative;z-index:20}
+.hd .lg{width:74px;color:var(--ink);line-height:0;flex:none}
+.hd .lg svg{display:block;width:100%;height:auto}
+.sel{display:flex;align-items:center;gap:7px;background:none;border:0;cursor:pointer;padding:6px 4px;
+  font-family:inherit;font-weight:900;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--alimF)}
+.sel i{width:8px;height:8px;border-radius:50%;background:var(--alim);flex:none}
+.sel .fl{color:#B7BEBA;font-size:10px}
+.cpt{margin-left:auto;width:31px;height:31px;border-radius:50%;border:1.4px dashed #CDD4D0;
+  display:grid;place-items:center;color:#A9B0AC;flex:none}
+.cpt svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+.piliers{position:absolute;left:16px;top:calc(100% - 4px);background:#fff;border:1px solid var(--piste);
+  border-radius:12px;box-shadow:0 14px 34px -16px rgba(0,0,0,.32);padding:6px;min-width:212px;z-index:30;
+  opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility .18s}
+.piliers.ouvert{opacity:1;visibility:visible;transform:none}
+.piliers a,.piliers span{display:flex;align-items:center;gap:9px;padding:10px 11px;border-radius:8px;
+  font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8C948F}
+.piliers .on{background:#FBF6E6;color:var(--alimF)}
+.piliers i{width:8px;height:8px;border-radius:50%;background:#DDE3E0;flex:none}
+.piliers .sp i{background:var(--vert)} .piliers .on i{background:var(--alim)}
+.piliers em{font-style:normal;margin-left:auto;font-weight:300;font-size:8px;color:#C0C7C3}
+
+.z{padding:24px 20px 0}
+.k{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#A9B0AC}
+.gros{font-weight:900;font-size:38px;letter-spacing:-.045em;line-height:1;margin:8px 0 4px}
+.gros u{text-decoration:none;font-size:.26em;color:var(--alimF);margin-left:3px}
+.intro{font-weight:300;font-size:12px;color:var(--texte);line-height:1.6;margin:10px 0 24px}
+.intro b{font-weight:900;color:var(--ink)}
+
+.jour{margin-bottom:22px}
+.jour .t{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--ink);
+  padding-bottom:7px;margin-bottom:2px}
+.jour .t b{font-weight:900;font-size:15px;letter-spacing:-.01em}
+.jour .t em{font-style:normal;font-weight:700;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;background:var(--vert);border-radius:999px;padding:3px 9px}
+.jour .t em.off{background:#EDF0EE;color:#8C948F}
+.jour .t em.dur{background:#7B4FD1}
+.repas{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid #F2F4F3}
+.repas .h{width:44px;flex:none;font-weight:900;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:#B7BEBA;padding-top:2px}
+.repas .c b{display:block;font-weight:900;font-size:13.5px;letter-spacing:-.01em}
+.repas .c span{font-weight:300;font-size:11.5px;color:var(--texte);line-height:1.5;display:block;margin-top:2px}
+.repas .c .tip{display:block;font-weight:700;font-size:10px;color:var(--vert);margin-top:4px}
+
+.bloc{background:#FBF9F2;border-radius:14px;padding:16px;margin-bottom:24px}
+.bloc h3{font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--alimF);margin-bottom:11px}
+.bloc ol{list-style:none;counter-reset:e}
+.bloc ol li{counter-increment:e;display:flex;gap:11px;padding:9px 0;border-bottom:1px solid #F0EDE2}
+.bloc ol li:last-child{border:0}
+.bloc ol li::before{content:counter(e);width:22px;height:22px;border-radius:50%;background:#F1EBD8;
+  color:var(--alimF);font-weight:900;font-size:10px;display:grid;place-items:center;flex:none}
+.bloc ol li div b{display:block;font-weight:900;font-size:12.5px}
+.bloc ol li div span{font-weight:300;font-size:11px;color:var(--texte);line-height:1.45}
+
+.rayon{margin-bottom:16px}
+.rayon .n{font-weight:900;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--alimF);
+  margin-bottom:6px}
+.rayon .l{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F4F6F5;
+  font-weight:300;font-size:12px;color:var(--texte)}
+.rayon .l b{font-weight:700;color:var(--ink)}
+.rayon .l em{font-style:normal;color:#A9B0AC;font-size:11px}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);
+  padding-top:11px;margin-top:4px}
+.total b{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.total em{font-style:normal;font-weight:900;font-size:24px;letter-spacing:-.03em}
+.note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;margin:22px 0 0}
+
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#fff;border-top:1px solid var(--piste);
+  padding:11px 0 max(15px,env(safe-area-inset-bottom));z-index:20;max-width:430px;margin:0 auto}
+.nav a{flex:1;text-align:center}
+.nav a .num{display:block;font-weight:900;font-size:16px;letter-spacing:-.02em;color:#CDD4D0;line-height:1}
+.nav a b{display:block;font-weight:700;font-size:8px;letter-spacing:.12em;text-transform:uppercase;
+  color:#B7BEBA;margin-top:4px}
+.nav a.on .num{color:var(--alimF)}
+.nav a.on b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <button class="sel" id="selP" aria-expanded="false"><i></i>Alimentation<span class="fl">&#9662;</span></button>
+  <a class="cpt" href="connexion.html" aria-label="Mon compte"><svg viewBox="0 0 24 24"><circle cx="12" cy="9.2" r="3.4"/><path d="M5.8 19.2c0-3.1 2.7-5 6.2-5s6.2 1.9 6.2 5"/></svg></a>
+  <div class="piliers" id="piliers">
+    <a class="sp" href="metanoia.html"><i></i>Sport</a>
+    <span class="on"><i></i>Alimentation</span>
+    <span><i></i>Sommeil<em>bientôt</em></span>
+    <span><i></i>Lecture<em>bientôt</em></span>
+    <span><i></i>Argent<em>bientôt</em></span>
+  </div>
+</header>
+
+<div class="z" id="z"></div>
+
+<nav class="nav">
+  <a href="#semaine" class="on"><span class="num">01</span><b>Semaine</b></a>
+  <a href="#courses"><span class="num">02</span><b>Courses</b></a>
+  <a href="#batch"><span class="num">03</span><b>Dimanche</b></a>
+</nav>
+
+<script>
+const SEMAINE = [
+ ['Lundi','Repos','off',[
+   ['Matin','Porridge avoine-banane','80 g de flocons d\u2019avoine, lait, 1 banane écrasée, 1 c. à s. de purée d\u2019amande, cannelle.'],
+   ['Midi','Salade de lentilles','Lentilles vertes, carottes râpées, oignon rouge, persil, vinaigrette moutarde-huile d\u2019olive. 2 œufs durs.'],
+   ['Soir','Soupe de pois chiches','Pois chiches, tomates, cumin, épinards. Une grosse tranche de pain complet.']]],
+ ['Mardi','Endurance 45 min','',[
+   ['Matin','Porridge avoine-pomme','Même base, pomme râpée et raisins secs.'],
+   ['Midi','Riz complet aux légumes rôtis','Riz, courgettes, poivrons, pois chiches rôtis, feta, huile d\u2019olive.'],
+   ['Soir','Omelette aux pommes de terre','3 œufs, pommes de terre, oignons, salade verte. Pain.','Séance faite : mange dans l\u2019heure qui suit.']]],
+ ['Mercredi','Seuil 2 × 10 min','dur',[
+   ['Matin','Porridge + miel','Ajoute une cuillère de miel et une poignée de noix : la séance est ce soir.'],
+   ['Midi','Pâtes complètes, sauce tomate-lentilles','Grosse assiette. C\u2019est le repas qui alimente la séance.','2 h avant la séance : une banane et un peu de pain.'],
+   ['Soir','Semoule, poulet, légumes','Une petite portion de poulet, beaucoup de semoule et de légumes rôtis.','Protéines dans les 30 min après la séance.']]],
+ ['Jeudi','Renfo salle','',[
+   ['Matin','Fromage blanc, avoine, fruits','Fromage blanc, 50 g d\u2019avoine, fruits de saison, graines de courge.'],
+   ['Midi','Riz, haricots rouges, avocat','Version chili doux, sans viande. Coriandre, citron vert.'],
+   ['Soir','Gratin de courgettes et boulgour','Boulgour, courgettes, œuf, un peu de fromage râpé.']]],
+ ['Vendredi','Endurance 40 min','',[
+   ['Matin','Porridge avoine-cacao','Cacao non sucré, banane.'],
+   ['Midi','Taboulé de quinoa','Quinoa, tomates, concombre, menthe, pois chiches, feta.'],
+   ['Soir','Sardines, pommes de terre, salade','Sardines à l\u2019huile — les moins chères et les meilleures pour toi.']]],
+ ['Samedi','Sortie longue 14 km','dur',[
+   ['Matin','Porridge + miel + banane','2 h avant la sortie. C\u2019est le carburant de la matinée.','Emporte une banane si tu dépasses 1 h 15.'],
+   ['Midi','Pâtes, thon, tomates, olives','Le repas de récupération : glucides et protéines ensemble.','Dans l\u2019heure qui suit la sortie.'],
+   ['Soir','Soupe de légumes, œufs, pain','Léger, la digestion a assez travaillé.']]],
+ ['Dimanche','Repos ou footing court','off',[
+   ['Matin','Œufs brouillés, pain complet, fruits','Le repas plaisir de la semaine.'],
+   ['Midi','Ce que tu veux','Un vrai repas libre. Un projet de dix ans ne tient pas sans respiration.'],
+   ['Soir','Restes du batch cooking','Et on prépare la semaine suivante.']]]
+];
+
+const COURSES = [
+ ['Sec et épicerie',[
+   ['Flocons d\u2019avoine bio','1 kg','2,50 €'],['Riz complet bio','1 kg','3,20 €'],
+   ['Pâtes complètes bio','1 kg','2,20 €'],['Lentilles vertes bio','500 g','2,40 €'],
+   ['Pois chiches secs bio','500 g','2,10 €'],['Haricots rouges secs','500 g','2,00 €'],
+   ['Quinoa','500 g','3,80 €'],['Boulgour bio','500 g','2,10 €'],
+   ['Semoule complète','500 g','1,60 €'],['Purée d\u2019amande','200 g','4,50 €']]],
+ ['Frais',[
+   ['Œufs bio','12','4,20 €'],['Fromage blanc','1 kg','2,60 €'],
+   ['Feta','200 g','2,50 €'],['Poulet (filet)','300 g','4,50 €'],
+   ['Sardines à l\u2019huile','3 boîtes','3,60 €'],['Thon au naturel','2 boîtes','3,00 €']]],
+ ['Fruits et légumes',[
+   ['Bananes','1,5 kg','2,70 €'],['Pommes','1 kg','2,20 €'],
+   ['Carottes bio','1,5 kg','2,40 €'],['Courgettes','1 kg','2,20 €'],
+   ['Poivrons','3','2,40 €'],['Tomates','1 kg','2,50 €'],
+   ['Oignons bio','1 kg','1,80 €'],['Pommes de terre bio','2 kg','3,20 €'],
+   ['Épinards frais','400 g','2,20 €'],['Salade','1','1,20 €'],
+   ['Concombre, citrons, herbes','—','3,00 €']]],
+ ['Base',[
+   ['Huile d\u2019olive','—','déjà là'],['Tomates concassées bio','3 boîtes','2,70 €'],
+   ['Pain complet','2','3,00 €'],['Noix et graines','200 g','3,40 €']]]
+];
+
+const BATCH = [
+ ['Lancer les légumineuses','Pois chiches et haricots ont trempé la nuit. Cuisson à l\u2019eau 45 min pendant que tu fais le reste.'],
+ ['Enfourner les légumes','Courgettes, poivrons, oignons, pommes de terre en dés. Huile d\u2019olive, herbes. 40 min à 200 °C, deux plaques.'],
+ ['Cuire les féculents','Riz complet et boulgour en grande quantité. Ils se gardent 4 jours au frais.'],
+ ['Lentilles et semoule','15 min pour les lentilles, 5 min pour la semoule.'],
+ ['Œufs durs','Six d\u2019un coup. Ils dépannent tous les midis.'],
+ ['Sauce tomate-lentilles','Oignon, tomates concassées, lentilles cuites, cumin. Elle sert mercredi et peut se congeler.'],
+ ['Répartir en boîtes','Une base féculent + une base légume + une base protéine par boîte. Tu assembles le matin en trois minutes.']
+];
+
+const z = document.getElementById('z');
+let h = `<p class="k">Alimentation</p>
+  <div class="gros">2 950<u>kcal / jour</u></div>
+  <p class="intro">Sans porc, peu de viande. Sept jours, vingt-et-un repas, préparés le dimanche.
+    Compté pour un métier physique <b>plus</b> 45 km de course par semaine —
+    c\u2019est beaucoup, et c\u2019est normal.</p>
+
+  <p class="k" id="semaine" style="margin-bottom:12px">La semaine</p>`;
+
+for (const [j, seance, cls, repas] of SEMAINE) {
+  h += `<div class="jour"><div class="t"><b>${j}</b><em class="${cls}">${seance}</em></div>`;
+  for (const r of repas) {
+    h += `<div class="repas"><span class="h">${r[0]}</span><div class="c">
+      <b>${r[1]}</b><span>${r[2]}</span>${r[3] ? `<span class="tip">${r[3]}</span>` : ''}</div></div>`;
+  }
+  h += `</div>`;
+}
+
+h += `<p class="k" id="courses" style="margin:30px 0 12px">La liste de courses</p>`;
+let total = 0;
+for (const [rayon, items] of COURSES) {
+  h += `<div class="rayon"><p class="n">${rayon}</p>`;
+  for (const [nom, q, prix] of items) {
+    const v = parseFloat(prix.replace(',', '.'));
+    if (!isNaN(v)) total += v;
+    h += `<div class="l"><span><b>${nom}</b> <em>${q}</em></span><span>${prix}</span></div>`;
+  }
+  h += `</div>`;
+}
+h += `<div class="total"><b>Total estimé</b><em>${total.toFixed(2).replace('.', ',')} €</em></div>
+  <p class="note">Prix moyens en magasin bio ou grande surface, rayon bio quand ça vaut le coup.
+    Le sec dure deux à trois semaines : les semaines suivantes coûteront moins cher.</p>`;
+
+h += `<p class="k" id="batch" style="margin:30px 0 12px">Le dimanche — 2 h 30</p>
+  <div class="bloc"><h3>Dans cet ordre</h3><ol>`;
+for (const [t, d] of BATCH) h += `<li><div><b>${t}</b><span>${d}</span></div></li>`;
+h += `</ol></div>
+  <p class="note">La veille au soir : mets les pois chiches et les haricots à tremper dans un grand volume d\u2019eau.
+    C\u2019est la seule chose à ne pas oublier.</p>`;
+
+z.innerHTML = h;
+
+(function(){
+  const b = document.getElementById('selP'), m = document.getElementById('piliers');
+  b.addEventListener('click', e => { e.stopPropagation();
+    const o = m.classList.toggle('ouvert'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  document.addEventListener('click', () => m.classList.remove('ouvert'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') m.classList.remove('ouvert'); });
+})();
+document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () => {
+  document.querySelectorAll('.nav a').forEach(x => x.classList.remove('on')); a.classList.add('on'); }));
+</script>
+<script>
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(ev =>
+  document.addEventListener(ev, e => { if (!e.target.closest('input,textarea')) e.preventDefault(); }));
+['gesturestart','gesturechange','gestureend'].forEach(ev =>
+  document.addEventListener(ev, e => e.preventDefault(), { passive:false }));
+document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive:false });
+</script>
+</body>
+</html>
