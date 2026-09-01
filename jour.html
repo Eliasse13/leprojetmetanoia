@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Metanoia — Aujourd'hui</title>
+<meta name="description" content="Les tâches du jour du projet Metanoia, sur les cinq piliers.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--sport:#0B7A3E;--sportV:#12B85F;--alim:#C9A227;--alimF:#8A6A12;--som:#4C6FA5;--lec:#8258DD;--arg:#2E8B8B;
+  --ink:#0D0F0E;--piste:#E8EBE9;--sourd:#6B736E;--texte:#454B48;--rouge:#C4452F}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max-width:430px;margin:0 auto;
+  padding-bottom:46px;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+  -webkit-touch-callout:none;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+.hd{display:flex;align-items:center;padding:max(14px,env(safe-area-inset-top)) 20px 13px;
+  border-bottom:1px solid var(--piste)}
+.hd .lg{width:74px;color:var(--ink);line-height:0}
+.hd .lg svg{display:block;width:100%;height:auto}
+.hd .cpt{margin-left:auto;width:30px;height:30px;border-radius:50%;border:1.4px dashed #CDD4D0;
+  display:grid;place-items:center;color:#A9B0AC}
+.hd .cpt svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+.z{padding:26px 20px 0}
+.k{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#A9B0AC}
+h1{font-weight:900;font-size:26px;letter-spacing:-.035em;margin:8px 0 2px;line-height:1.05}
+
+.tete{display:flex;align-items:flex-end;justify-content:space-between;margin:18px 0 9px}
+.tete .c{font-weight:900;font-size:34px;letter-spacing:-.04em;line-height:1}
+.tete .c u{text-decoration:none;font-size:.42em;color:#C0C7C3;margin-left:2px}
+.tete .s{font-weight:300;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--sourd);
+  text-align:right;line-height:1.5}
+.tete .s b{font-weight:900;color:var(--ink)}
+.rail{height:6px;background:#EFF2F0;border-radius:4px;overflow:hidden;margin-bottom:22px}
+.rail i{display:block;height:100%;border-radius:4px;background:var(--sportV);transition:width .4s ease}
+
+.l{display:flex;align-items:center;gap:12px;padding:13px 0 13px 13px;border-left:4px solid;
+  border-bottom:1px solid #F4F6F5;cursor:pointer}
+.l .t b{display:block;font-weight:900;font-size:14px;letter-spacing:-.015em;line-height:1.2}
+.l .t span{display:block;font-weight:300;font-size:10.5px;color:var(--sourd);margin-top:2px;line-height:1.4}
+.l .cb{margin-left:auto;width:24px;height:24px;border-radius:8px;border:2px solid #DDE3E0;flex:none;
+  position:relative;transition:background .18s,border-color .18s}
+.l.ok .cb{background:var(--sportV);border-color:var(--sportV)}
+.l.ok .cb::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#fff;
+  font-size:13px;font-weight:900}
+.l.ok .t b{color:#C0C7C3;text-decoration:line-through}
+.l.ok .t span{color:#D3D9D6}
+
+.fini{background:#F3FAF6;border-radius:14px;padding:16px;margin-top:22px;text-align:center}
+.fini b{display:block;font-weight:900;font-size:15px;color:var(--sport)}
+.fini span{display:block;font-weight:300;font-size:12px;color:var(--texte);margin-top:5px;line-height:1.5}
+.vide{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.6;margin-top:16px}
+.note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;margin-top:26px}
+.note a{color:var(--sport);font-weight:900}
+.err{font-weight:700;font-size:12px;color:var(--rouge);text-align:center;margin-top:14px;min-height:1.2em}
+</style>
+</head>
+<body>
+<header class="hd">
+  <a class="lg" href="metanoia.html" aria-label="Vue d'ensemble"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <a class="cpt" href="connexion.html" aria-label="Mon compte"><svg viewBox="0 0 24 24"><circle cx="12" cy="9.2" r="3.4"/><path d="M5.8 19.2c0-3.1 2.7-5 6.2-5s6.2 1.9 6.2 5"/></svg></a>
+</header>
+
+<div class="z" id="z"><p class="k">Chargement…</p></div>
+
+<script type="module">
+import { list, litRegles, litGouts, listTaches, bascule, projetActif, listJournal }
+  from './config.js?v=20260901d';
+import { vdot, recommandation, fmtAllure } from './moteur.js?v=20260901d';
+import { genererSemaine } from './cuisine.js?v=20260901d';
+
+const $ = id => document.getElementById(id);
+const z = $('z');
+const auj = new Date();
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const AUJ = iso(auj);
+const COUL = { sport:'var(--sport)', alim:'var(--alimF)', sommeil:'var(--som)', lecture:'var(--lec)', argent:'var(--arg)' };
+
+function heure(t) { return (t || '').slice(0,5).replace(':', ' h '); }
+
+try {
+  const [seances, regles, gouts, faites, projet, journal] = await Promise.all([
+    list().catch(() => []), litRegles(), litGouts(),
+    listTaches(AUJ).catch(() => []), projetActif().catch(() => null),
+    listJournal().catch(() => [])
+  ]);
+
+  const v = projet ? vdot(projet.ref_distance_m, projet.ref_chrono_s) : 50;
+  const r = recommandation(seances, v, auj, journal);
+
+  // les repas du jour, dans la même trame que la page Alimentation
+  const TRAME = [
+    { seance:'Repos', intensite:'repos' }, { seance:'Endurance', intensite:'souple' },
+    { seance:'Seuil', intensite:'dure' },  { seance:'Renfo', intensite:'souple' },
+    { seance:'Endurance', intensite:'souple' }, { seance:'Sortie longue', intensite:'dure' },
+    { seance:'Repos', intensite:'repos' }
+  ];
+  const JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+  const idx = (auj.getDay() + 6) % 7;
+  let repas = null;
+  if (gouts) {
+    const sem = genererSemaine(gouts, JOURS.map((nom, k) => ({ nom, ...TRAME[k] })));
+    repas = sem[idx];
+  }
+
+  // construction des tâches
+  const T = [];
+  if (repas?.matin) T.push(['petitdej','alim','Petit-déjeuner', repas.matin.nom]);
+  if (regles?.euros_jour) T.push(['argent','argent',
+    `Mettre ${Number(regles.euros_jour).toFixed(0)} € de côté`,
+    regles.objectif_argent || `${(Number(regles.euros_jour)*30).toFixed(0)} € par mois`]);
+  if (repas?.midi) T.push(['dejeuner','alim','Déjeuner', repas.midi.nom]);
+
+  if (r.titre.toLowerCase().includes('repos')) {
+    T.push(['sport','sport','Repos', r.pourquoi.split('.')[0] + '.']);
+  } else {
+    const blocs = (r.blocs || []).map(b => `${b.nom} ${b.detail ? '(' + b.detail + ')' : ''} à ${fmtAllure(b.secondesParKm)}`);
+    T.push(['sport','sport', r.titre, blocs.length ? blocs.join(' · ') : `environ ${r.km} km`]);
+  }
+
+  if (repas?.soir) T.push(['diner','alim','Dîner', repas.soir.nom]);
+  if (regles?.pages_jour) T.push(['lecture','lecture',
+    `Lire ${regles.pages_jour} pages`,
+    regles.livre ? `${regles.livre}${regles.page_actuelle ? ' — page ' + regles.page_actuelle : ''}` : 'Livre en cours']);
+  if (regles?.coucher) T.push(['sommeil','sommeil',
+    `Extinction ${heure(regles.coucher)}`,
+    `Lever ${heure(regles.lever)} — ${heuresDeSommeil(regles)} de sommeil`]);
+
+  function heuresDeSommeil(rg) {
+    const [hc, mc] = rg.coucher.split(':').map(Number);
+    const [hl, ml] = rg.lever.split(':').map(Number);
+    let m = (hl*60 + ml) - (hc*60 + mc); if (m <= 0) m += 1440;
+    return `${Math.floor(m/60)} h${m%60 ? ' ' + String(m%60).padStart(2,'0') : ''}`;
+  }
+
+  const etat = Object.fromEntries(faites.map(f => [f.cle, f.fait]));
+  const rendu = () => {
+    const n = T.filter(t => etat[t[0]]).length;
+    $('compte').textContent = n;
+    $('barre').style.width = (n / T.length * 100) + '%';
+    $('fini').style.display = n === T.length ? 'block' : 'none';
+  };
+
+  z.innerHTML = `
+    <p class="k">Aujourd'hui</p>
+    <h1>${(() => { const d = auj.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+      return d.charAt(0).toUpperCase() + d.slice(1); })()}</h1>
+    <div class="tete">
+      <span class="c"><span id="compte">0</span><u> / ${T.length}</u></span>
+      <span class="s">tâches<br><b>du jour</b></span>
+    </div>
+    <div class="rail"><i id="barre" style="width:0"></i></div>
+    ${T.map(([cle, pil, titre, detail]) => `
+      <div class="l ${etat[cle] ? 'ok' : ''}" data-cle="${cle}" data-pil="${pil}"
+           style="border-left-color:${COUL[pil]}">
+        <div class="t"><b>${titre}</b><span>${detail || ''}</span></div>
+        <span class="cb"></span></div>`).join('')}
+    <div class="fini" id="fini" style="display:none">
+      <b>Journée complète.</b>
+      <span>Les cinq piliers sont cochés. C'est une journée qui compte double :
+        celles-là sont rares, et ce sont elles qui construisent la décennie.</span>
+    </div>
+    <p class="err" id="err"></p>
+    <p class="note">Les repas viennent de <a href="alimentation.html">tes goûts</a>,
+      la séance de <a href="objectif.html">ton objectif</a>.
+      <a href="metanoia.html">Voir les kilomètres</a>.</p>`;
+
+  rendu();
+
+  document.querySelectorAll('.l').forEach(el => el.addEventListener('click', async () => {
+    const cle = el.dataset.cle, pil = el.dataset.pil;
+    const t = T.find(x => x[0] === cle);
+    const nouveau = !etat[cle];
+    etat[cle] = nouveau;
+    el.classList.toggle('ok', nouveau);
+    rendu();
+    try { await bascule(AUJ, cle, pil, t[2], t[3], nouveau); }
+    catch (e) {
+      etat[cle] = !nouveau; el.classList.toggle('ok', !nouveau); rendu();
+      $('err').textContent = 'Non enregistré : ' + (e.message.includes('row-level')
+        ? 'connecte-toi pour cocher.' : e.message);
+    }
+  }));
+
+} catch (e) {
+  z.innerHTML = '<p class="k" style="color:#C4452F">Erreur : ' + e.message + '</p>';
+}
+</script>
+<script>
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(ev =>
+  document.addEventListener(ev, e => { if (!e.target.closest('input,textarea')) e.preventDefault(); }));
+['gesturestart','gesturechange','gestureend'].forEach(ev =>
+  document.addEventListener(ev, e => e.preventDefault(), { passive:false }));
+document.addEventListener('touchmove', e => { if (e.touches.length > 1) e.preventDefault(); }, { passive:false });
+</script>
+</body>
+</html>
