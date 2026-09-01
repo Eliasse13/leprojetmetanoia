@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Metanoia — Mes goûts</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--alim:#C9A227;--alimF:#8A6A12;--vert:#0B7A3E;--ink:#0D0F0E;--piste:#E8EBE9;--sourd:#6B736E;--texte:#454B48;--rouge:#C4452F}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max-width:430px;margin:0 auto;
+  padding-bottom:40px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+input{user-select:text;-webkit-user-select:text}
+.hd{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top)) 20px 12px;
+  border-bottom:1px solid var(--piste)}
+.hd .lg{width:72px;color:var(--ink);line-height:0}.hd .lg svg{display:block;width:100%;height:auto}
+.hd .q{margin-left:auto;font-weight:300;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:#A9B0AC;text-decoration:none}
+.jauge{height:3px;background:#F1F4F2}
+.jauge i{display:block;height:100%;background:var(--alim);width:0;transition:width .35s ease}
+.z{padding:26px 20px 0}
+.etape{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#B7BEBA}
+h1{font-weight:900;font-size:25px;letter-spacing:-.03em;line-height:1.1;margin:9px 0 6px}
+.sous{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.55;margin-bottom:20px}
+
+.choix{display:grid;gap:8px}
+.choix button{display:flex;align-items:center;gap:12px;text-align:left;background:#fff;cursor:pointer;
+  border:1.5px solid var(--piste);border-radius:12px;padding:14px 15px;font-family:inherit;width:100%}
+.choix button .em{font-size:19px;line-height:1;flex:none}
+.choix button b{font-weight:900;font-size:14px;letter-spacing:-.01em;display:block}
+.choix button span{font-weight:300;font-size:11px;color:var(--sourd);display:block;margin-top:2px}
+.choix button.on{border-color:var(--alim);background:#FDFAF0}
+.choix button.on b{color:var(--alimF)}
+.choix.grille{grid-template-columns:1fr 1fr}
+.choix.grille button{flex-direction:column;align-items:flex-start;gap:5px;padding:13px}
+
+.mesures{display:flex;gap:10px}
+.mesures>div{flex:1}
+label{display:block;font-weight:900;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sourd);margin-bottom:5px}
+input.ch{width:100%;border:1.5px solid var(--piste);border-radius:9px;padding:12px 13px;
+  font-family:inherit;font-weight:700;font-size:16px;color:var(--ink)}
+input.ch:focus{outline:0;border-color:var(--ink)}
+
+.pied{display:flex;gap:10px;margin-top:26px}
+.btn{flex:1;background:var(--alimF);color:#fff;border:0;border-radius:999px;padding:14px;
+  font-family:inherit;font-weight:900;font-size:12px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
+.btn.ghost{flex:0 0 90px;background:#fff;color:var(--sourd);border:1.5px solid var(--piste)}
+.btn:disabled{background:#DDE3DF;color:#9AA19D}
+.msg{font-weight:700;font-size:12px;text-align:center;margin-top:14px;min-height:1.3em}
+.msg.ok{color:var(--vert)}.msg.ko{color:var(--rouge)}
+.fin{text-align:center;padding-top:20px}
+.fin .gros{font-weight:900;font-size:44px;letter-spacing:-.045em;line-height:1}
+.fin .gros u{text-decoration:none;font-size:.26em;color:var(--alimF);margin-left:3px}
+.fin p{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.6;margin-top:12px}
+.recap{text-align:left;background:#FBF9F2;border-radius:13px;padding:15px;margin-top:18px}
+.recap .l{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F0EDE2;
+  font-weight:300;font-size:12px;color:var(--texte)}
+.recap .l:last-child{border:0}
+.recap .l b{font-weight:900;color:var(--ink);text-align:right;max-width:60%}
+</style>
+</head>
+<body>
+<header class="hd">
+  <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <a class="q" href="alimentation.html">Voir la semaine</a>
+</header>
+<div class="jauge"><i id="jauge"></i></div>
+<div class="z" id="z"><p class="etape">Chargement…</p></div>
+
+<script type="module">
+import { exigerConnexion, litGouts, ecritGouts } from './config.js?v=20260901b';
+import { besoins } from './cuisine.js?v=20260901b';
+
+if (!await exigerConnexion('connexion.html')) throw new Error('non connecté');
+const $ = id => document.getElementById(id);
+
+const E = [
+ { cle:'regime', titre:'Tu manges comment ?', sous:'La base de tout le reste.', type:'un',
+   opts:[['omnivore','🍽️','De tout','Aucune restriction'],
+         ['peu-viande','🌱','Peu de viande','Juste ce qu’il faut'],
+         ['vegetarien','🥬','Végétarien','Ni viande ni poisson']] },
+ { cle:'exclusions', titre:'Ce que tu ne veux pas voir', sous:'Coche tout ce qui te dégoûte. Ces aliments disparaîtront complètement.', type:'plusieurs',
+   opts:[['porc','🚫','Porc',''],['poisson','🐟','Poisson',''],['crustaces','🦐','Crustacés',''],
+         ['fromage','🧀','Fromage affiné',''],['laitage','🥛','Tous les laitages',''],
+         ['oleagineux','🥜','Noix et amandes',''],['tofu','⬜','Tofu',''],
+         ['gluten','🌾','Gluten',''],['oeufs','🥚','Œufs','']] },
+ { cle:'aimes', titre:'Ce que tu adores', sous:'Ces goûts reviendront le plus souvent dans la semaine.', type:'plusieurs',
+   opts:[['risotto','🍚','Risotto',''],['tomate','🍅','Tomate',''],['oeufs','🍳','Œufs',''],
+         ['legumineuses','🫘','Légumineuses',''],['volaille','🍗','Volaille',''],['sucre','🍯','Sucré','']] },
+ { cle:'petit_dej', titre:'Le matin, plutôt…', sous:'', type:'un',
+   opts:[['sale','🍳','Salé','Œufs, pain, tomates'],
+         ['sucre','🥣','Sucré','Porridge, fruits, miel'],
+         ['peu-importe','🤷','Peu importe','Les deux me vont']] },
+ { cle:'epices', titre:'Le goût', sous:'', type:'un',
+   opts:[['doux','🌾','Doux','Peu d’épices'],
+         ['parfume','🌿','Parfumé','Herbes, cumin, paprika doux'],
+         ['releve','🌶️','Relevé','Du piquant']] },
+ { cle:'temps_cuisine', titre:'Le dimanche, tu as…', sous:'Le temps de préparation en une seule fois.', type:'un',
+   opts:[['1h','⏱️','1 heure','Recettes très simples'],
+         ['2-3h','🕑','2 à 3 heures','Le batch cooking complet'],
+         ['chaque-soir','🍳','Je cuisine chaque soir','Pas de préparation groupée']] },
+ { cle:'budget', titre:'Ton budget courses', sous:'Par semaine, pour toi seul.', type:'un',
+   opts:[[40,'💶','40 €','Serré mais faisable'],[60,'💶','60 €','Confortable'],[80,'💶','80 € et plus','Bio partout']] },
+ { cle:'mesures', titre:'Tes mesures', sous:'Pour calculer combien tu dois manger.', type:'mesures' }
+];
+
+let g = await litGouts() || {};
+let i = 0;
+const v = {
+  regime: g.regime || 'peu-viande',
+  exclusions: g.exclusions || [],
+  aimes: g.aimes || [],
+  petit_dej: g.petit_dej || 'sale',
+  epices: g.epices || 'parfume',
+  temps_cuisine: g.temps_cuisine || '2-3h',
+  budget: g.budget || 60,
+  poids_kg: g.poids_kg || '',
+  taille_cm: g.taille_cm || ''
+};
+
+function rendre() {
+  $('jauge').style.width = (i / E.length * 100) + '%';
+  if (i >= E.length) return fin();
+  const e = E[i];
+  let corps;
+  if (e.type === 'mesures') {
+    corps = `<div class="mesures">
+      <div><label for="p">Poids</label><input class="ch" id="p" type="number" step="0.5" placeholder="69" value="${v.poids_kg}"></div>
+      <div><label for="t">Taille</label><input class="ch" id="t" type="number" placeholder="186" value="${v.taille_cm}"></div>
+    </div><p class="sous" style="margin-top:9px">Kilogrammes et centimètres.</p>`;
+  } else {
+    const sel = x => e.type === 'plusieurs' ? v[e.cle].includes(x) : v[e.cle] == x;
+    corps = `<div class="choix ${e.opts.length > 5 ? 'grille' : ''}">
+      ${e.opts.map(([val, em, nom, d]) => `<button data-v="${val}" class="${sel(val) ? 'on' : ''}">
+        <span class="em">${em}</span><span><b>${nom}</b>${d ? `<span>${d}</span>` : ''}</span></button>`).join('')}
+    </div>`;
+  }
+  $('z').innerHTML = `<p class="etape">Étape ${i + 1} sur ${E.length}</p>
+    <h1>${e.titre}</h1>${e.sous ? `<p class="sous">${e.sous}</p>` : '<div style="height:8px"></div>'}
+    ${corps}
+    <div class="pied">
+      ${i ? '<button class="btn ghost" id="prec">Retour</button>' : ''}
+      <button class="btn" id="suiv">${i === E.length - 1 ? 'Terminer' : 'Suivant'}</button>
+    </div><p class="msg" id="msg"></p>`;
+
+  document.querySelectorAll('.choix button').forEach(b => b.addEventListener('click', () => {
+    const val = isNaN(b.dataset.v) ? b.dataset.v : Number(b.dataset.v);
+    if (e.type === 'plusieurs') {
+      const k = v[e.cle].indexOf(b.dataset.v);
+      if (k > -1) v[e.cle].splice(k, 1); else v[e.cle].push(b.dataset.v);
+      b.classList.toggle('on');
+    } else {
+      v[e.cle] = val;
+      document.querySelectorAll('.choix button').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+    }
+  }));
+  if ($('prec')) $('prec').addEventListener('click', () => { i--; rendre(); });
+  $('suiv').addEventListener('click', async () => {
+    if (e.type === 'mesures') {
+      v.poids_kg = Number($('p').value) || null;
+      v.taille_cm = Number($('t').value) || null;
+      if (!v.poids_kg || !v.taille_cm) { $('msg').className='msg ko'; $('msg').textContent='Il me faut les deux.'; return; }
+    }
+    i++; rendre();
+  });
+}
+
+async function fin() {
+  $('jauge').style.width = '100%';
+  const b = besoins(v, 45);
+  const NOMS = { omnivore:'De tout', 'peu-viande':'Peu de viande', vegetarien:'Végétarien',
+                 sale:'Salé', sucre:'Sucré', 'peu-importe':'Peu importe',
+                 doux:'Doux', parfume:'Parfumé', releve:'Relevé',
+                 '1h':'1 heure', '2-3h':'2 à 3 heures', 'chaque-soir':'Chaque soir' };
+  $('z').innerHTML = `<div class="fin">
+    <p class="etape">Ton besoin quotidien</p>
+    <div class="gros">${b.kcal.toLocaleString('fr-FR')}<u>kcal</u></div>
+    <p>${b.proteines} g de protéines, ${b.glucides} g de glucides, ${b.lipides} g de lipides.
+       Calculé sur ${v.poids_kg} kg, ${v.taille_cm} cm, un métier physique et 45 km de course par semaine.</p>
+    <div class="recap">
+      <div class="l"><span>Régime</span><b>${NOMS[v.regime]}</b></div>
+      <div class="l"><span>Exclusions</span><b>${v.exclusions.length ? v.exclusions.join(', ') : 'aucune'}</b></div>
+      <div class="l"><span>Préférences</span><b>${v.aimes.length ? v.aimes.join(', ') : '—'}</b></div>
+      <div class="l"><span>Le matin</span><b>${NOMS[v.petit_dej]}</b></div>
+      <div class="l"><span>Le goût</span><b>${NOMS[v.epices]}</b></div>
+      <div class="l"><span>Dimanche</span><b>${NOMS[v.temps_cuisine]}</b></div>
+      <div class="l"><span>Budget</span><b>${v.budget} € par semaine</b></div>
+    </div>
+    <div class="pied">
+      <button class="btn ghost" id="prec">Retour</button>
+      <button class="btn" id="save">Enregistrer</button>
+    </div><p class="msg" id="msg"></p></div>`;
+  $('prec').addEventListener('click', () => { i = E.length - 1; rendre(); });
+  $('save').addEventListener('click', async () => {
+    $('save').disabled = true; $('msg').className='msg'; $('msg').textContent='Enregistrement…';
+    try {
+      await ecritGouts({ id:1, ...v, maj:new Date().toISOString() });
+      $('msg').className='msg ok'; $('msg').textContent='Enregistré. La semaine se régénère.';
+      setTimeout(() => location.href = 'alimentation.html', 1000);
+    } catch (err) { $('msg').className='msg ko'; $('msg').textContent='Erreur : ' + err.message; $('save').disabled = false; }
+  });
+}
+
+rendre();
+</script>
+<script>
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(ev =>
+  document.addEventListener(ev, e => { if (!e.target.closest('input')) e.preventDefault(); }));
+['gesturestart','gesturechange','gestureend'].forEach(ev =>
+  document.addEventListener(ev, e => e.preventDefault(), { passive:false }));
+</script>
+</body>
+</html>
