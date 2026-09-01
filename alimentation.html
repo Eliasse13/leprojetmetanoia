@@ -118,120 +118,109 @@ a{color:inherit;text-decoration:none}
   <a href="#batch"><span class="num">03</span><b>Dimanche</b></a>
 </nav>
 
-<script>
-const SEMAINE = [
- ['Lundi','Repos','off',[
-   ['Matin','Œufs brouillés, pain grillé, tomates','3 œufs, 2 tranches de pain complet, tomates cerises poêlées à l’huile d’olive et à l’origan.'],
-   ['Midi','Salade de lentilles tièdes','Lentilles, carottes, oignon rouge, tomates séchées, persil, vinaigrette moutarde. 2 œufs durs. Pain. Un yaourt.'],
-   ['Soir','Risotto à la tomate et au basilic','Riz arborio, coulis de tomates, oignon, bouillon de légumes, huile d’olive en finition. Sans fromage, crémeux quand même.']]],
- ['Mardi','Endurance 45 min','',[
-   ['Matin','Houmous, pain, œuf dur, tomates','Houmous maison, 2 tranches de pain complet, un œuf dur, tomates.'],
-   ['Midi','Riz complet, poulet, légumes rôtis','Poulet grillé, poivrons, oignons, courgettes bien dorées — jamais fondues. Un yaourt.','Boîte du frigo, se mange froid ou réchauffé.'],
-   ['Soir','Chili doux aux haricots rouges','Haricots, tomates concassées, maïs, oignons, cumin, paprika doux. Riz à côté.','Séance faite : mange dans l’heure.']]],
- ['Mercredi','Seuil 2 × 10 min','dur',[
-   ['Matin','Œufs à la coque, pain, avocat','Jaune coulant mais blanc bien pris. Avocat écrasé au citron.'],
-   ['Midi','Pâtes complètes, sauce tomate-lentilles','Grosse assiette. C’est le carburant de la séance de ce soir.','Une banane et du pain 2 h avant.'],
-   ['Soir','Semoule, boulettes de pois chiches, tomates','Boulettes au four, pas frites. Semoule et sauce tomate maison.','Protéines dans les 30 min après la séance.']]],
- ['Jeudi','Renfo salle','',[
-   ['Matin','Omelette aux herbes, pain, tomates','2 à 3 œufs, persil, ciboulette. Fromage blanc au miel à côté.'],
-   ['Midi','Taboulé de quinoa','Quinoa, tomates, concombre, menthe, pois chiches, huile d’olive, citron. Un yaourt.'],
-   ['Soir','Dinde, pommes de terre au four, salade','Escalope de dinde poêlée, pommes de terre en quartiers rôtis.']]],
- ['Vendredi','Endurance 40 min','',[
-   ['Matin','Pain, houmous, œuf dur','Le petit-déjeuner du jour pressé. Se prépare la veille.'],
-   ['Midi','Risotto aux champignons','Le deuxième risotto de la semaine. Champignons de Paris, oignon, bouillon. Un yaourt.'],
-   ['Soir','Soupe de pois chiches, pain complet','Pois chiches, tomates, épinards, cumin. Épaisse, pas en purée.']]],
- ['Samedi','Sortie longue 14 km','dur',[
-   ['Matin','Pain, œufs, banane, miel','2 h avant la sortie. Salé d’abord, puis du pain au miel : c’est le carburant.','Emporte une banane au-delà d’1 h 15.'],
-   ['Midi','Pâtes, sauce tomate, poulet','Le repas de récupération : glucides et protéines ensemble. Fromage blanc au miel en dessert.','Dans l’heure qui suit la sortie.'],
-   ['Soir','Œufs, riz, légumes rôtis','Simple, la digestion a assez travaillé.']]],
- ['Dimanche','Repos ou footing court','off',[
-   ['Matin','Œufs brouillés, pain, tomates','Le classique du dimanche.'],
-   ['Midi','Ce que tu veux','Un vrai repas libre. Un projet de dix ans ne tient pas sans respiration.'],
-   ['Soir','Restes du batch cooking','Et on prépare la semaine suivante.']]]
-];
-
-const COURSES = [
- ['Sec et épicerie',[
-   ['Flocons d’avoine bio','1 kg','2,50 €'],['Riz complet bio','1 kg','3,20 €'],
-   ['Riz arborio','1 kg','2,90 €'],['Pâtes complètes bio','1 kg','2,20 €'],
-   ['Lentilles vertes bio','500 g','2,40 €'],['Pois chiches secs bio','1 kg','3,80 €'],
-   ['Haricots rouges secs','500 g','2,00 €'],['Quinoa','500 g','3,80 €'],
-   ['Semoule complète','500 g','1,60 €'],['Tomates concassées bio','5 boîtes','4,50 €'],
-   ['Tomates séchées','200 g','2,80 €'],['Maïs','1 boîte','1,10 €'],
-   ['Bouillon de légumes bio','1 boîte','2,20 €'],['Tahini','200 g','3,90 €']]],
- ['Frais',[
-   ['Œufs bio','24','8,40 €'],['Fromage blanc','1 kg','2,60 €'],
-   ['Yaourts nature bio','8','3,20 €'],['Poulet (filet)','400 g','5,90 €'],
-   ['Escalope de dinde','300 g','4,50 €'],['Champignons de Paris','500 g','2,60 €']]],
- ['Fruits et légumes',[
-   ['Tomates','2 kg','5,00 €'],['Tomates cerises','500 g','2,40 €'],
-   ['Bananes','1,5 kg','2,70 €'],['Pommes','1 kg','2,20 €'],
-   ['Carottes bio','1,5 kg','2,40 €'],['Courgettes','1 kg','2,20 €'],
-   ['Poivrons','3','2,40 €'],['Oignons bio','1,5 kg','2,40 €'],
-   ['Pommes de terre bio','2 kg','3,20 €'],['Épinards frais','400 g','2,20 €'],
-   ['Avocats','2','2,60 €'],['Salade, concombre, citrons, herbes','—','4,00 €']]],
- ['Base',[
-   ['Huile d’olive','—','déjà là'],['Pain complet','3','4,50 €'],
-   ['Épices : cumin, paprika doux, origan','—','3,00 €'],
-   ['Miel','250 g','4,20 €']]]
-];
-
-const BATCH = [
- ['Faire tremper la veille','Pois chiches et haricots rouges, dans un grand volume d’eau. La seule chose à ne pas oublier le samedi soir.'],
- ['Lancer les légumineuses','Pois chiches et haricots à l’eau, 45 min. Lentilles à part, 18 min — elles doivent rester fermes.'],
- ['Enfourner les légumes','Poivrons, courgettes, oignons, pommes de terre en gros dés. Huile d’olive, origan. 40 min à 200 °C. Bien dorés, jamais fondants.'],
- ['Cuire les féculents','Riz complet, quinoa, semoule. En grande quantité, ils tiennent 4 jours au frais.'],
- ['La sauce tomate','Oignon, tomates concassées, origan, une pointe de cumin. Elle sert au moins trois fois dans la semaine.'],
- ['Les boulettes de pois chiches','Pois chiches écrasés grossièrement, oignon, persil, un œuf, chapelure. Au four 25 min.'],
- ['Le houmous','Pois chiches, tahini, citron, ail, huile d’olive. Pour les petits-déjeuners salés.'],
- ['Huit œufs durs','Ils dépannent tous les matins et tous les midis.'],
- ['Portionner les laitages','Fromage blanc en pots individuels avec le miel à part. Les yaourts partent dans les boîtes du midi.'],
- ['Répartir en boîtes','Une base féculent, une base légume, une base protéine par boîte. Le matin, tu assembles en trois minutes.']
-];
+<script type="module">
+import { litGouts, list } from './config.js?v=20260901b';
+import { genererSemaine, besoins, courses, ajustement } from './cuisine.js?v=20260901b';
+import { recommandation, vdot } from './moteur.js?v=20260901b';
 
 const z = document.getElementById('z');
-let h = `<p class="k">Alimentation</p>
-  <div class="gros">3 070<u>kcal / jour</u></div>
-  <p class="intro">Sans porc, sans poisson, sans fromage, peu de viande. Sept jours, vingt-et-un repas, préparés le dimanche et emportés en boîte. Calculé pour <b>1,86 m, 69 kg</b>, un métier physique et 45 km de course par semaine.</p>
+const JOURS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 
-  <p class="k" id="semaine" style="margin-bottom:12px">La semaine</p>`;
+// la trame d'entraînement de la semaine, dans l'esprit du coach
+const TRAME = [
+  { seance:'Repos', intensite:'repos' },
+  { seance:'Endurance 45 min', intensite:'souple' },
+  { seance:'Seuil 2 × 10 min', intensite:'dure' },
+  { seance:'Renfo salle', intensite:'souple' },
+  { seance:'Endurance 40 min', intensite:'souple' },
+  { seance:'Sortie longue', intensite:'dure' },
+  { seance:'Repos ou footing court', intensite:'repos' }
+];
 
-for (const [j, seance, cls, repas] of SEMAINE) {
-  h += `<div class="jour"><div class="t"><b>${j}</b><em class="${cls}">${seance}</em></div>`;
-  for (const r of repas) {
-    h += `<div class="repas"><span class="h">${r[0]}</span><div class="c">
-      <b>${r[1]}</b><span>${r[2]}</span>${r[3] ? `<span class="tip">${r[3]}</span>` : ''}</div></div>`;
+try {
+  const [g, seances] = await Promise.all([litGouts(), list().catch(() => [])]);
+
+  if (!g) {
+    z.innerHTML = `<p class="k">Alimentation</p>
+      <h1 style="font-weight:900;font-size:25px;letter-spacing:-.03em;margin:9px 0 6px">Rien de configuré</h1>
+      <p class="intro">Réponds au questionnaire de goûts et la semaine se construira toute seule.</p>
+      <a href="gouts.html" style="display:block;text-align:center;background:#8A6A12;color:#fff;
+        border-radius:999px;padding:14px;font-weight:900;font-size:12px;letter-spacing:.14em;
+        text-transform:uppercase">Répondre au questionnaire</a>`;
+    throw new Error('pas de goûts');
   }
-  h += `</div>`;
-}
 
-h += `<p class="k" id="courses" style="margin:30px 0 12px">La liste de courses</p>`;
-let total = 0;
-for (const [rayon, items] of COURSES) {
-  h += `<div class="rayon"><p class="n">${rayon}</p>`;
-  for (const [nom, q, prix] of items) {
-    const v = parseFloat(prix.replace(',', '.'));
-    if (!isNaN(v)) total += v;
-    h += `<div class="l"><span><b>${nom}</b> <em>${q}</em></span><span>${prix}</span></div>`;
+  // volume de course des 7 derniers jours, pour caler le besoin
+  const auj = new Date();
+  const km7 = (seances || [])
+    .filter(s => (auj - new Date(s.date + 'T00:00:00')) / 864e5 <= 7)
+    .reduce((t, s) => t + Number(s.distance_km || 0), 0);
+  const kmSem = Math.max(20, Math.round(km7 || 45));
+
+  const jours = JOURS.map((nom, k) => ({ nom, ...TRAME[k] }));
+  const semaine = genererSemaine(g, jours);
+  const b = besoins(g, kmSem);
+  const aj = ajustement(semaine, b);
+  const liste = courses(semaine);
+
+  let h = `<p class="k">Alimentation</p>
+    <div class="gros">${b.kcal.toLocaleString('fr-FR')}<u>kcal / jour</u></div>
+    <p class="intro">${b.proteines} g de protéines par jour.
+      Semaine construite à partir de <b>tes réponses</b> et de ${kmSem} km de course.
+      <a href="gouts.html" style="color:#8A6A12;font-weight:900">Modifier mes goûts</a>.</p>`;
+
+  if (aj.ecart > 250 || aj.ecart < -250) {
+    h += `<div class="bloc" style="margin-bottom:22px"><h3>Portions</h3>
+      <p style="font-weight:300;font-size:12px;color:var(--texte);line-height:1.55">${aj.conseil}</p></div>`;
   }
-  h += `</div>`;
+
+  h += `<p class="k" id="semaine" style="margin-bottom:12px">La semaine</p>`;
+  for (const j of semaine) {
+    const cls = j.intensite === 'repos' ? 'off' : j.intensite === 'dure' ? 'dur' : '';
+    h += `<div class="jour"><div class="t"><b>${j.nom}</b><em class="${cls}">${j.seance}</em></div>`;
+    for (const [m, lbl] of [['matin','Matin'],['midi','Midi'],['soir','Soir']]) {
+      const r = j[m]; if (!r) continue;
+      h += `<div class="repas"><span class="h">${lbl}</span><div class="c">
+        <b>${r.nom}</b><span>${r.detail}</span>
+        ${j.notes[m] ? `<span class="tip">${j.notes[m]}</span>` : ''}</div></div>`;
+    }
+    for (const e of (j.encas || [])) {
+      h += `<div class="repas"><span class="h">En-cas</span><div class="c">
+        <b>${e.nom}</b><span>${e.detail}</span></div></div>`;
+    }
+    h += `<p style="font-weight:300;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+      color:#B7BEBA;padding-top:9px">${j.kcal.toLocaleString('fr-FR')} kcal · ${j.prot} g de protéines</p></div>`;
+  }
+
+  h += `<p class="k" id="courses" style="margin:30px 0 12px">La liste de courses</p>`;
+  for (const [rayon, items] of liste) {
+    h += `<div class="rayon"><p class="n">${rayon}</p>`;
+    for (const nom of items) h += `<div class="l"><span><b>${nom}</b></span><span></span></div>`;
+    h += `</div>`;
+  }
+  h += `<p class="note">Générée à partir des recettes de la semaine.
+    Budget visé : <b>${g.budget} €</b>. Les quantités dépendent de tes portions —
+    achète large sur le sec, il se garde.</p>`;
+
+  const BATCH = [
+    ['Faire tremper la veille','Pois chiches et haricots, dans un grand volume d’eau.'],
+    ['Lancer les légumineuses','Pois chiches et haricots à l’eau, 45 min. Lentilles à part, 18 min, elles doivent rester fermes.'],
+    ['Enfourner les légumes','Poivrons, courgettes, oignons, pommes de terre en gros dés. 40 min à 200 °C, bien dorés.'],
+    ['Cuire les féculents','Riz, quinoa, semoule en grande quantité. Ils tiennent 4 jours au frais.'],
+    ['La sauce tomate','Oignon, tomates concassées, origan. Elle sert plusieurs fois dans la semaine.'],
+    ['Les œufs durs','Huit d’un coup. Ils dépannent matins et midis.'],
+    ['Portionner','Une base féculent, une base légume, une base protéine par boîte.']
+  ];
+  h += `<p class="k" id="batch" style="margin:30px 0 12px">Le dimanche</p>
+    <div class="bloc"><h3>Dans cet ordre</h3><ol>`;
+  for (const [t, d] of BATCH) h += `<li><div><b>${t}</b><span>${d}</span></div></li>`;
+  h += `</ol></div>`;
+
+  z.innerHTML = h;
+} catch (e) {
+  if (e.message !== 'pas de goûts')
+    z.innerHTML = '<p class="k" style="color:#C4452F">Erreur : ' + e.message + '</p>';
 }
-h += `<div class="total"><b>Total estimé</b><em>${total.toFixed(2).replace('.', ',')} €</em></div>
-  <p class="note">Prix moyens en magasin bio ou grande surface, rayon bio quand ça vaut le coup.
-    Le sec, les épices, le tahini et le miel durent trois semaines à un mois :
-    les semaines suivantes tomberont autour de 55 €.</p>
-  <p class="note" style="margin-top:10px">Sans poisson, sans fromage affiné, sans oléagineux,
-    les protéines viennent des <b>œufs</b>, des <b>légumineuses</b>, des <b>laitages frais</b>
-    et d\u2019un peu de volaille. Environ 110 g par jour, pour une cible de 117 g.</p>`;
-
-h += `<p class="k" id="batch" style="margin:30px 0 12px">Le dimanche — 2 h 30</p>
-  <div class="bloc"><h3>Dans cet ordre</h3><ol>`;
-for (const [t, d] of BATCH) h += `<li><div><b>${t}</b><span>${d}</span></div></li>`;
-h += `</ol></div>
-  <p class="note">La veille au soir : mets les pois chiches et les haricots à tremper dans un grand volume d\u2019eau.
-    C\u2019est la seule chose à ne pas oublier.</p>`;
-
-z.innerHTML = h;
 
 (function(){
   const b = document.getElementById('selP'), m = document.getElementById('piliers');
