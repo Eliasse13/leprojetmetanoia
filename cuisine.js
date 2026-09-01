@@ -19,7 +19,7 @@ export const RECETTES = [
     glu:2, prot:24, kcal:620, cont:['oeufs','gluten'], aime:['oeufs','tomate'], cout:1, boite:false, sale:true },
   { id:'m-houmous', moment:'matin', nom:'Houmous, pain, œuf dur, tomates',
     detail:'Houmous maison, deux tranches de pain complet, un œuf dur, tomates.',
-    glu:2, prot:22, kcal:600, cont:['oeufs','gluten','sesame'], aime:['legumineuses','tomate'], cout:1, boite:true, sale:true },
+    glu:2, prot:22, kcal:600, cont:['oeufs','gluten','sesame','legumineuses'], aime:['legumineuses','tomate'], cout:1, boite:true, sale:true },
   { id:'m-omelette', moment:'matin', nom:'Omelette aux herbes, pain, tomates',
     detail:'Deux à trois œufs, persil, ciboulette. Fromage blanc au miel à côté.',
     glu:2, prot:30, kcal:660, cont:['oeufs','gluten','laitage'], aime:['oeufs'], cout:1, boite:false, sale:true },
@@ -39,68 +39,80 @@ export const RECETTES = [
   // ---------- midi ----------
   { id:'d-lentilles', moment:'midi', nom:'Salade de lentilles tièdes',
     detail:'Lentilles, carottes, oignon rouge, tomates séchées, persil, vinaigrette moutarde. Deux œufs durs, pain, un yaourt.',
-    glu:2, prot:36, kcal:820, cont:['oeufs','gluten','laitage'], aime:['legumineuses','tomate'], cout:1, boite:true },
+    glu:2, prot:36, kcal:820, cont:['oeufs','gluten','laitage','legumineuses','oignon'], aime:['legumineuses','tomate'], cout:1, boite:true },
   { id:'d-riz-poulet', moment:'midi', nom:'Riz complet, poulet, légumes rôtis',
     detail:'Poulet grillé, poivrons, oignons, courgettes bien dorées — jamais fondues. Un yaourt.',
-    glu:3, prot:42, kcal:880, cont:['volaille','laitage'], aime:['volaille'], cout:2, boite:true },
+    glu:3, prot:42, kcal:880, cont:['volaille','laitage','courgette','oignon'], aime:['volaille'], cout:2, boite:true },
   { id:'d-taboule', moment:'midi', nom:'Taboulé de quinoa',
     detail:'Quinoa, tomates, concombre, menthe, pois chiches, huile d’olive, citron. Un yaourt.',
-    glu:2, prot:30, kcal:760, cont:['laitage'], aime:['legumineuses','tomate'], cout:2, boite:true },
+    glu:2, prot:30, kcal:760, cont:['laitage','legumineuses'], aime:['legumineuses','tomate'], cout:2, boite:true },
   { id:'d-risotto-champ', moment:'midi', nom:'Risotto aux champignons',
     detail:'Riz arborio, champignons de Paris, oignon, bouillon de légumes. Un yaourt.',
-    glu:3, prot:22, kcal:820, cont:['laitage'], aime:['risotto'], cout:2, boite:true },
+    glu:3, prot:22, kcal:820, cont:['laitage','champignons','oignon'], aime:['risotto'], cout:2, boite:true },
   { id:'d-pates-tomate', moment:'midi', nom:'Pâtes complètes, sauce tomate-lentilles',
     detail:'Grosse assiette. C’est le carburant de la séance du soir.',
-    glu:3, prot:32, kcal:900, cont:['gluten'], aime:['tomate','legumineuses'], cout:1, boite:true },
+    glu:3, prot:32, kcal:900, cont:['gluten','legumineuses'], aime:['tomate','legumineuses'], cout:1, boite:true },
   { id:'d-pates-poulet', moment:'midi', nom:'Pâtes, sauce tomate, poulet',
     detail:'Le repas de récupération : glucides et protéines ensemble. Fromage blanc au miel en dessert.',
     glu:3, prot:44, kcal:950, cont:['gluten','volaille','laitage'], aime:['tomate','volaille'], cout:2, boite:true },
   { id:'d-riz-haricots', moment:'midi', nom:'Riz, haricots rouges, avocat',
     detail:'Chili doux sans viande, coriandre et citron vert. Un yaourt.',
-    glu:3, prot:30, kcal:840, cont:['laitage'], aime:['legumineuses','tomate'], cout:1, boite:true },
+    glu:3, prot:30, kcal:840, cont:['laitage','legumineuses','coriandre'], aime:['legumineuses','tomate'], cout:1, boite:true },
 
   // ---------- soir ----------
   { id:'s-risotto-tomate', moment:'soir', nom:'Risotto à la tomate et au basilic',
     detail:'Riz arborio, coulis de tomates, oignon, bouillon, huile d’olive en finition. Crémeux sans fromage.',
-    glu:3, prot:20, kcal:780, cont:[], aime:['risotto','tomate'], cout:2, boite:true },
+    glu:3, prot:20, kcal:780, cont:['oignon'], aime:['risotto','tomate'], cout:2, boite:true },
   { id:'s-chili', moment:'soir', nom:'Chili doux aux haricots rouges',
     detail:'Haricots, tomates concassées, maïs, oignons, cumin, paprika doux. Riz à côté.',
-    glu:3, prot:28, kcal:820, cont:[], aime:['legumineuses','tomate'], cout:1, boite:true },
+    glu:3, prot:28, kcal:820, cont:['legumineuses','oignon'], aime:['legumineuses','tomate'], cout:1, boite:true },
   { id:'s-boulettes', moment:'soir', nom:'Semoule, boulettes de pois chiches, tomates',
     detail:'Boulettes au four, jamais frites. Semoule et sauce tomate maison.',
-    glu:3, prot:30, kcal:830, cont:['oeufs','gluten'], aime:['legumineuses','tomate'], cout:1, boite:true },
+    glu:3, prot:30, kcal:830, cont:['oeufs','gluten','legumineuses','oignon'], aime:['legumineuses','tomate'], cout:1, boite:true },
   { id:'s-dinde-pdt', moment:'soir', nom:'Dinde, pommes de terre au four, salade',
     detail:'Escalope poêlée, pommes de terre en quartiers bien rôtis.',
     glu:2, prot:40, kcal:800, cont:['volaille'], aime:['volaille'], cout:2, boite:true },
-  { id:'s-soupe-pois', moment:'soir', nom:'Soupe de pois chiches, pain complet',
+  { id:'s-soupe-pois', moment:'soir', texture:['puree'], nom:'Soupe de pois chiches, pain complet',
     detail:'Pois chiches, tomates, épinards, cumin. Épaisse, pas en purée.',
-    glu:2, prot:26, kcal:700, cont:['gluten'], aime:['legumineuses','tomate'], cout:1, boite:true },
+    glu:2, prot:26, kcal:700, cont:['gluten','legumineuses'], aime:['legumineuses','tomate'], cout:1, boite:true },
   { id:'s-oeufs-riz', moment:'soir', nom:'Œufs, riz, légumes rôtis',
     detail:'Simple et rapide. Quand la digestion a assez travaillé.',
     glu:2, prot:26, kcal:720, cont:['oeufs'], aime:['oeufs'], cout:1, boite:true },
   { id:'s-omelette-pdt', moment:'soir', nom:'Omelette aux pommes de terre',
     detail:'Trois œufs, pommes de terre, oignons, salade verte, pain.',
-    glu:2, prot:28, kcal:760, cont:['oeufs','gluten'], aime:['oeufs'], cout:1, boite:false },
+    glu:2, prot:28, kcal:760, cont:['oeufs','gluten','oignon'], aime:['oeufs'], cout:1, boite:false },
   { id:'s-gratin-boulgour', moment:'soir', nom:'Gratin de courgettes et boulgour',
     detail:'Boulgour, courgettes dorées, œuf. Au four.',
-    glu:2, prot:24, kcal:700, cont:['oeufs','gluten'], aime:[], cout:1, boite:true }
+    glu:2, prot:24, kcal:700, cont:['oeufs','gluten','courgette'], aime:[], cout:1, boite:true }
 ];
 
 // une exclusion déclarée écarte toutes les recettes qui contiennent l'ingrédient
 const CORRESPOND = {
   poisson:['poisson'], crustaces:['crustaces'], porc:['porc'],
+  boeuf:['boeuf'], agneau:['agneau'], volaille:['volaille'],
   fromage:['fromage'], laitage:['laitage','fromage'],
   oeufs:['oeufs'], gluten:['gluten'], oleagineux:['oleagineux','sesame'],
-  tofu:['tofu'], volaille:['volaille'], legumineuses:['legumineuses']
+  tofu:['tofu','soja'], legumineuses:['legumineuses','poischiches','lentilles','haricots'],
+  champignons:['champignons'], choux:['choux'], aubergine:['aubergine'],
+  courgette:['courgette'], oignon:['oignon'], coriandre:['coriandre'], olives:['olives']
 };
 
 export function recettesPossibles(gouts) {
   const ex = new Set();
   for (const e of (gouts?.exclusions || [])) (CORRESPOND[e] || [e]).forEach(x => ex.add(x));
-  const veg = gouts?.regime === 'vegetarien';
+
+  const reg = gouts?.regime;
+  if (reg === 'vegetarien') ['volaille','boeuf','agneau','porc','poisson','crustaces'].forEach(x => ex.add(x));
+  if (reg === 'vegetalien') ['volaille','boeuf','agneau','porc','poisson','crustaces','oeufs','laitage','fromage'].forEach(x => ex.add(x));
+  if (reg === 'halal' || reg === 'casher') ex.add('porc');
+
+  const tex = new Set(gouts?.textures || []);
+  const froid = gouts?.midi === 'boite-froid';
+
   return RECETTES.filter(r => {
-    if (veg && r.cont.includes('volaille')) return false;
     if (r.cont.some(c => ex.has(c))) return false;
+    if ((r.texture || []).some(t => tex.has(t))) return false;
+    if (froid && r.moment === 'midi' && r.boite === false) return false;
     if (gouts?.petit_dej === 'sale' && r.moment === 'matin' && r.sale === false) return false;
     if (gouts?.petit_dej === 'sucre' && r.moment === 'matin' && r.sale === true) return false;
     return true;
@@ -125,6 +137,20 @@ export const ENCAS = [
   { id:'e-houmous', nom:'Houmous et pain', detail:'Deux belles tartines.',
     kcal:430, prot:13, cont:['gluten','sesame'] }
 ];
+
+/** Le catalogue est-il assez fourni pour construire une semaine variée ? */
+export function couverture(gouts) {
+  const d = recettesPossibles(gouts);
+  const par = m => d.filter(r => r.moment === m).length;
+  const min = Math.min(par('matin'), par('midi'), par('soir'));
+  return {
+    total: d.length, matin: par('matin'), midi: par('midi'), soir: par('soir'),
+    suffisant: min >= 3,
+    alerte: min >= 3 ? null
+      : `Tes contraintes ne laissent que ${min} recette${min>1?'s':''} pour un des repas. `
+        + `La semaine se répétera. Retire une exclusion, ou dis-le moi et j'ajoute des recettes.`
+  };
+}
 
 export function genererSemaine(gouts, jours) {
   const dispo = recettesPossibles(gouts);
