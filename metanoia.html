@@ -75,8 +75,8 @@
   .hd .lg{width:74px;color:var(--ink);line-height:0;flex:none}
   .hd .lg svg{display:block;width:100%;height:auto}
   .sel:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
-  .cpt{margin-left:auto;width:31px;height:31px;border-radius:50%;border:1.4px dashed #CDD4D0;
-    display:grid;place-items:center;color:#A9B0AC;flex:none;text-decoration:none}
+  .cpt{margin-left:auto;width:30px;height:30px;border-radius:9px;background:#F3F6F4;
+    border:1.5px solid var(--piste);display:grid;place-items:center;color:var(--sourd);flex:none}
   .cpt svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
 
@@ -87,12 +87,15 @@
     background:#fff;border-top:1px solid var(--piste);border-radius:20px 20px 0 0;
     box-shadow:0 -14px 34px -22px rgba(0,0,0,.3);
     padding:9px 20px max(16px,env(safe-area-inset-bottom));
-    transform:translateY(calc(100% - 56px));
+    transform:translateY(calc(100% - 52px));
     transition:transform .38s cubic-bezier(.2,.9,.3,1)}
   .tiroir.ouvert{transform:translateY(0)}
-  .tiroir .poignee{display:block;width:38px;height:10px;padding:3px 0;background-clip:content-box;border-radius:3px;background:#DDE3E0;margin:0 auto 9px;cursor:pointer}
-  .tiroir .vis{font-weight:300;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
-    color:#B7BEBA;text-align:center;padding-bottom:6px;cursor:pointer}
+  .tiroir .barre{display:flex;align-items:center;gap:10px;padding:4px 0 8px;cursor:pointer}
+  .tiroir .barre .ch{font-size:14px;color:#B7BEBA;line-height:1;transition:transform .3s}
+  .tiroir.ouvert .barre .ch{transform:rotate(180deg)}
+  .tiroir .barre b{font-weight:900;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .tiroir .barre .vis{margin-left:auto;font-weight:300;font-size:9px;letter-spacing:.2em;
+    text-transform:uppercase;color:#B7BEBA}
   .tiroir .g{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0 12px}
   .tiroir .g a{display:flex;align-items:center;gap:10px;border:1.5px solid var(--piste);
     border-radius:12px;padding:12px;text-decoration:none;color:var(--ink)}
@@ -119,7 +122,7 @@
 <div class="err" id="err"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260901e';
+import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260902a';
 const $ = id => document.getElementById(id);
 
 try {
@@ -205,8 +208,9 @@ document.addEventListener('keydown', function(e){
 <script>
 </script>
 <div class="tiroir" id="tiroir">
-  <span class="poignee" id="poignee"></span>
-  <p class="vis" id="visits"></p>
+  <div class="barre" id="poignee">
+    <span class="ch">&#8963;</span><b>Naviguer</b><span class="vis" id="visits"></span>
+  </div>
   <div class="g">
     <a class="on" href="metanoia.html"><span class="ic">🏃</span><b>Kilomètres</b></a>
     <a href="jour.html"><span class="ic">✅</span><b>Aujourd’hui</b></a>
@@ -222,7 +226,6 @@ document.addEventListener('keydown', function(e){
   var t = document.getElementById('tiroir');
   function bascule(){ t.classList.toggle('ouvert'); }
   document.getElementById('poignee').addEventListener('click', bascule);
-  document.getElementById('visits').addEventListener('click', bascule);
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') t.classList.remove('ouvert'); });
   var y0 = null;
   t.addEventListener('touchstart', function(e){ y0 = e.touches[0].clientY; }, { passive:true });
