@@ -73,8 +73,8 @@ input.ch:focus{outline:0;border-color:var(--ink)}
 <div class="z" id="z"><p class="etape">Chargement…</p></div>
 
 <script type="module">
-import { exigerConnexion, litGouts, ecritGouts } from './config.js?v=20260901b';
-import { besoins } from './cuisine.js?v=20260901b';
+import { exigerConnexion, litGouts, ecritGouts } from './config.js?v=20260901c';
+import { besoins } from './cuisine.js?v=20260901c';
 
 if (!await exigerConnexion('connexion.html')) throw new Error('non connecté');
 const $ = id => document.getElementById(id);
@@ -83,29 +83,87 @@ const E = [
  { cle:'regime', titre:'Tu manges comment ?', sous:'La base de tout le reste.', type:'un',
    opts:[['omnivore','🍽️','De tout','Aucune restriction'],
          ['peu-viande','🌱','Peu de viande','Juste ce qu’il faut'],
-         ['vegetarien','🥬','Végétarien','Ni viande ni poisson']] },
- { cle:'exclusions', titre:'Ce que tu ne veux pas voir', sous:'Coche tout ce qui te dégoûte. Ces aliments disparaîtront complètement.', type:'plusieurs',
-   opts:[['porc','🚫','Porc',''],['poisson','🐟','Poisson',''],['crustaces','🦐','Crustacés',''],
+         ['vegetarien','🥬','Végétarien','Ni viande ni poisson'],
+         ['vegetalien','🌾','Végétalien','Aucun produit animal'],
+         ['halal','🕌','Halal','Sans porc ni alcool'],
+         ['casher','✡️','Casher','']] },
+
+ { cle:'exclusions', titre:'Ce que tu ne veux pas voir', sous:'Coche tout ce qui te dégoûte ou que tu ne digères pas. Ces aliments disparaîtront complètement.', type:'plusieurs',
+   opts:[['porc','🥓','Porc',''],['boeuf','🥩','Bœuf',''],['agneau','🐑','Agneau',''],
+         ['volaille','🍗','Volaille',''],['poisson','🐟','Poisson',''],['crustaces','🦐','Crustacés',''],
          ['fromage','🧀','Fromage affiné',''],['laitage','🥛','Tous les laitages',''],
-         ['oleagineux','🥜','Noix et amandes',''],['tofu','⬜','Tofu',''],
-         ['gluten','🌾','Gluten',''],['oeufs','🥚','Œufs','']] },
+         ['oeufs','🥚','Œufs',''],['oleagineux','🥜','Noix, amandes',''],
+         ['tofu','⬜','Tofu, soja',''],['gluten','🌾','Gluten',''],
+         ['champignons','🍄','Champignons',''],['choux','🥦','Choux, brocoli',''],
+         ['aubergine','🍆','Aubergine',''],['courgette','🥒','Courgette',''],
+         ['legumineuses','🫘','Légumineuses',''],['oignon','🧅','Oignon, ail',''],
+         ['coriandre','🌿','Coriandre',''],['olives','🫒','Olives','']] },
+
+ { cle:'textures', titre:'Les textures qui te rebutent', sous:'Les recettes concernées seront écartées ou adaptées.', type:'plusieurs',
+   opts:[['gluant','🥴','Gluant',''],['mou','😐','Trop mou',''],
+         ['puree','🥣','Purées, mixé',''],['croquant','🦷','Très croquant',''],
+         ['gras','🫗','Gras, huileux',''],['sec','🏜️','Trop sec','']] },
+
  { cle:'aimes', titre:'Ce que tu adores', sous:'Ces goûts reviendront le plus souvent dans la semaine.', type:'plusieurs',
-   opts:[['risotto','🍚','Risotto',''],['tomate','🍅','Tomate',''],['oeufs','🍳','Œufs',''],
-         ['legumineuses','🫘','Légumineuses',''],['volaille','🍗','Volaille',''],['sucre','🍯','Sucré','']] },
+   opts:[['risotto','🍚','Risotto',''],['pates','🍝','Pâtes',''],['riz','🍙','Riz',''],
+         ['tomate','🍅','Tomate',''],['pommedeterre','🥔','Pomme de terre',''],
+         ['oeufs','🍳','Œufs',''],['legumineuses','🫘','Légumineuses',''],
+         ['volaille','🍗','Volaille',''],['soupe','🍲','Soupes',''],
+         ['gratin','🧑‍🍳','Gratins',''],['salade','🥗','Salades',''],
+         ['curry','🍛','Currys, mijotés',''],['pain','🥖','Pain',''],
+         ['sucre','🍯','Sucré','']] },
+
+ { cle:'cuisines', titre:'Les cuisines qui te parlent', sous:'', type:'plusieurs',
+   opts:[['mediterraneenne','🫒','Méditerranéenne',''],['italienne','🇮🇹','Italienne',''],
+         ['maghrebine','🌙','Maghrébine',''],['libanaise','🧆','Libanaise',''],
+         ['indienne','🍛','Indienne',''],['asiatique','🥢','Asiatique',''],
+         ['francaise','🥖','Française',''],['mexicaine','🌮','Mexicaine','']] },
+
  { cle:'petit_dej', titre:'Le matin, plutôt…', sous:'', type:'un',
    opts:[['sale','🍳','Salé','Œufs, pain, tomates'],
          ['sucre','🥣','Sucré','Porridge, fruits, miel'],
-         ['peu-importe','🤷','Peu importe','Les deux me vont']] },
+         ['peu-importe','🤷','Peu importe','Les deux me vont'],
+         ['rien','☕','Rien','Je ne déjeune pas']] },
+
  { cle:'epices', titre:'Le goût', sous:'', type:'un',
-   opts:[['doux','🌾','Doux','Peu d’épices'],
-         ['parfume','🌿','Parfumé','Herbes, cumin, paprika doux'],
-         ['releve','🌶️','Relevé','Du piquant']] },
+   opts:[['fade','🌾','Très doux','Presque pas d’épices'],
+         ['doux','🧂','Doux','Sel, poivre, herbes'],
+         ['parfume','🌿','Parfumé','Cumin, paprika doux, herbes'],
+         ['releve','🌶️','Relevé','J’aime que ça pique'],
+         ['tresreleve','🔥','Très relevé','Le plus fort possible']] },
+
+ { cle:'midi', titre:'Le midi, tu manges…', sous:'Ça change tout pour les recettes du déjeuner.', type:'un',
+   opts:[['boite-froid','🥶','Une boîte, froide','Pas de micro-ondes'],
+         ['boite-chaud','♨️','Une boîte, réchauffée','Micro-ondes disponible'],
+         ['maison','🏠','Chez moi','Je peux cuisiner'],
+         ['dehors','🏪','Dehors','Je prends sur place']] },
+
  { cle:'temps_cuisine', titre:'Le dimanche, tu as…', sous:'Le temps de préparation en une seule fois.', type:'un',
-   opts:[['1h','⏱️','1 heure','Recettes très simples'],
+   opts:[['30min','⚡','30 minutes','Le strict minimum'],
+         ['1h','⏱️','1 heure','Recettes très simples'],
          ['2-3h','🕑','2 à 3 heures','Le batch cooking complet'],
+         ['4h','🕓','Une demi-journée','Je cuisine beaucoup'],
          ['chaque-soir','🍳','Je cuisine chaque soir','Pas de préparation groupée']] },
+
+ { cle:'materiel', titre:'Ton matériel', sous:'', type:'plusieurs',
+   opts:[['four','🔥','Four',''],['poele','🍳','Poêle, casseroles',''],
+         ['cocotte','🥘','Cocotte, mijoteuse',''],['mixeur','🌀','Mixeur, blender',''],
+         ['riceCooker','🍚','Rice cooker',''],['congelateur','❄️','Congélateur','']] },
+
+ { cle:'repas_libre', titre:'Ton repas libre', sous:'Un repas par semaine sans aucune règle. Il faut le prévoir, sinon il arrive quand même.', type:'un',
+   opts:[['dimanche-midi','🍽️','Dimanche midi',''],['samedi-soir','🌙','Samedi soir',''],
+         ['vendredi-soir','🎉','Vendredi soir',''],['aucun','🚫','Aucun','Je préfère tout cadrer']] },
+
  { cle:'budget', titre:'Ton budget courses', sous:'Par semaine, pour toi seul.', type:'un',
-   opts:[[40,'💶','40 €','Serré mais faisable'],[60,'💶','60 €','Confortable'],[80,'💶','80 € et plus','Bio partout']] },
+   opts:[[35,'💶','35 €','Très serré'],[50,'💶','50 €','Serré mais faisable'],
+         [65,'💶','65 €','Confortable'],[85,'💶','85 €','Bio sur presque tout'],
+         [110,'💶','110 € et plus','Aucune contrainte']] },
+
+ { cle:'bio', titre:'Le bio', sous:'', type:'un',
+   opts:[['partout','🌿','Partout où c’est possible',''],
+         ['malin','🎯','Là où ça vaut le coup','Sur le sec et les légumes'],
+         ['peu-importe','🤷','Peu importe','Le prix d’abord']] },
+
  { cle:'mesures', titre:'Tes mesures', sous:'Pour calculer combien tu dois manger.', type:'mesures' }
 ];
 
@@ -114,11 +172,17 @@ let i = 0;
 const v = {
   regime: g.regime || 'peu-viande',
   exclusions: g.exclusions || [],
+  textures: g.textures || [],
   aimes: g.aimes || [],
+  cuisines: g.cuisines || [],
   petit_dej: g.petit_dej || 'sale',
   epices: g.epices || 'parfume',
+  midi: g.midi || 'boite-froid',
   temps_cuisine: g.temps_cuisine || '2-3h',
+  materiel: g.materiel || ['four','poele'],
+  repas_libre: g.repas_libre || 'dimanche-midi',
   budget: g.budget || 60,
+  bio: g.bio || 'malin',
   poids_kg: g.poids_kg || '',
   taille_cm: g.taille_cm || ''
 };
@@ -174,10 +238,15 @@ function rendre() {
 async function fin() {
   $('jauge').style.width = '100%';
   const b = besoins(v, 45);
-  const NOMS = { omnivore:'De tout', 'peu-viande':'Peu de viande', vegetarien:'Végétarien',
-                 sale:'Salé', sucre:'Sucré', 'peu-importe':'Peu importe',
-                 doux:'Doux', parfume:'Parfumé', releve:'Relevé',
-                 '1h':'1 heure', '2-3h':'2 à 3 heures', 'chaque-soir':'Chaque soir' };
+  const NOMS = { omnivore:'De tout','peu-viande':'Peu de viande',vegetarien:'Végétarien',
+    vegetalien:'Végétalien',halal:'Halal',casher:'Casher',
+    sale:'Salé',sucre:'Sucré','peu-importe':'Peu importe',rien:'Rien',
+    fade:'Très doux',doux:'Doux',parfume:'Parfumé',releve:'Relevé',tresreleve:'Très relevé',
+    '30min':'30 minutes','1h':'1 heure','2-3h':'2 à 3 heures','4h':'Une demi-journée','chaque-soir':'Chaque soir',
+    'boite-froid':'Boîte froide','boite-chaud':'Boîte réchauffée',maison:'Chez moi',dehors:'Dehors',
+    'dimanche-midi':'Dimanche midi','samedi-soir':'Samedi soir','vendredi-soir':'Vendredi soir',aucun:'Aucun',
+    partout:'Partout',malin:'Là où ça vaut le coup' };
+  const liste = a => a && a.length ? a.join(', ') : '—';
   $('z').innerHTML = `<div class="fin">
     <p class="etape">Ton besoin quotidien</p>
     <div class="gros">${b.kcal.toLocaleString('fr-FR')}<u>kcal</u></div>
@@ -186,11 +255,17 @@ async function fin() {
     <div class="recap">
       <div class="l"><span>Régime</span><b>${NOMS[v.regime]}</b></div>
       <div class="l"><span>Exclusions</span><b>${v.exclusions.length ? v.exclusions.join(', ') : 'aucune'}</b></div>
-      <div class="l"><span>Préférences</span><b>${v.aimes.length ? v.aimes.join(', ') : '—'}</b></div>
+      <div class="l"><span>Textures évitées</span><b>${liste(v.textures)}</b></div>
+      <div class="l"><span>Préférences</span><b>${liste(v.aimes)}</b></div>
+      <div class="l"><span>Cuisines</span><b>${liste(v.cuisines)}</b></div>
       <div class="l"><span>Le matin</span><b>${NOMS[v.petit_dej]}</b></div>
       <div class="l"><span>Le goût</span><b>${NOMS[v.epices]}</b></div>
+      <div class="l"><span>Le midi</span><b>${NOMS[v.midi]}</b></div>
       <div class="l"><span>Dimanche</span><b>${NOMS[v.temps_cuisine]}</b></div>
+      <div class="l"><span>Matériel</span><b>${liste(v.materiel)}</b></div>
+      <div class="l"><span>Repas libre</span><b>${NOMS[v.repas_libre]}</b></div>
       <div class="l"><span>Budget</span><b>${v.budget} € par semaine</b></div>
+      <div class="l"><span>Bio</span><b>${NOMS[v.bio]}</b></div>
     </div>
     <div class="pied">
       <button class="btn ghost" id="prec">Retour</button>
