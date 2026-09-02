@@ -45,6 +45,22 @@ p.t b{font-weight:900;color:var(--ink)}
 .cta{display:block;background:var(--vert);color:#fff;border-radius:999px;padding:15px;text-align:center;
   font-weight:900;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:32px}
 .note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;margin-top:20px}
+
+  /* frise de la décennie */
+  .frise{position:relative;padding-left:26px;margin:6px 0 4px}
+  .frise::before{content:"";position:absolute;left:7px;top:12px;bottom:12px;width:2px;background:var(--piste)}
+  .an{position:relative;padding:13px 0}
+  .an::before{content:"";position:absolute;left:-26px;top:19px;width:14px;height:14px;border-radius:50%;
+    background:#fff;border:2.5px solid var(--piste)}
+  .an.on::before{background:var(--vert);border-color:var(--vert)}
+  .an b{font-weight:900;font-size:15px;letter-spacing:-.02em;color:#C0C7C3}
+  .an.on b{color:var(--ink)}
+  .an .q{display:block;font-weight:300;font-size:11px;color:#C6CCC9;margin-top:2px}
+  .an.on .q{color:var(--sourd)}
+  .grille{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:11px}
+  .grille div{border-radius:11px;padding:10px 11px;color:#fff}
+  .grille div b{display:block;font-weight:900;font-size:12.5px;letter-spacing:-.01em}
+  .grille div span{display:block;font-weight:300;font-size:9.5px;opacity:.8;margin-top:2px;line-height:1.35}
 </style>
 </head>
 <body>
@@ -60,36 +76,30 @@ p.t b{font-weight:900;color:var(--ink)}
     une conversion — celle dont on ne revient pas. Le projet a commencé le
     <b>18 août 2026</b> et se termine le <b>18 août 2036</b>.</p>
 
-  <h2>Les huit piliers</h2>
-  <div class="pil"><span class="n" style="background:var(--vert)"></span>
-    <div><b>Sport</b><span>Course à pied. Objectif : 14 minutes au 5 km, puis l’ultra-trail.</span></div>
-    <em class="on">ouvert</em></div>
-  <div class="pil"><span class="n" style="background:var(--alim)"></span>
-    <div><b>Alimentation</b><span>Manger assez, au bon moment, sans y passer ses soirées.</span></div>
-    <em class="on">ouvert</em></div>
-  <div class="pil"><span class="n" style="background:var(--som)"></span>
-    <div><b>Sommeil</b><span>Se coucher à 21 h 30, se lever à 5 h 30.</span></div><em>à venir</em></div>
-  <div class="pil"><span class="n" style="background:var(--lec)"></span>
-    <div><b>Lecture</b><span>Quarante pages par jour.</span></div><em>à venir</em></div>
-  <div class="pil"><span class="n" style="background:var(--arg)"></span>
-    <div><b>Argent</b><span>Mettre de côté, chaque jour, pour financer la suite.</span></div><em>à venir</em></div>
-  <div class="pil"><span class="n" style="background:var(--mus)"></span>
-    <div><b>Musique</b><span>Chant et guitare. Pratique quotidienne, morceaux enregistrés.</span></div>
-    <em>à venir</em></div>
-  <div class="pil"><span class="n" style="background:var(--cul)"></span>
-    <div><b>Culture</b><span>La chaîne, la culture générale. Ce que j’apprends et ce que je transmets.</span></div>
-    <em>à venir</em></div>
-  <div class="pil"><span class="n" style="background:var(--tra)"></span>
-    <div><b>Travail</b><span>Quitter les docks. Diplôme, coaching, premiers revenus.</span></div>
-    <em>à venir</em></div>
+  <h2>La décennie</h2>
+  <div class="frise">
+    <div class="an on"><b>2026</b><span class="q">Les huit piliers s’ouvrent</span>
+      <div class="grille">
+        <div style="background:var(--vert)"><b>Sport</b><span>14:00 au 5 km, puis l’ultra</span></div>
+        <div style="background:var(--alim)"><b>Alimentation</b><span>Manger assez, au bon moment</span></div>
+        <div style="background:var(--som)"><b>Sommeil</b><span>21 h 30 — 5 h 30</span></div>
+        <div style="background:var(--lec)"><b>Lecture</b><span>Quarante pages par jour</span></div>
+        <div style="background:var(--arg)"><b>Argent</b><span>Mettre de côté chaque jour</span></div>
+        <div style="background:var(--mus)"><b>Musique</b><span>Chant et guitare</span></div>
+        <div style="background:var(--cul)"><b>Culture</b><span>La chaîne, ce que je transmets</span></div>
+        <div style="background:var(--tra)"><b>Travail</b><span>Quitter les docks</span></div>
+      </div></div>
+    <div class="an"><b>2027</b><span class="q">à écrire</span></div>
+    <div class="an"><b>2028</b><span class="q">à écrire</span></div>
+    <div class="an"><b>2029 — 2035</b><span class="q">à écrire</span></div>
+    <div class="an"><b>2036</b><span class="q">Fin du compte à rebours, le 28 août</span></div>
+  </div>
 
   <h2>Pourquoi c’est public</h2>
   <p class="t">Parce qu’un projet qu’on garde pour soi n’engage à rien. Tout ce qui est ici est réel :
     les kilomètres viennent de mes séances, les chronos de mes courses, les creux
     et les blessures y sont aussi. <b>Rien n’est effacé, rien n’est arrondi.</b></p>
-  <p class="t">Huit piliers, mais jamais huit chantiers en même temps.
-    <b>Deux ou trois sont ouverts à la fois</b>, les autres attendent leur tour.
-    C’est la seule façon de tenir dix ans.</p>
+  <p class="t">Les huit piliers sont ouverts dès la première année. Les suivantes ne sont pas encore écrites : <b>elles se rempliront au fur et à mesure</b>, avec ce qui aura vraiment eu lieu.</p>
   <p class="t">Le site calcule tout seul : allures d’entraînement, charge, séance du jour,
     repas de la semaine. Ce n’est pas une vitrine, c’est l’outil que j’utilise tous les jours.</p>
 
