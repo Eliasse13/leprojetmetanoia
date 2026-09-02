@@ -91,15 +91,6 @@
   body.ouvert .label small{color:var(--vert)}
 
 
-  .entrer{opacity:1;transform:none;pointer-events:auto;
-    background:var(--vert);color:var(--sur-accent);
-    font-weight:900;font-size:clamp(13px,3.4vw,15px);
-    letter-spacing:.02em;text-decoration:none;
-    padding:15px 34px;border-radius:999px;
-    transition:filter .2s;
-  }
-  .entrer:hover{filter:brightness(1.08)}
-  .entrer:focus-visible{outline:3px solid var(--craie);outline-offset:4px}
 
 
   @media (prefers-reduced-motion:reduce){
@@ -124,20 +115,20 @@
     font-weight:300;font-size:12px;color:var(--texte-f)}
   .fiche .l:last-child{border:0}
   .fiche .l b{font-weight:900;color:var(--craie);text-align:right}
-  .secondaire{opacity:1;pointer-events:auto;display:inline-block;margin-top:2px;font-weight:300;font-size:11px;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--sourd);
-    border-bottom:1px solid transparent;padding-bottom:2px;
-    transition:opacity .4s ease .35s,color .2s,border-color .2s}
-  .secondaire:hover,.secondaire:focus-visible{color:var(--craie);border-bottom-color:var(--piste)}
   @media (prefers-reduced-motion:reduce){.fiche,.secondaire{opacity:1;pointer-events:auto;transition:none}}
 
   /* bouton d'entrée */
-  a.entrer{display:inline-block;margin:22px auto 0;background:var(--vert);color:#fff;
-    border-radius:999px;padding:15px 44px;font-weight:900;font-size:12.5px;letter-spacing:.14em;
-    text-transform:uppercase;text-decoration:none;
-    box-shadow:0 0 0 3px var(--fond),0 0 0 5px var(--craie)}
-  a.entrer:hover{filter:brightness(1.08)}
-  a.entrer:focus-visible{outline:3px solid var(--craie);outline-offset:5px}
+
+  /* les deux actions */
+  .duo{display:flex;gap:8px;width:min(100%,320px);margin:20px auto 0}
+  .duo a{flex:1;padding:14px 0;text-align:center;border-radius:12px;text-decoration:none;
+    font-weight:900;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+    transition:filter .2s,background .2s}
+  .duo .p{background:var(--vert);color:#fff}
+  .duo .p:hover{filter:brightness(1.08)}
+  .duo .s{background:var(--piste-l);color:var(--texte-f)}
+  .duo .s:hover{background:var(--piste)}
+  .duo a:focus-visible{outline:3px solid var(--craie);outline-offset:3px}
 </style>
 </head>
 <body class="ouvert">
@@ -152,21 +143,25 @@
 
 <div class="fiche" id="fiche">
   <div class="l"><span>Début</span><b>28 août 2026</b></div>
+
+
   <div class="l"><span>Fin</span><b>28 août 2036</b></div>
   <div class="l"><span>Jour en cours</span><b id="fJour">—</b></div>
   <div class="l"><span>Distance parcourue</span><b id="fKm">—</b></div>
 </div>
 
+<div class="duo">
+  <a class="p" href="metanoia.html">Entrer</a>
+  <a class="s" href="projet.html">Le projet</a>
+</div>
 
-<a class="entrer" id="entrer" href="metanoia.html">ENTRER</a>
-<a class="secondaire" id="comprendre" href="projet.html">Comprendre le projet</a>
 
 <noscript>
   <p class="msg"><a href="metanoia.html" style="color:#31E07A">Entrer</a></p>
 </noscript>
 
 <script type="module">
-import { list, fr, DEBUT } from './config.js?v=20260902g';
+import { list, fr, DEBUT } from './config.js?v=20260902h';
 
 const debut = new Date(DEBUT + 'T00:00:00');
 document.getElementById('fJour').textContent =
