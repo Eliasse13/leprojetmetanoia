@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Metanoia — Le projet</title>
+<meta name="description" content="Ce qu'est le projet Metanoia : dix ans, cinq piliers, un suivi public.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@300;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--vert:#0B7A3E;--vif:#12B85F;--alim:#C9A227;--som:#4C6FA5;--lec:#8258DD;--arg:#2E8B8B;
+  --ink:#0D0F0E;--piste:#E8EBE9;--sourd:#6B736E;--texte:#454B48}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;color:var(--ink);font-family:Chivo,system-ui,sans-serif;max-width:430px;margin:0 auto;
+  padding-bottom:44px;-webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+  -webkit-touch-callout:none;touch-action:pan-y}
+a{color:inherit;text-decoration:none}
+.hd{display:flex;align-items:center;padding:max(14px,env(safe-area-inset-top)) 20px 13px;
+  border-bottom:1px solid var(--piste)}
+.hd .lg{width:74px;color:var(--ink);line-height:0}
+.hd .lg svg{display:block;width:100%;height:auto}
+.hd .r{margin-left:auto;font-weight:300;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#A9B0AC}
+.z{padding:28px 20px 0}
+.k{font-weight:300;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:#A9B0AC}
+h1{font-weight:900;font-size:clamp(26px,7.5vw,32px);letter-spacing:-.04em;line-height:1.06;margin:9px 0 12px}
+.chapo{font-weight:300;font-size:13.5px;color:var(--texte);line-height:1.65}
+.chapo b{font-weight:900;color:var(--ink)}
+h2{font-weight:900;font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:34px 0 10px;
+  padding-bottom:8px;border-bottom:2px solid var(--ink)}
+p.t{font-weight:300;font-size:12.5px;color:var(--texte);line-height:1.65;margin-bottom:11px}
+p.t b{font-weight:900;color:var(--ink)}
+.pil{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid #F2F4F3}
+.pil .n{width:9px;height:9px;border-radius:50%;flex:none;margin-top:5px}
+.pil b{display:block;font-weight:900;font-size:14px;letter-spacing:-.015em}
+.pil span{display:block;font-weight:300;font-size:11.5px;color:var(--sourd);margin-top:2px;line-height:1.5}
+.pil em{font-style:normal;margin-left:auto;font-weight:700;font-size:8.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#C0C7C3;flex:none;padding-top:4px}
+.pil em.on{color:var(--vert)}
+.cite{border-left:3px solid var(--vert);padding:4px 0 4px 15px;margin:22px 0;
+  font-weight:300;font-size:14px;line-height:1.6;color:var(--texte)}
+.cite b{display:block;font-weight:900;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:#A9B0AC;margin-top:8px}
+.cta{display:block;background:var(--vert);color:#fff;border-radius:999px;padding:15px;text-align:center;
+  font-weight:900;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:32px}
+.note{font-weight:300;font-size:10px;color:#A9B0AC;line-height:1.6;text-align:center;margin-top:20px}
+</style>
+</head>
+<body>
+<header class="hd">
+  <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
+  <a class="r" href="index.html">Retour</a>
+</header>
+
+<div class="z">
+  <p class="k">Le projet</p>
+  <h1>Dix ans pour changer cinq domaines de ma vie.</h1>
+  <p class="chapo">Metanoia est un mot grec : <b>changement d’esprit</b>. Pas une résolution,
+    une conversion — celle dont on ne revient pas. Le projet a commencé le
+    <b>18 août 2026</b> et se termine le <b>18 août 2036</b>.</p>
+
+  <h2>Les cinq piliers</h2>
+  <div class="pil"><span class="n" style="background:var(--vert)"></span>
+    <div><b>Sport</b><span>Course à pied. Objectif : 14 minutes au 5 km, puis l’ultra-trail.</span></div>
+    <em class="on">ouvert</em></div>
+  <div class="pil"><span class="n" style="background:var(--alim)"></span>
+    <div><b>Alimentation</b><span>Manger assez, au bon moment, sans y passer ses soirées.</span></div>
+    <em class="on">ouvert</em></div>
+  <div class="pil"><span class="n" style="background:var(--som)"></span>
+    <div><b>Sommeil</b><span>Se coucher à 21 h 30, se lever à 5 h 30.</span></div><em>à venir</em></div>
+  <div class="pil"><span class="n" style="background:var(--lec)"></span>
+    <div><b>Lecture</b><span>Quarante pages par jour.</span></div><em>à venir</em></div>
+  <div class="pil"><span class="n" style="background:var(--arg)"></span>
+    <div><b>Argent</b><span>Mettre de côté, chaque jour, pour financer la suite.</span></div><em>à venir</em></div>
+
+  <h2>Pourquoi c’est public</h2>
+  <p class="t">Parce qu’un projet qu’on garde pour soi n’engage à rien. Tout ce qui est ici est réel :
+    les kilomètres viennent de mes séances, les chronos de mes courses, les creux
+    et les blessures y sont aussi. <b>Rien n’est effacé, rien n’est arrondi.</b></p>
+  <p class="t">Le site calcule tout seul : allures d’entraînement, charge, séance du jour,
+    repas de la semaine. Ce n’est pas une vitrine, c’est l’outil que j’utilise tous les jours.</p>
+
+  <div class="cite">« Deviens ce que tu es. »<b>Pindare</b></div>
+
+  <h2>Qui</h2>
+  <p class="t">Elias, 30 ans, docker à Marseille — troisième génération.
+    Coureur, guitariste, autodidacte en tout. Je code ce site moi-même.</p>
+
+  <a class="cta" href="metanoia.html">Voir où j’en suis</a>
+  <p class="note">Mis à jour à chaque séance. Aucun compte n’est nécessaire pour lire.</p>
+</div>
+
+<script>
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(ev =>
+  document.addEventListener(ev, e => e.preventDefault()));
+['gesturestart','gesturechange','gestureend'].forEach(ev =>
+  document.addEventListener(ev, e => e.preventDefault(), { passive:false }));
+</script>
+</body>
+</html>
