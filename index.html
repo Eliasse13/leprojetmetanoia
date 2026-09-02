@@ -120,18 +120,20 @@
   /* bouton d'entrée */
 
   /* les deux actions */
-  .duo{display:flex;gap:8px;width:min(100%,320px);margin:20px auto 0}
-  .duo a{flex:1;padding:14px 0;text-align:center;border-radius:12px;text-decoration:none;
-    font-weight:900;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
-    transition:filter .2s,background .2s}
-  .duo .p{background:var(--vert);color:#fff}
-  .duo .p.off{background:#EDF0EE;color:#B7BEBA;cursor:not-allowed;pointer-events:none}
-  .duo .p:hover{filter:brightness(1.08)}
-  .duo .s{background:var(--piste-l);color:var(--texte-f)}
-  .duo .s:hover{background:var(--piste)}
-  .duo a:focus-visible{outline:3px solid var(--craie);outline-offset:3px}
   .attente{margin:12px auto 0;font-weight:300;font-size:10px;letter-spacing:.16em;
     text-transform:uppercase;color:#B7BEBA;text-align:center}
+
+  /* bouton d'entrée */
+  .entrer{display:inline-block;margin:22px auto 0;background:var(--vert);color:#fff;
+    border-radius:999px;padding:15px 44px;font-weight:900;font-size:12.5px;letter-spacing:.14em;
+    text-transform:uppercase;text-decoration:none;
+    box-shadow:0 0 0 3px var(--fond),0 0 0 5px var(--craie)}
+  .entrer.off{background:#EDF0EE;color:#B7BEBA;box-shadow:0 0 0 3px var(--fond),0 0 0 5px #DDE3E0;
+    cursor:not-allowed;pointer-events:none}
+  .secondaire{display:inline-block;margin-top:15px;font-weight:300;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--sourd);text-decoration:none;
+    border-bottom:1px solid var(--piste);padding-bottom:3px}
+  .secondaire:hover{color:var(--craie)}
 </style>
 </head>
 <body class="ouvert">
@@ -153,10 +155,8 @@
   <div class="l"><span>Distance parcourue</span><b id="fKm">—</b></div>
 </div>
 
-<div class="duo">
-  <span class="p off" aria-disabled="true" title="Bientôt disponible">Entrer</span>
-  <a class="s" href="projet.html">Le projet</a>
-</div>
+<span class="entrer off" aria-disabled="true">Entrer</span>
+<a class="secondaire" href="projet.html">Comprendre le projet</a>
 
 <p class="attente">Mise à jour en cours — le site rouvre bientôt.</p>
 
@@ -165,7 +165,7 @@
 </noscript>
 
 <script type="module">
-import { list, fr, DEBUT } from './config.js?v=20260902i';
+import { list, fr, DEBUT } from './config.js?v=20260902j';
 
 const debut = new Date(DEBUT + 'T00:00:00');
 document.getElementById('fJour').textContent =
