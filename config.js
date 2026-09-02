@@ -6,53 +6,75 @@ export const DEBUT = '2026-08-28'; // le compteur compte à partir de cette date
 export const TYPES = ['Footing', 'Fractionné', 'Sortie longue', 'Seuil', 'Compétition', 'Salle de sport'];
 
 let sb = null;
-let sbReady = Promise.resolve();
-if (SUPABASE_URL && SUPABASE_KEY) {
-  sbReady = (async () => {
-    try { const m = await import('https://esm.sh/@supabase/supabase-js@2'); sb = m.createClient(SUPABASE_URL, SUPABASE_KEY); }
-    catch (e) { console.warn('Supabase indisponible', e); }
-  })();
+
+// Le SDK Supabase pèse plus de cent kilooctets et vient d'un CDN tiers.
+// Les pages publiques ne font que lire : un simple fetch sur l'API REST suffit,
+// et le SDK n'est chargé que si une écriture ou une connexion le demande.
+const ENTETES = { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` };
+
+async function lire(table, requete = 'select=*') {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${requete}`, { headers: ENTETES });
+  if (!r.ok) throw new Error(`${table} : ${r.status}`);
+  return r.json();
+}
+
+/** Charge le SDK à la demande — écritures, session, authentification. */
+export async function client() {
+  if (sb) return sb;
+  const m = await import('https://esm.sh/@supabase/supabase-js@2');
+  sb = m.createClient(SUPABASE_URL, SUPABASE_KEY);
+  return sb;
 }
 let mem = []; // secours sans Supabase (session uniquement)
 
 export async function list() {
-  await sbReady; if (!sb) return [...mem].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
-  const { data, error } = await sb.from(TABLE).select('*').order('date', { ascending: false }).order('id', { ascending: false });
+  try { return (await lire(TABLE, 'select=*&order=date.desc')); }
+  catch (e) { return [...mem].sort((a, b) => b.date.localeCompare(a.date)); }
+}
+async function _listAncien() {
+  const cl = await client(); if (!cl) return [...mem].sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+  const { data, error } = await cl.from(TABLE).select('*').order('date', { ascending: false }).order('id', { ascending: false });
   if (error) throw error; return data;
 }
 export async function insert(row) {
-  await sbReady; if (!sb) { mem.push({ ...row, id: Date.now() }); return; }
-  const { error } = await sb.from(TABLE).insert(row); if (error) throw error;
+  const cl = await client(); if (!cl) { mem.push({ ...row, id: Date.now() }); return; }
+  const { error } = await cl.from(TABLE).insert(row); if (error) throw error;
 }
 export async function update(id, row) {
-  await sbReady; if (!sb) { const i = mem.findIndex(r => r.id === id); if (i > -1) mem[i] = { ...mem[i], ...row }; return; }
-  const { error } = await sb.from(TABLE).update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) { const i = mem.findIndex(r => r.id === id); if (i > -1) mem[i] = { ...mem[i], ...row }; return; }
+  const { error } = await cl.from(TABLE).update(row).eq('id', id); if (error) throw error;
 }
 export async function remove(id) {
-  await sbReady; if (!sb) { mem = mem.filter(r => r.id !== id); return; }
-  const { error } = await sb.from(TABLE).delete().eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) { mem = mem.filter(r => r.id !== id); return; }
+  const { error } = await cl.from(TABLE).delete().eq('id', id); if (error) throw error;
 }
 
 // résultats de course
 export async function listResultats() {
-  await sbReady; if (!sb) return [];
-  const { data, error } = await sb.from('resultats').select('*').order('date', { ascending: false });
+  try { return await lire('resultats', 'select=*&order=date.desc'); } catch (e) { return []; }
+}
+async function _listResultats() {
+  const cl = await client(); if (!cl) return [];
+  const { data, error } = await cl.from('resultats').select('*').order('date', { ascending: false });
   if (error) throw error; return data;
 }
 export async function insertResultat(row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('resultats').insert(row); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('resultats').insert(row); if (error) throw error;
 }
 export async function updateResultat(id, row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('resultats').update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('resultats').update(row).eq('id', id); if (error) throw error;
 }
 export async function removeResultat(id) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('resultats').delete().eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('resultats').delete().eq('id', id); if (error) throw error;
 }
 
 // compétitions
 export async function listCompetitions() {
-  await sbReady; if (!sb) return [];
-  const { data, error } = await sb.from('competitions').select('*').order('date', { ascending: true });
+  try { return await lire('competitions', 'select=*&order=date.asc'); } catch (e) { return []; }
+}
+async function _listCompetitions() {
+  const cl = await client(); if (!cl) return [];
+  const { data, error } = await cl.from('competitions').select('*').order('date', { ascending: true });
   if (error) throw error; return data;
 }
 export async function prochaineCompetition() {
@@ -61,19 +83,22 @@ export async function prochaineCompetition() {
   return all.find(c => c.date >= today) || null;
 }
 export async function insertCompetition(row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('competitions').insert(row); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('competitions').insert(row); if (error) throw error;
 }
 export async function updateCompetition(id, row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('competitions').update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('competitions').update(row).eq('id', id); if (error) throw error;
 }
 export async function removeCompetition(id) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('competitions').delete().eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('competitions').delete().eq('id', id); if (error) throw error;
 }
 
 // objectifs
 export async function listObjectifs() {
-  await sbReady; if (!sb) return [];
-  const { data, error } = await sb.from('objectifs').select('*').order('date', { ascending: true });
+  try { return await lire('objectifs', 'select=*'); } catch (e) { return []; }
+}
+async function _listObjectifs() {
+  const cl = await client(); if (!cl) return [];
+  const { data, error } = await cl.from('objectifs').select('*').order('date', { ascending: true });
   if (error) throw error; return data;
 }
 export async function objectifActif() {
@@ -82,13 +107,13 @@ export async function objectifActif() {
   return all.find(o => o.actif && o.date >= today) || null;
 }
 export async function insertObjectif(row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('objectifs').insert(row); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('objectifs').insert(row); if (error) throw error;
 }
 export async function updateObjectif(id, row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('objectifs').update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('objectifs').update(row).eq('id', id); if (error) throw error;
 }
 export async function removeObjectif(id) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('objectifs').delete().eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('objectifs').delete().eq('id', id); if (error) throw error;
 }
 
 // compteur de visites
@@ -96,13 +121,22 @@ export async function enregistrerVisite() {
   try {
     if (localStorage.getItem('metanoia_visite')) return;
     localStorage.setItem('metanoia_visite', '1');
-    await sbReady; if (!sb) return;
-    await sb.from('visites').insert({});
+    await fetch(`${SUPABASE_URL}/rest/v1/visites`, {
+      method: 'POST', headers: { ...ENTETES, 'Content-Type': 'application/json' }, body: '{}'
+    });
   } catch (e) { /* silencieux */ }
 }
 export async function nbVisites() {
-  await sbReady; if (!sb) return null;
-  const { count, error } = await sb.from('visites').select('*', { count: 'exact', head: true });
+  try {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/visites?select=id`, 
+      { headers: { ...ENTETES, Prefer: 'count=exact', Range: '0-0' } });
+    const c = r.headers.get('content-range');
+    return c ? Number(c.split('/')[1]) : null;
+  } catch (e) { return null; }
+}
+async function _nbVisites() {
+  const cl = await client(); if (!cl) return null;
+  const { count, error } = await cl.from('visites').select('*', { count: 'exact', head: true });
   if (error) throw error; return count;
 }
 
@@ -118,61 +152,66 @@ export const fr = (n, d = 1) => Number(n).toLocaleString('fr-FR', { maximumFract
 
 // plan d'entraînement
 export async function listPlan(objectifId) {
-  await sbReady; if (!sb) return [];
-  const { data, error } = await sb.from('plan').select('*').eq('objectif_id', objectifId).order('date');
-  if (error) throw error; return data;
+  try { return await lire('plan', `select=*&projet_id=eq.${projetId}&order=date.asc`); } catch (e) { return []; }
 }
 export async function insertPlan(rows) {
-  await sbReady; if (!sb) return;
+  const cl = await client(); if (!cl) return;
   for (let i = 0; i < rows.length; i += 200) {
-    const { error } = await sb.from('plan').insert(rows.slice(i, i + 200));
+    const { error } = await cl.from('plan').insert(rows.slice(i, i + 200));
     if (error) throw error;
   }
 }
 export async function updatePlan(id, row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('plan').update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('plan').update(row).eq('id', id); if (error) throw error;
 }
 export async function removePlan(objectifId) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('plan').delete().eq('objectif_id', objectifId); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('plan').delete().eq('objectif_id', objectifId); if (error) throw error;
 }
 
 // projet à dix ans + paliers
 export async function projetActif() {
-  await sbReady; if (!sb) return null;
-  const { data, error } = await sb.from('projet').select('*').eq('actif', true).order('id').limit(1);
+  try { const d = await lire('projet', 'select=*&id=eq.1'); return d[0] || null; } catch (e) { return null; }
+}
+async function _projetActif() {
+  const cl = await client(); if (!cl) return null;
+  const { data, error } = await cl.from('projet').select('*').eq('actif', true).order('id').limit(1);
   if (error) throw error; return data[0] || null;
 }
 export async function listPaliers(projetId) {
-  await sbReady; if (!sb) return [];
-  const { data, error } = await sb.from('paliers').select('*').eq('projet_id', projetId).order('ordre');
+  try { return await lire('paliers', `select=*&projet_id=eq.${projetId}&order=ordre.asc`); }
+  catch (e) { return []; }
+}
+async function _listPaliers(projetId) {
+  const cl = await client(); if (!cl) return [];
+  const { data, error } = await cl.from('paliers').select('*').eq('projet_id', projetId).order('ordre');
   if (error) throw error; return data;
 }
 export async function updatePalier(id, row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('paliers').update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('paliers').update(row).eq('id', id); if (error) throw error;
 }
 export async function updateProjet(id, row) {
-  await sbReady; if (!sb) return; const { error } = await sb.from('projet').update(row).eq('id', id); if (error) throw error;
+  const cl = await client(); if (!cl) return; const { error } = await cl.from('projet').update(row).eq('id', id); if (error) throw error;
 }
 
 // authentification
-export async function sbClient() { await sbReady; return sb; }
+export async function sbClient() { const cl = await client(); return sb; }
 export async function utilisateur() {
-  await sbReady; if (!sb) return null;
-  const { data } = await sb.auth.getUser();
+  const cl = await client(); if (!cl) return null;
+  const { data } = await cl.auth.getUser();
   return data?.user || null;
 }
 export async function connexion(email, motDePasse) {
-  await sbReady; if (!sb) throw new Error('Supabase indisponible');
-  const { error } = await sb.auth.signInWithPassword({ email, password: motDePasse });
+  const cl = await client(); if (!cl) throw new Error('Supabase indisponible');
+  const { error } = await cl.auth.signInWithPassword({ email, password: motDePasse });
   if (error) throw error;
 }
 export async function inscription(email, motDePasse) {
-  await sbReady; if (!sb) throw new Error('Supabase indisponible');
-  const { error } = await sb.auth.signUp({ email, password: motDePasse });
+  const cl = await client(); if (!cl) throw new Error('Supabase indisponible');
+  const { error } = await cl.auth.signUp({ email, password: motDePasse });
   if (error) throw error;
 }
 export async function deconnexion() {
-  await sbReady; if (!sb) return; await sb.auth.signOut();
+  const cl = await client(); if (!cl) return; await cl.auth.signOut();
 }
 /** À placer en tête d'une page privée : redirige si non connecté. */
 export async function exigerConnexion(retour = 'connexion.html') {
@@ -183,62 +222,62 @@ export async function exigerConnexion(retour = 'connexion.html') {
 
 // journal quotidien
 export async function listJournal(jours = 60) {
-  await sbReady; if (!sb) return [];
-  const d = new Date(); d.setDate(d.getDate() - jours);
+  const d = new Date(); d.setDate(d.getDate() - (jours || 60));
   const depuis = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const { data, error } = await sb.from('journal').select('*').gte('date', depuis).order('date', { ascending: false });
-  if (error) throw error; return data;
+  try { return await lire('journal', `select=*&date=gte.${depuis}&order=date.desc`); } catch (e) { return []; }
 }
 export async function upsertJournal(row) {
-  await sbReady; if (!sb) return;
-  const { error } = await sb.from('journal').upsert(row, { onConflict: 'date' });
+  const cl = await client(); if (!cl) return;
+  const { error } = await cl.from('journal').upsert(row, { onConflict: 'date' });
   if (error) throw error;
 }
 export async function journalDuJour(date) {
-  await sbReady; if (!sb) return null;
-  const { data, error } = await sb.from('journal').select('*').eq('date', date).limit(1);
+  const cl = await client(); if (!cl) return null;
+  const { data, error } = await cl.from('journal').select('*').eq('date', date).limit(1);
   if (error) throw error; return data[0] || null;
 }
 
 // préférences alimentaires
 export async function litGouts() {
-  await sbReady; if (!sb) return null;
-  const { data, error } = await sb.from('gouts').select('*').eq('id', 1).limit(1);
+  try { const d = await lire('gouts', 'select=*&id=eq.1'); return d[0] || null; } catch (e) { return null; }
+}
+async function _litGouts() {
+  const cl = await client(); if (!cl) return null;
+  const { data, error } = await cl.from('gouts').select('*').eq('id', 1).limit(1);
   if (error) throw error; return data[0] || null;
 }
 export async function ecritGouts(row) {
-  await sbReady; if (!sb) return;
-  const { error } = await sb.from('gouts').upsert(row, { onConflict: 'id' });
+  const cl = await client(); if (!cl) return;
+  const { error } = await cl.from('gouts').upsert(row, { onConflict: 'id' });
   if (error) throw error;
 }
 
 // règles quotidiennes et tâches du jour
 export async function litRegles() {
-  await sbReady; if (!sb) return null;
-  const { data, error } = await sb.from('regles').select('*').eq('id', 1).limit(1);
+  try { const d = await lire('regles', 'select=*&id=eq.1'); return d[0] || null; } catch (e) { return null; }
+}
+async function _litRegles() {
+  const cl = await client(); if (!cl) return null;
+  const { data, error } = await cl.from('regles').select('*').eq('id', 1).limit(1);
   if (error) throw error; return data[0] || null;
 }
 export async function ecritRegles(row) {
-  await sbReady; if (!sb) return;
-  const { error } = await sb.from('regles').upsert({ id: 1, ...row }, { onConflict: 'id' });
+  const cl = await client(); if (!cl) return;
+  const { error } = await cl.from('regles').upsert({ id: 1, ...row }, { onConflict: 'id' });
   if (error) throw error;
 }
 export async function listTaches(date) {
-  await sbReady; if (!sb) return [];
-  const { data, error } = await sb.from('taches').select('*').eq('date', date);
-  if (error) throw error; return data;
+  try { return await lire('taches', `select=*&date=eq.${date}`); } catch (e) { return []; }
 }
 export async function bascule(date, cle, pilier, titre, detail, fait) {
-  await sbReady; if (!sb) return;
-  const { error } = await sb.from('taches').upsert(
+  const cl = await client(); if (!cl) return;
+  const { error } = await cl.from('taches').upsert(
     { date, cle, pilier, titre, detail, fait, fait_a: fait ? new Date().toISOString() : null },
     { onConflict: 'date,cle' });
   if (error) throw error;
 }
 export async function serieTaches(jours = 60) {
-  await sbReady; if (!sb) return [];
-  const d = new Date(); d.setDate(d.getDate() - jours);
+  const d = new Date(); d.setDate(d.getDate() - (jours || 60));
   const depuis = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const { data, error } = await sb.from('taches').select('date,fait').gte('date', depuis);
-  if (error) throw error; return data;
+  try { return await lire('taches', `select=date,fait&date=gte.${depuis}`); } catch (e) { return []; }
 }
