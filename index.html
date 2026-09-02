@@ -120,8 +120,6 @@
   /* bouton d'entrée */
 
   /* les deux actions */
-  .attente{margin:12px auto 0;font-weight:300;font-size:10px;letter-spacing:.16em;
-    text-transform:uppercase;color:#B7BEBA;text-align:center}
 
 
   /* les deux actions */
@@ -154,18 +152,17 @@
 </div>
 
 <div class="duo">
-  <span class="p off" aria-disabled="true">Entrer</span>
+  <a class="p" href="metanoia.html">Entrer</a>
   <a class="s" href="projet.html">Le projet</a>
 </div>
 
-<p class="attente">Mise à jour en cours — le site rouvre bientôt.</p>
 
 <noscript>
   <p class="msg"><a href="metanoia.html" style="color:#31E07A">Entrer</a></p>
 </noscript>
 
 <script type="module">
-import { list, fr, DEBUT } from './config.js?v=20260902k';
+import { list, fr, DEBUT } from './config.js?v=20260902l';
 
 const debut = new Date(DEBUT + 'T00:00:00');
 document.getElementById('fJour').textContent =
