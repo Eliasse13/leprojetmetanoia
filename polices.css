@@ -1,0 +1,14 @@
+/* Chivo — hébergée sur le site, licence SIL Open Font.
+   Sous-ensemble latin + ponctuation française, trois graisses. */
+@font-face{
+  font-family:'Chivo';font-style:normal;font-weight:300;font-display:swap;
+  src:url('/polices/chivo-300.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Chivo';font-style:normal;font-weight:700;font-display:swap;
+  src:url('/polices/chivo-700.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Chivo';font-style:normal;font-weight:900;font-display:swap;
+  src:url('/polices/chivo-900.woff2') format('woff2');
+}
