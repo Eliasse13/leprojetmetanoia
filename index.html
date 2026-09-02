@@ -6,7 +6,7 @@
 <title>Metanoia — dix ans pour changer d'esprit</title>
 <meta name="description" content="Metanoia : un projet de transformation sur dix ans, du 18 août 2026 au 18 août 2036. Cinq piliers, un seul ouvert pour l'instant.">
 <link rel="canonical" href="https://leprojetmetanoia.fr/">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="dark">
 
 <meta property="og:type" content="website">
@@ -66,10 +66,10 @@
   }
   body.ouvert .secours{color:#B7BEBA}
   body.ouvert .secours:hover,body.ouvert .secours:focus-visible{color:var(--texte);border-bottom-color:var(--piste)}
-  body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{
+  body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{opacity:1;transform:none;pointer-events:auto;
     transition:color .8s ease,background .8s ease,stroke .8s ease,fill .8s ease}
   @media (prefers-reduced-motion:reduce){
-    body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{transition:none}
+    body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{opacity:1;transform:none;pointer-events:auto;transition:none}
   }
 
   .entete{display:grid;gap:clamp(8px,1.6vh,14px)}
@@ -86,59 +86,21 @@
   h1 .logo{display:block;width:100%;height:auto;color:var(--craie)}
 
   /* — le cadran — */
-  .dial{
-    position:relative;
-    width:min(58vw,182px);aspect-ratio:1;
-    display:grid;place-items:center;
-    cursor:pointer;user-select:none;-webkit-user-select:none;
-    border-radius:50%;
-    transition:transform .2s ease;
-  }
-  .dial:active{transform:scale(.97)}
-  .dial:focus-visible{outline:2px solid var(--vert);outline-offset:10px}
-  .dial svg{position:absolute;inset:0;transform:rotate(-90deg);overflow:visible}
-  .dial circle{fill:none;stroke-width:5;stroke-linecap:round}
-  .piste{stroke:var(--piste)}
-  .jauge{stroke:var(--vert)}
   body.ouvert .jauge{filter:drop-shadow(0 0 10px var(--lueur))}
 
-  .label{
-    z-index:2;
-    font-weight:700;font-size:clamp(11px,3vw,14px);
-    letter-spacing:.14em;text-transform:uppercase;line-height:1.35;
-  }
-  .label small{
-    display:block;font-weight:300;font-size:clamp(9px,2.4vw,10px);
-    letter-spacing:.2em;color:var(--sourd);margin-top:6px;
-  }
   body.ouvert .label small{color:var(--vert)}
 
-  .msg{
-    font-size:clamp(12px,3.2vw,14px);font-weight:300;
-    color:var(--texte);max-width:34ch;line-height:1.75;
-    min-height:3.5em;
-  }
-  .msg-2{display:block;color:var(--sourd);margin-top:2px}
 
-  .entrer{
+  .entrer{opacity:1;transform:none;pointer-events:auto;
     background:var(--vert);color:var(--sur-accent);
     font-weight:900;font-size:clamp(13px,3.4vw,15px);
     letter-spacing:.02em;text-decoration:none;
     padding:15px 34px;border-radius:999px;
-    opacity:0;transform:scale(.9);pointer-events:none;
-    transition:opacity .5s ease,transform .5s cubic-bezier(.2,1.3,.4,1),filter .2s;
+    transition:filter .2s;
   }
-  .entrer.visible{opacity:1;transform:none;pointer-events:auto}
   .entrer:hover{filter:brightness(1.08)}
   .entrer:focus-visible{outline:3px solid var(--craie);outline-offset:4px}
 
-  .secours{
-    font-size:11px;font-weight:300;letter-spacing:.14em;text-transform:uppercase;
-    color:#2F3A35;text-decoration:none;border-bottom:1px solid transparent;
-    opacity:0;pointer-events:none;transition:opacity .5s,color .3s;
-  }
-  .secours.visible{opacity:1;pointer-events:auto}
-  .secours:hover,.secours:focus-visible{color:var(--texte);border-bottom-color:var(--sourd)}
 
   @media (prefers-reduced-motion:reduce){
     *{transition-duration:.01ms!important}
@@ -153,27 +115,32 @@
 
 
   /* fiche du projet, révélée après le cadran */
-  .fiche{width:min(100%,320px);border:1.5px solid var(--piste);border-radius:14px;
+  .fiche{opacity:1;transform:none;pointer-events:auto;max-height:none;width:min(100%,320px);border:1.5px solid var(--piste);border-radius:14px;
     text-align:left;margin:4px auto 0;overflow:hidden;
-    opacity:0;transform:translateY(10px);pointer-events:none;
-    max-height:0;transition:opacity .45s ease .1s,transform .5s cubic-bezier(.2,.9,.3,1) .1s,max-height .5s ease}
-  body.ouvert .fiche{opacity:1;transform:none;pointer-events:auto;max-height:340px}
+    
+    transition:opacity .45s ease .1s,transform .5s cubic-bezier(.2,.9,.3,1) .1s,max-height .5s ease}
   .fiche .l{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
     padding:11px 15px;border-bottom:1px solid var(--piste-l);
     font-weight:300;font-size:12px;color:var(--texte-f)}
   .fiche .l:last-child{border:0}
   .fiche .l b{font-weight:900;color:var(--craie);text-align:right}
-  .secondaire{display:inline-block;margin-top:2px;font-weight:300;font-size:11px;
+  .secondaire{opacity:1;pointer-events:auto;display:inline-block;margin-top:2px;font-weight:300;font-size:11px;
     letter-spacing:.14em;text-transform:uppercase;color:var(--sourd);
     border-bottom:1px solid transparent;padding-bottom:2px;
-    opacity:0;pointer-events:none;transition:opacity .4s ease .35s,color .2s,border-color .2s}
-  body.ouvert .secondaire{opacity:1;pointer-events:auto}
+    transition:opacity .4s ease .35s,color .2s,border-color .2s}
   .secondaire:hover,.secondaire:focus-visible{color:var(--craie);border-bottom-color:var(--piste)}
-  body.ouvert .dial{display:none}
-  @media (prefers-reduced-motion:reduce){.fiche,.secondaire{transition:none}}
+  @media (prefers-reduced-motion:reduce){.fiche,.secondaire{opacity:1;pointer-events:auto;transition:none}}
+
+  /* bouton d'entrée */
+  a.entrer{display:inline-block;margin:22px auto 0;background:var(--vert);color:#fff;
+    border-radius:999px;padding:15px 44px;font-weight:900;font-size:12.5px;letter-spacing:.14em;
+    text-transform:uppercase;text-decoration:none;
+    box-shadow:0 0 0 3px var(--fond),0 0 0 5px var(--craie)}
+  a.entrer:hover{filter:brightness(1.08)}
+  a.entrer:focus-visible{outline:3px solid var(--craie);outline-offset:5px}
 </style>
 </head>
-<body>
+<body class="ouvert">
 
 
 <div class="entete">
@@ -181,137 +148,40 @@
   <h1><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5.0710 0.6860" role="img" aria-label="Metanoia"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></h1>
 </div>
 
-<div class="dial" id="dial" role="button" tabindex="0"
-     aria-label="Maintenir appuyé trois secondes pour entrer">
-  <svg viewBox="0 0 100 100" aria-hidden="true">
-    <circle class="piste" cx="50" cy="50" r="45"></circle>
-    <circle class="jauge" id="jauge" cx="50" cy="50" r="45"></circle>
-  </svg>
-  <span class="label" id="label">Maintiens<small>3 secondes</small></span>
-</div>
 
 
 <div class="fiche" id="fiche">
-  <div class="l"><span>Début</span><b>18 août 2026</b></div>
-  <div class="l"><span>Fin</span><b>18 août 2036</b></div>
+  <div class="l"><span>Début</span><b>28 août 2026</b></div>
+  <div class="l"><span>Fin</span><b>28 août 2036</b></div>
   <div class="l"><span>Jour en cours</span><b id="fJour">—</b></div>
   <div class="l"><span>Distance parcourue</span><b id="fKm">—</b></div>
-  <div class="l"><span>Piliers ouverts</span><b>Sport, alimentation</b></div>
 </div>
 
-<p class="msg" id="msg" aria-live="polite">Rien ici ne s'ouvre en un clic.<br><span class="msg-2">C'est un peu le sujet.</span></p>
 
 <a class="entrer" id="entrer" href="metanoia.html">ENTRER</a>
 <a class="secondaire" id="comprendre" href="projet.html">Comprendre le projet</a>
-<a class="secours" id="secours" href="metanoia.html">Passer directement</a>
 
 <noscript>
   <p class="msg"><a href="metanoia.html" style="color:#31E07A">Entrer</a></p>
 </noscript>
 
 <script type="module">
-import { list, fr } from './config.js?v=20260902e';
+import { list, fr, DEBUT } from './config.js?v=20260902f';
+
+const debut = new Date(DEBUT + 'T00:00:00');
+document.getElementById('fJour').textContent =
+  Math.max(1, Math.floor((new Date() - debut) / 864e5) + 1);
+
 (async () => {
   try {
     const s = await list();
-    const km = s.reduce((t, x) => t + Number(x.distance_km || 0), 0);
+    const km = s.filter(x => x.date >= DEBUT)
+                .reduce((t, x) => t + Number(x.distance_km || 0), 0);
     document.getElementById('fKm').textContent = fr(km, 1) + ' km';
   } catch (e) { document.getElementById('fKm').textContent = '—'; }
 })();
 </script>
 
-<script>
-(function(){
-  "use strict";
-
-  var DEBUT = new Date(2026, 7, 18);          // 18 août 2026
-  var JOUR  = Math.floor((new Date() - DEBUT) / 864e5) + 1;
-  var DUREE = 3000;                            // ms de maintien
-
-  var jauge   = document.getElementById('jauge'),
-      dial    = document.getElementById('dial'),
-      label   = document.getElementById('label'),
-      msg     = document.getElementById('msg'),
-      entrer  = document.getElementById('entrer'),
-      secours = document.getElementById('secours');
-
-  var L = 2 * Math.PI * 45;
-  jauge.style.strokeDasharray  = L;
-  jauge.style.strokeDashoffset = L;
-
-  var t0 = null, raf = null, fini = false, echecs = 0, actif = false;
-
-  function dire(t){ msg.textContent = t; }
-
-  var PALIERS = [[0.25, 'Tiens bon.'], [0.55, 'Encore un peu.'], [0.85, 'Presque.']];
-
-  function tick(ts){
-    if (t0 === null) t0 = ts;
-    var p = Math.min((ts - t0) / DUREE, 1);
-    jauge.style.strokeDashoffset = L * (1 - p);
-
-    for (var i = 0; i < PALIERS.length; i++){
-      if (p >= PALIERS[i][0]) dire(PALIERS[i][1]);
-    }
-
-    if (p >= 1){ ouvrir(); return; }
-    raf = requestAnimationFrame(tick);
-  }
-
-  function ouvrir(){
-    fini = true; actif = false;
-    document.body.classList.add('ouvert');
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', '#FFFFFF');
-    document.getElementById('fJour').textContent = JOUR;
-    dire('Voilà. La suite se mérite pareil.');
-    entrer.classList.add('visible');
-    secours.classList.remove('visible');
-    dial.setAttribute('aria-label', 'Ouvert');
-    try { entrer.focus({ preventScroll: true }); } catch(e){}
-  }
-
-  function start(e){
-    if (fini || actif) return;
-    if (e && e.cancelable) e.preventDefault();
-    actif = true; t0 = null;
-    raf = requestAnimationFrame(tick);
-  }
-
-  function stop(){
-    if (fini || !actif) return;
-    actif = false;
-    cancelAnimationFrame(raf);
-    t0 = null;
-    jauge.style.strokeDashoffset = L;
-    echecs++;
-    dire(echecs > 1 ? 'Encore lâché. Trois secondes, pas plus.'
-                    : 'Lâché trop tôt. Recommence.');
-    if (echecs >= 3) secours.classList.add('visible');
-  }
-
-  dial.addEventListener('pointerdown', start);
-  window.addEventListener('pointerup', stop);
-  window.addEventListener('pointercancel', stop);
-  dial.addEventListener('contextmenu', function(e){ e.preventDefault(); });
-
-  dial.addEventListener('keydown', function(e){
-    if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); start(); }
-  });
-  dial.addEventListener('keyup', function(e){
-    if (e.key === ' ' || e.key === 'Enter') stop();
-  });
-  dial.addEventListener('blur', stop);
-  document.addEventListener('visibilitychange', function(){
-    if (document.hidden) stop();
-  });
-
-  dial.addEventListener('pointerdown', function(){ document.body.classList.add('tient'); });
-  window.addEventListener('pointerup', function(){ document.body.classList.remove('tient'); });
-  window.addEventListener('pointercancel', function(){ document.body.classList.remove('tient'); });
-
-})();
-</script>
 
 <script>
 // pas de sélection ni de copie ; zoom bloqué sur mobile seulement
