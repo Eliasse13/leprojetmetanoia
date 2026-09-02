@@ -125,10 +125,13 @@
     font-weight:900;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
     transition:filter .2s,background .2s}
   .duo .p{background:var(--vert);color:#fff}
+  .duo .p.off{background:#EDF0EE;color:#B7BEBA;cursor:not-allowed;pointer-events:none}
   .duo .p:hover{filter:brightness(1.08)}
   .duo .s{background:var(--piste-l);color:var(--texte-f)}
   .duo .s:hover{background:var(--piste)}
   .duo a:focus-visible{outline:3px solid var(--craie);outline-offset:3px}
+  .attente{margin:12px auto 0;font-weight:300;font-size:10px;letter-spacing:.16em;
+    text-transform:uppercase;color:#B7BEBA;text-align:center}
 </style>
 </head>
 <body class="ouvert">
@@ -151,17 +154,18 @@
 </div>
 
 <div class="duo">
-  <a class="p" href="metanoia.html">Entrer</a>
+  <span class="p off" aria-disabled="true" title="Bientôt disponible">Entrer</span>
   <a class="s" href="projet.html">Le projet</a>
 </div>
 
+<p class="attente">Mise à jour en cours — le site rouvre bientôt.</p>
 
 <noscript>
   <p class="msg"><a href="metanoia.html" style="color:#31E07A">Entrer</a></p>
 </noscript>
 
 <script type="module">
-import { list, fr, DEBUT } from './config.js?v=20260902h';
+import { list, fr, DEBUT } from './config.js?v=20260902i';
 
 const debut = new Date(DEBUT + 'T00:00:00');
 document.getElementById('fJour').textContent =
