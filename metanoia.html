@@ -94,7 +94,7 @@
   .aurore{position:fixed;inset:0;z-index:60;color:#EDF2EF;overflow:hidden;
     display:flex;flex-direction:column;
     padding:max(18px,env(safe-area-inset-top)) 22px max(20px,env(safe-area-inset-bottom));
-    visibility:hidden;transition:visibility .5s}
+    visibility:hidden}
   .aurore.ouvert{visibility:visible}
 
   /* le disque part du bouton, en haut à droite */
@@ -102,16 +102,16 @@
   .aurore .disque{position:absolute;width:260vmax;height:260vmax;border-radius:50%;
     top:calc(-130vmax + 34px);right:calc(-130vmax + 34px);
     background:radial-gradient(circle at 50% 50%,#12B85F 0%,#0B7A3E 18%,#05100A 42%);
-    transform:scale(0);transform-origin:center;
+    transform:scale(0);transform-origin:center;transition:none}
+  .aurore.ouvert .disque{transform:scale(1);
     transition:transform .55s cubic-bezier(.3,.85,.35,1)}
-  .aurore.ouvert .disque{transform:scale(1)}
 
   .aurore .haut{display:flex;align-items:center;position:relative;z-index:5}
   .aurore .haut .lg{width:clamp(70px,20vw,96px);color:#EDF2EF;line-height:0}
   .aurore .haut .lg svg{display:block;width:100%;height:auto}
   .aurore .fermer{margin-left:auto;background:none;border:0;color:#EDF2EF;font-size:20px;
-    line-height:1;cursor:pointer;padding:9px;margin-right:-9px;opacity:0;transition:opacity .3s ease .22s}
-  .aurore.ouvert .fermer{opacity:.75}
+    line-height:1;cursor:pointer;padding:9px;margin-right:-9px;opacity:0;transition:none}
+  .aurore.ouvert .fermer{opacity:.75;transition:opacity .3s ease .22s}
   .aurore .fermer:focus-visible{outline:2px solid #31E07A;outline-offset:2px;border-radius:6px}
 
   .aurore nav{margin:auto 0;position:relative;z-index:5;display:grid}
@@ -131,8 +131,8 @@
   .aurore nav a.on b,.aurore nav a.on i{color:#fff}
   .aurore .vis{position:relative;z-index:5;font-weight:300;font-size:8.5px;letter-spacing:.22em;
     text-transform:uppercase;text-align:center;color:rgba(237,242,239,.35);
-    opacity:0;transition:opacity .3s ease .5s}
-  .aurore.ouvert .vis{opacity:1}
+    opacity:0;transition:none}
+  .aurore.ouvert .vis{opacity:1;transition:opacity .3s ease .5s}
 
   @media (prefers-reduced-motion:reduce){
     .aurore .disque{transition:none}
