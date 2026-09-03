@@ -72,7 +72,7 @@
 
   /* ---- en-tête ---- */
   .hd{display:flex;align-items:center;gap:11px;padding:max(14px,env(safe-area-inset-top)) 20px 13px;
-    border-bottom:1px solid var(--piste);position:relative;z-index:20}
+    position:relative;z-index:20}
   .hd .lg{width:74px;color:var(--ink);line-height:0;flex:none}
   .hd .lg svg{display:block;width:100%;height:auto}
   .sel:focus-visible{outline:2px solid var(--vert);outline-offset:2px;border-radius:6px}
@@ -90,51 +90,54 @@
   .visites{padding:14px 0 max(16px,env(safe-area-inset-bottom));text-align:center;
     font-weight:300;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#B7BEBA}
 
-  /* panneau de navigation — aurore verte */
-  .aurore{position:fixed;inset:0;z-index:60;background:#05100A;color:#EDF2EF;overflow:hidden;
-    display:flex;flex-direction:column;padding:max(18px,env(safe-area-inset-top)) 22px max(20px,env(safe-area-inset-bottom));
-    opacity:0;visibility:hidden;transition:opacity .32s ease,visibility .32s}
-  .aurore.ouvert{opacity:1;visibility:visible}
-  .aurore .blob{position:absolute;border-radius:50%;filter:blur(48px);opacity:.55;pointer-events:none}
-  .aurore .b1{width:60vw;height:60vw;max-width:300px;max-height:300px;background:#12B85F;left:-16vw;top:-8vh;
-    animation:fl1 9s ease-in-out infinite alternate}
-  .aurore .b2{width:54vw;height:54vw;max-width:270px;max-height:270px;background:#0B7A3E;right:-16vw;top:30vh;
-    animation:fl2 11s ease-in-out infinite alternate}
-  .aurore .b3{width:46vw;height:46vw;max-width:230px;max-height:230px;background:#31E07A;left:12vw;bottom:-12vh;
-    opacity:.32;animation:fl1 13s ease-in-out infinite alternate-reverse}
-  @keyframes fl1{to{transform:translate(9vw,7vh) scale(1.15)}}
-  @keyframes fl2{to{transform:translate(-10vw,-6vh) scale(1.1)}}
+  /* panneau de navigation — le cercle qui s'étend */
+  .aurore{position:fixed;inset:0;z-index:60;color:#EDF2EF;overflow:hidden;
+    display:flex;flex-direction:column;
+    padding:max(18px,env(safe-area-inset-top)) 22px max(20px,env(safe-area-inset-bottom));
+    visibility:hidden;transition:visibility .5s}
+  .aurore.ouvert{visibility:visible}
+
+  /* le disque part du bouton, en haut à droite */
+  /* le disque est centré sur le bouton, en haut à droite, et grandit jusqu'à tout couvrir */
+  .aurore .disque{position:absolute;width:260vmax;height:260vmax;border-radius:50%;
+    top:calc(-130vmax + 34px);right:calc(-130vmax + 34px);
+    background:radial-gradient(circle at 50% 50%,#12B85F 0%,#0B7A3E 18%,#05100A 42%);
+    transform:scale(0);transform-origin:center;
+    transition:transform .55s cubic-bezier(.3,.85,.35,1)}
+  .aurore.ouvert .disque{transform:scale(1)}
 
   .aurore .haut{display:flex;align-items:center;position:relative;z-index:5}
   .aurore .haut .lg{width:clamp(70px,20vw,96px);color:#EDF2EF;line-height:0}
   .aurore .haut .lg svg{display:block;width:100%;height:auto}
-  .aurore .fermer{margin-left:auto;background:none;border:0;color:#8B948F;font-size:20px;
-    line-height:1;cursor:pointer;padding:9px;margin-right:-9px}
-  .aurore .fermer:focus-visible{outline:2px solid var(--vif);outline-offset:2px;border-radius:6px}
+  .aurore .fermer{margin-left:auto;background:none;border:0;color:#EDF2EF;font-size:20px;
+    line-height:1;cursor:pointer;padding:9px;margin-right:-9px;opacity:0;transition:opacity .3s ease .22s}
+  .aurore.ouvert .fermer{opacity:.75}
+  .aurore .fermer:focus-visible{outline:2px solid #31E07A;outline-offset:2px;border-radius:6px}
 
   .aurore nav{margin:auto 0;position:relative;z-index:5;display:grid}
   .aurore nav a{display:flex;align-items:flex-end;gap:12px;padding:clamp(11px,2vh,15px) 0;
     border-bottom:1px solid rgba(255,255,255,.09);text-decoration:none;
-    opacity:0;transform:translateY(10px)}
-  .aurore.ouvert nav a{animation:entree .5s cubic-bezier(.2,.9,.3,1) forwards}
-  .aurore nav a:nth-child(1){animation-delay:.06s} .aurore nav a:nth-child(2){animation-delay:.11s}
-  .aurore nav a:nth-child(3){animation-delay:.16s} .aurore nav a:nth-child(4){animation-delay:.21s}
-  .aurore nav a:nth-child(5){animation-delay:.26s} .aurore nav a:nth-child(6){animation-delay:.31s}
+    opacity:0;transform:translateY(12px)}
+  .aurore.ouvert nav a{animation:entree .42s cubic-bezier(.2,.9,.3,1) forwards}
+  .aurore nav a:nth-child(1){animation-delay:.24s} .aurore nav a:nth-child(2){animation-delay:.29s}
+  .aurore nav a:nth-child(3){animation-delay:.34s} .aurore nav a:nth-child(4){animation-delay:.39s}
+  .aurore nav a:nth-child(5){animation-delay:.44s} .aurore nav a:nth-child(6){animation-delay:.49s}
   @keyframes entree{to{opacity:1;transform:none}}
   .aurore nav a i{font-style:normal;font-weight:300;font-size:9.5px;letter-spacing:.16em;
-    color:#5C6560;padding-bottom:4px}
-  .aurore nav a b{font-weight:900;font-size:clamp(21px,6.2vw,27px);letter-spacing:-.03em;color:#8E9793;
-    transition:color .18s,transform .18s}
+    color:rgba(237,242,239,.42);padding-bottom:4px}
+  .aurore nav a b{font-weight:900;font-size:clamp(21px,6.2vw,27px);letter-spacing:-.03em;
+    color:rgba(237,242,239,.62);transition:color .18s,transform .18s}
   .aurore nav a:active b{transform:translateX(4px)}
-  .aurore nav a.on b{color:#31E07A}
-  .aurore nav a.on i{color:#31E07A}
+  .aurore nav a.on b,.aurore nav a.on i{color:#fff}
   .aurore .vis{position:relative;z-index:5;font-weight:300;font-size:8.5px;letter-spacing:.22em;
-    text-transform:uppercase;text-align:center;color:#4E5754}
+    text-transform:uppercase;text-align:center;color:rgba(237,242,239,.35);
+    opacity:0;transition:opacity .3s ease .5s}
+  .aurore.ouvert .vis{opacity:1}
 
   @media (prefers-reduced-motion:reduce){
-    .aurore{transition:opacity .01ms}
-    .aurore .blob{animation:none}
+    .aurore .disque{transition:none}
     .aurore.ouvert nav a{animation:none;opacity:1;transform:none}
+    .aurore .fermer,.aurore .vis{transition:none;opacity:1}
   }
 </style>
 </head>
@@ -153,7 +156,7 @@
 <div class="err" id="err"></div>
 
 <script type="module">
-import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260902m';
+import { list, DEBUT, fr, enregistrerVisite, nbVisites } from './config.js?v=20260903a';
 const $ = id => document.getElementById(id);
 
 try {
@@ -246,7 +249,7 @@ document.addEventListener('keydown', function(e){
 <div class="visites" id="visits"></div>
 
 <div class="aurore" id="aurore" role="dialog" aria-modal="true" aria-label="Navigation">
-  <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+  <span class="disque"></span>
   <div class="haut">
     <a class="lg" href="index.html" aria-label="Accueil"><svg viewBox="0 0 5.0710 0.6860" aria-hidden="true"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></a>
     <button class="fermer" id="fermerMenu" aria-label="Fermer le menu">&#10005;</button>
