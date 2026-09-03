@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Metanoia — dix ans pour changer d'esprit</title>
+<meta name="description" content="Metanoia : un projet de transformation sur dix ans, du 18 août 2026 au 18 août 2036. Cinq piliers, un seul ouvert pour l'instant.">
+<link rel="canonical" href="https://leprojetmetanoia.fr/">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="dark">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://leprojetmetanoia.fr/">
+<meta property="og:title" content="Metanoia">
+<meta property="og:description" content="Dix ans pour changer d'esprit. Cinq piliers. Un seul ouvert pour l'instant.">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23000000'/%3E%3Ccircle cx='50' cy='50' r='30' fill='none' stroke='%2331E07A' stroke-width='9' stroke-linecap='round' stroke-dasharray='142 189' transform='rotate(-90 50 50)'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://mfbrnmhtoqqklmywclxt.supabase.co" crossorigin>
+<link rel="preload" href="/polices/chivo-900.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/polices/chivo-300.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/polices.css?v=1">
+
+<style>
+  :root{--piste:#1C221F;--piste-l:#151A18;--texte-f:#8A938E;
+    --fond:#000000;
+    --fond-ouvert:#000000;
+    --vert:#31E07A;
+    --craie:#EDF2EF;
+    --sourd:#767F7A;
+    --texte:#A3ADA7;
+    --duree:3s;
+    --piste:#1A1A1A;
+    --lueur:rgba(49,224,122,.5);
+    --sur-accent:#07130C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--fond);
+    color:var(--craie);
+    font-family:"Chivo",system-ui,sans-serif;
+    min-height:100svh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(16px,3.6vh,32px);
+    padding:max(20px,env(safe-area-inset-top)) clamp(20px,5vw,52px) max(20px,env(safe-area-inset-bottom));
+    text-align:center;
+    overflow:hidden;
+    touch-action:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .8s ease;
+  }
+  /* une fois ouvert : tout s'inverse */
+  body.ouvert{--piste:#E3E6E4;--piste-l:#F2F4F3;--texte-f:#454B48;
+    --fond:#FFFFFF;
+    --craie:#0D0F0E;
+    --sourd:#6B736E;
+    --texte:#454B48;
+    --piste:#E3E6E4;
+    --vert:#0B7A3E;
+    --lueur:rgba(11,122,62,.35);
+    --sur-accent:#FFFFFF;
+    background:#FFFFFF;
+    color:#0D0F0E;
+  }
+  body.ouvert .secours{color:#B7BEBA}
+  body.ouvert .secours:hover,body.ouvert .secours:focus-visible{color:var(--texte);border-bottom-color:var(--piste)}
+  body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{opacity:1;transform:none;pointer-events:auto;
+    transition:color .8s ease,background .8s ease,stroke .8s ease,fill .8s ease}
+  @media (prefers-reduced-motion:reduce){
+    body,h1 .logo,.dates,.msg,.jauge,.piste,.label,.label small,.entrer{opacity:1;transform:none;pointer-events:auto;transition:none}
+  }
+
+  .entete{display:grid;gap:clamp(8px,1.6vh,14px)}
+  .dates{
+    font-size:clamp(9px,2.6vw,12px);font-weight:300;
+    letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;
+    color:var(--sourd);
+  }
+  h1{
+    font-size:0;line-height:0;
+    width:min(86vw,560px);
+    margin:0 auto;
+  }
+  h1 .logo{display:block;width:100%;height:auto;color:var(--craie)}
+
+  /* — le cadran — */
+  body.ouvert .jauge{filter:drop-shadow(0 0 10px var(--lueur))}
+
+  body.ouvert .label small{color:var(--vert)}
+
+
+
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition-duration:.01ms!important}
+    .dial:active{transform:none}
+  }
+  @media (max-height:560px){
+    body{gap:12px}
+    .dial{width:min(38vw,120px)}
+    .msg{min-height:2.4em}
+  }
+
+
+
+  /* fiche du projet, révélée après le cadran */
+  .fiche{opacity:1;transform:none;pointer-events:auto;max-height:none;width:min(100%,320px);border:1.5px solid var(--piste);border-radius:14px;
+    text-align:left;margin:4px auto 0;overflow:hidden;
+    
+    transition:opacity .45s ease .1s,transform .5s cubic-bezier(.2,.9,.3,1) .1s,max-height .5s ease}
+  .fiche .l{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    padding:11px 15px;border-bottom:1px solid var(--piste-l);
+    font-weight:300;font-size:12px;color:var(--texte-f)}
+  .fiche .l:last-child{border:0}
+  .fiche .l b{font-weight:900;color:var(--craie);text-align:right}
+  @media (prefers-reduced-motion:reduce){.fiche,.secondaire{opacity:1;pointer-events:auto;transition:none}}
+
+  /* bouton d'entrée */
+
+  /* les deux actions */
+
+
+  /* les deux actions */
+  .duo{display:flex;gap:8px;width:min(100%,320px);margin:20px auto 0}
+  .duo a,.duo span{flex:1;padding:14px 0;text-align:center;border-radius:12px;text-decoration:none;
+    font-weight:900;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;transition:filter .2s,background .2s}
+  .duo .p{background:var(--vert);color:#fff}
+  .duo .p.off{background:#EDF0EE;color:#B7BEBA;cursor:not-allowed;pointer-events:none}
+  .duo .s{background:var(--piste-l);color:var(--texte-f)}
+  .duo .s:hover{background:var(--piste)}
+</style>
+</head>
+<body class="ouvert">
+
+
+<div class="entete">
+  <p class="dates">Deviens ce que tu es</p>
+  <h1><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5.0710 0.6860" role="img" aria-label="Metanoia"><g fill="currentColor"><path transform="translate(-0.05700 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H401L500 320H504L601 686H947V0H737V440H733L613 0H372L253 440H248V0Z"/><path transform="translate(0.86300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H572L552 526H263V426H541V273H263V160H552L572 0Z"/><path transform="translate(1.45000 0.68600) scale(0.001000 -0.001000)" d="M187 0V521H15V686H571V521H398V0Z"/><path transform="translate(1.90600 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/><path transform="translate(2.59300 0.68600) scale(0.001000 -0.001000)" d="M57 0V686H233L410 431L441 372L446 375V686H639V0H459L276 264L255 306L250 304V0Z"/><path transform="translate(3.23100 0.68600) scale(0.001000 -0.001000)" d="M331 -10Q269 -10 214.5 13.5Q160 37 119.0 78.0Q78 119 54.5 173.5Q31 228 31 290V394Q31 456 54.5 510.5Q78 565 119.0 606.0Q160 647 214.5 670.5Q269 694 331 694H387Q449 694 503.5 670.5Q558 647 599.0 606.0Q640 565 663.5 510.5Q687 456 687 394V290Q687 228 663.5 173.5Q640 119 599.0 78.0Q558 37 503.5 13.5Q449 -10 387 -10ZM359 146Q382 146 400.5 154.0Q419 162 433.0 175.5Q447 189 454.5 207.0Q462 225 462 246V438Q462 459 454.5 477.0Q447 495 433.0 509.0Q419 523 400.5 530.5Q382 538 359 538Q337 538 318.0 530.0Q299 522 285.0 508.5Q271 495 263.5 477.0Q256 459 256 438V246Q256 225 263.5 207.0Q271 189 285.0 175.0Q299 161 318.0 153.5Q337 146 359 146Z"/><path transform="translate(3.91200 0.68600) scale(0.001000 -0.001000)" d="M36 0V148H118V538H36V686H410V538H329V148H410V0Z"/><path transform="translate(4.35700 0.68600) scale(0.001000 -0.001000)" d="M-5 0 224 686H485L714 0H496L455 122H237L197 0ZM285 267H407L349 475H344Z"/></g></svg></h1>
+</div>
+
+
+
+<div class="fiche" id="fiche">
+  <div class="l"><span>Début</span><b>28 août 2026</b></div>
+
+
+  <div class="l"><span>Fin</span><b>28 août 2036</b></div>
+  <div class="l"><span>Jour en cours</span><b id="fJour">—</b></div>
+  <div class="l"><span>Distance parcourue</span><b id="fKm">—</b></div>
+</div>
+
+<div class="duo">
+  <a class="p" href="metanoia.html">Entrer</a>
+  <a class="s" href="projet.html">Le projet</a>
+</div>
+
+
+<noscript>
+  <p class="msg"><a href="metanoia.html" style="color:#31E07A">Entrer</a></p>
+</noscript>
+
+<script type="module">
+import { list, fr, DEBUT } from './config.js?v=20260902m';
+
+const debut = new Date(DEBUT + 'T00:00:00');
+document.getElementById('fJour').textContent =
+  Math.max(1, Math.floor((new Date() - debut) / 864e5) + 1);
+
+(async () => {
+  try {
+    const s = await list();
+    const km = s.filter(x => x.date >= DEBUT)
+                .reduce((t, x) => t + Number(x.distance_km || 0), 0);
+    document.getElementById('fKm').textContent = fr(km, 1) + ' km';
+  } catch (e) { document.getElementById('fKm').textContent = '—'; }
+})();
+</script>
+
+
+<script>
+// pas de sélection ni de copie ; zoom bloqué sur mobile seulement
+['copy','cut','contextmenu','dragstart','selectstart'].forEach(function(ev){
+  document.addEventListener(ev, function(e){
+    if (e.target.closest('input, textarea, select')) return;   // la saisie reste possible
+    e.preventDefault();
+  });
+});
+['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); }, { passive:false });
+});
+document.addEventListener('touchmove', function(e){
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive:false });
+document.addEventListener('keydown', function(e){
+  if ((e.ctrlKey || e.metaKey) && ['c','x','a','u','s','p'].indexOf(e.key.toLowerCase()) > -1) {
+    if (e.target.closest('input, textarea')) return;
+    e.preventDefault();
+  }
+});
+</script>
+</body>
+</html>
