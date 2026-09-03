@@ -101,28 +101,29 @@
   /* le disque est centré sur le bouton, en haut à droite, et grandit jusqu'à tout couvrir */
   .aurore .disque{position:absolute;width:260vmax;height:260vmax;border-radius:50%;
     top:calc(-130vmax + 34px);right:calc(-130vmax + 34px);
-    background:radial-gradient(circle at 50% 50%,#12B85F 0%,#0B7A3E 18%,#05100A 42%);
-    transform:scale(0);transform-origin:center;transition:none}
+    background:radial-gradient(circle at 50% 50%,#15C566 0%,#0E8E49 14%,#075C33 26%,#05100A 44%);
+    transform:scale(0);transform-origin:center;transition:none;
+    will-change:transform;backface-visibility:hidden}
   .aurore.ouvert .disque{transform:scale(1);
-    transition:transform .55s cubic-bezier(.3,.85,.35,1)}
+    transition:transform .62s cubic-bezier(.22,.61,.24,1)}
 
   .aurore .haut{display:flex;align-items:center;position:relative;z-index:5}
   .aurore .haut .lg{width:clamp(70px,20vw,96px);color:#EDF2EF;line-height:0}
   .aurore .haut .lg svg{display:block;width:100%;height:auto}
   .aurore .fermer{margin-left:auto;background:none;border:0;color:#EDF2EF;font-size:20px;
     line-height:1;cursor:pointer;padding:9px;margin-right:-9px;opacity:0;transition:none}
-  .aurore.ouvert .fermer{opacity:.75;transition:opacity .3s ease .22s}
+  .aurore.ouvert .fermer{opacity:.75;transition:opacity .32s ease .16s}
   .aurore .fermer:focus-visible{outline:2px solid #31E07A;outline-offset:2px;border-radius:6px}
 
   .aurore nav{margin:auto 0;position:relative;z-index:5;display:grid}
   .aurore nav a{display:flex;align-items:flex-end;gap:12px;padding:clamp(11px,2vh,15px) 0;
     border-bottom:1px solid rgba(255,255,255,.09);text-decoration:none;
-    opacity:0;transform:translateY(12px)}
-  .aurore.ouvert nav a{animation:entree .42s cubic-bezier(.2,.9,.3,1) forwards}
-  .aurore nav a:nth-child(1){animation-delay:.24s} .aurore nav a:nth-child(2){animation-delay:.29s}
-  .aurore nav a:nth-child(3){animation-delay:.34s} .aurore nav a:nth-child(4){animation-delay:.39s}
-  .aurore nav a:nth-child(5){animation-delay:.44s} .aurore nav a:nth-child(6){animation-delay:.49s}
-  @keyframes entree{to{opacity:1;transform:none}}
+    opacity:0;transform:translate3d(0,14px,0);will-change:transform,opacity}
+  .aurore.ouvert nav a{animation:entree .5s cubic-bezier(.16,.84,.28,1) forwards}
+  .aurore nav a:nth-child(1){animation-delay:.14s} .aurore nav a:nth-child(2){animation-delay:.19s}
+  .aurore nav a:nth-child(3){animation-delay:.24s} .aurore nav a:nth-child(4){animation-delay:.29s}
+  .aurore nav a:nth-child(5){animation-delay:.34s} .aurore nav a:nth-child(6){animation-delay:.39s}
+  @keyframes entree{to{opacity:1;transform:translate3d(0,0,0)}}
   .aurore nav a i{font-style:normal;font-weight:300;font-size:9.5px;letter-spacing:.16em;
     color:rgba(237,242,239,.42);padding-bottom:4px}
   .aurore nav a b{font-weight:900;font-size:clamp(21px,6.2vw,27px);letter-spacing:-.03em;
@@ -132,7 +133,7 @@
   .aurore .vis{position:relative;z-index:5;font-weight:300;font-size:8.5px;letter-spacing:.22em;
     text-transform:uppercase;text-align:center;color:rgba(237,242,239,.35);
     opacity:0;transition:none}
-  .aurore.ouvert .vis{opacity:1;transition:opacity .3s ease .5s}
+  .aurore.ouvert .vis{opacity:1;transition:opacity .32s ease .42s}
 
   @media (prefers-reduced-motion:reduce){
     .aurore .disque{transition:none}
@@ -279,7 +280,7 @@ document.addEventListener('keydown', function(e){
     p.classList.remove('ouvert'); o.setAttribute('aria-expanded','false');
     document.body.style.overflow = ''; (avant || o).focus();
   }
-  o.addEventListener('click', ouvrir);
+  o.addEventListener('click', function(){ requestAnimationFrame(ouvrir); });
   f.addEventListener('click', fermer);
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') fermer(); });
 })();
